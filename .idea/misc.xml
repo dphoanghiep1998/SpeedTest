@@ -6,6 +6,7 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/background_remove_ads.xml" value="0.1985" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/bg_background_splash.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/border_item_drawer.xml" value="0.1985" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/button_background_start.xml" value="0.234" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/custom_progress_bg.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ic_analytics.xml" value="0.279" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2835" />
@@ -18,7 +19,7 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_analyzer.xml" value="0.13703140830800406" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_check_result.xml" value="0.13703140830800406" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_home.xml" value="0.13703140830800406" />
-        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_speedtest.xml" value="0.33" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_speedtest.xml" value="0.22" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/drawer_view.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/menu_toolbar.xml" value="0.2" />

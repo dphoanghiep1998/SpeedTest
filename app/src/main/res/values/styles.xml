@@ -6,8 +6,6 @@
     </style>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
-        <item name="android:background">@color/background_main</item>
-
     </style>
     <style name="ToolBarTheme" >
         <item name="android:background">@color/background_main</item>

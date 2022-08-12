@@ -15,4 +15,8 @@
     <color name="background_ads_center">#FF168FEF</color>
     <color name="border_color">#5CDDDDDD</color>
     <color name="infor_container">#322C2C</color>
+    <color name="button_color_start">#12FFAC</color>
+    <color name="button_color_end">#C603A9F4</color>
+    <color name="text_accent">#00BCD4</color>
+
 </resources>
