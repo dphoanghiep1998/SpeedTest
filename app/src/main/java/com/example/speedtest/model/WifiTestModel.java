@@ -6,12 +6,14 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "wifi_model")
 public class WifiTestModel {
     @PrimaryKey(autoGenerate = true)
-    private String id;
+    private int id;
     private String name;
     private String date;
     private String downloadSpeed;
     private String upLoadSpeed;
     private String ping;
+//    private String jitter;
+//    private String loss;
 
     public WifiTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping) {
         this.name = name;
@@ -22,14 +24,16 @@ public class WifiTestModel {
     }
 
 
-    public String getId() {
+
+
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
-
     public String getName() {
         return name;
     }

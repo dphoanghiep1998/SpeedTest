@@ -28,6 +28,8 @@ import com.example.speedtest.utils.DateTimeUtils;
 import com.example.speedtest.utils.NetworkUtils;
 import com.github.anastr.speedviewlib.Gauge;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -52,6 +54,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupView();
+
     }
 
     public void setupView() {
@@ -159,6 +162,25 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void onCickWifiName() {
         Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
         startActivity(intent);
+
+    }
+
+    public void testPing(){
+        try{
+            ProcessBuilder ps = new ProcessBuilder("ping", "-c " + 4, "192.168.1.1");
+
+            ps.redirectErrorStream(true);
+            Process pr = ps.start();
+            BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                Log.d("TAG", line.toString());
+            }
+            pr.waitFor();
+            in.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
