@@ -41,17 +41,31 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold|italic"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/menu"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imv_vip"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_vip"
+                android:layout_marginRight="8dp"
+                app:layout_goneMarginRight="0dp"
+                app:layout_constraintEnd_toStartOf="@+id/imv_delete"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/imv_delete"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_delete"
+                app:layout_constraintTop_toTopOf="@id/imv_vip"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <FrameLayout

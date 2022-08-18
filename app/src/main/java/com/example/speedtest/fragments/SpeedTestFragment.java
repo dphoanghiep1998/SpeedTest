@@ -1,12 +1,18 @@
 package com.example.speedtest.fragments;
 
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 
-import android.net.wifi.WifiInfo;
+import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -19,21 +25,26 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.speedtest.R;
 import com.example.speedtest.databinding.FragmentSpeedtestBinding;
 import com.example.speedtest.model.WifiTestModel;
-import com.example.speedtest.utils.DateTimeUtils;
+import com.example.speedtest.services.CheckISPIP;
 import com.example.speedtest.utils.NetworkUtils;
 import com.github.anastr.speedviewlib.Gauge;
+import com.github.anastr.speedviewlib.components.Style;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import kotlin.Unit;
 
@@ -41,12 +52,19 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     FragmentSpeedtestBinding binding;
     WifiTestModel wifiTest;
     int duration = 0;
+    Boolean isConnectivityChanged = false;
+
+    private BroadcastReceiver internetBroad;
+    private IntentFilter internetFilter;
+
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSpeedtestBinding.inflate(inflater, container, false);
+        initBroadCast();
+        getActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         return binding.getRoot();
     }
 
@@ -55,6 +73,43 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
         setupView();
 
+
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("msg", "onResume: ");
+        super.onResume();
+        if(isConnectivityChanged){
+            if(NetworkUtils.isWifiConnected(getContext())){
+                SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()).substring(1,NetworkUtils.getNameWifi(getContext().getApplicationContext()).length()-1));
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                binding.tvWifiName.setText(content);
+            }
+        }
+        isConnectivityChanged = false;
+    }
+
+    private void initBroadCast() {
+        internetFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        internetBroad = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                isConnectivityChanged = true;
+            }
+        };
+    }
+
+
+
+    private void unRegisterBroadCast() {
+        requireContext().unregisterReceiver(internetBroad);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unRegisterBroadCast();
     }
 
     public void setupView() {
@@ -69,13 +124,17 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         //onClick start scan
         binding.btnStartScan.setOnClickListener(this);
 
-        //selec Wifi
+        //select Wifi
         binding.tvWifiName.setOnClickListener(this);
+
 
     }
 
     public void customTick() {
         List<Float> arList = new ArrayList<>(Arrays.asList(0f, 0.05f, 0.1f, 0.15f, 0.20f, 0.30f, 0.5f, 0.75f, 1f));
+        binding.speedView.clearSections();
+        binding.speedView.makeSections(1,Color.GRAY, Style.BUTT);
+
         binding.speedView.setTicks(arList);
         binding.speedView.setSpeedTextPosition(Gauge.Position.BOTTOM_CENTER);
         binding.speedView.setUnit("");
@@ -134,10 +193,10 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     public Unit onSpeedChange(Gauge gauge, boolean isSpeedUp, boolean isByTremple) {
         Log.d("TAG", "onSpeedChange: " + isByTremple);
-        duration += gauge.getTrembleDuration();
-        if(duration == 30000){
-            binding.speedView.setWithTremble(false);
+        duration += 100;
+        if(duration >= 30000){
             binding.speedView.speedTo(0);
+            binding.speedView.setWithTremble(false);
             duration = 0;
 //            binding.tvDownloadSpeed.setText(downSpeed);
         }
@@ -150,19 +209,20 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             Toast.makeText(this.getContext(), "No wifi connected", Toast.LENGTH_SHORT).show();
             return;
         }
-        int downSpeed = NetworkUtils.getDownloadSpeed(this.getContext())/1024;
-        int upSpeed = NetworkUtils.getUploadSpeed(this.getContext())/1024;
-        WifiInfo wifiInfo = NetworkUtils.getWifiInfo(getContext());
-        wifiTest = new WifiTestModel(wifiInfo.getSSID().toString(), DateTimeUtils.getDateNowConverted(),String.valueOf(downSpeed),String.valueOf(upSpeed),"1");
-        binding.speedView.stop();
-        binding.speedView.speedTo(downSpeed);
-//        binding.speedView.setOnSpeedChangeListener();
+        ExecutorService executors = Executors.newFixedThreadPool(4);
+        Callable<String> callable = new CheckISPIP();
+        Future<String> future = executors.submit(callable);
+//        Callable<String> callable1 = new ApiBase(future.toString());
+//        Future<String> future1 = executors.submit(callable1);
+//        Log.d("TAG", "onClickStartButton: " + future1);
+//
+
+
     }
 
     public void onCickWifiName() {
-        Intent intent = new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK);
+        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         startActivity(intent);
-
     }
 
     public void testPing(){
@@ -195,4 +255,6 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 break;
         }
     }
+
+
 }

@@ -15,7 +15,11 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 
-public class UploadTest implements Runnable {
+public class UploadTest extends Thread {
+    public UploadTest(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
     public String fileUrl = "";
     //thoi gian bat dau gui (mls)
     long startTime = 0;
@@ -80,6 +84,7 @@ public class UploadTest implements Runnable {
             long now = System.currentTimeMillis();
             uploadElapsedTime = (now - startTime)/1000.0;
             finalUploadRate = (Double)(((uploadedByte * 8) / 10^6) / uploadElapsedTime);
+            finished = true;
 
 
         } catch (Exception e) {
@@ -95,7 +100,7 @@ public class UploadTest implements Runnable {
 
         @Override
         public void run() {
-            byte[] buffer = new byte[150 * 1024];
+            byte[] buffer = new byte[1000000];
             long startTime = System.currentTimeMillis();
             int timeout = 8;
 

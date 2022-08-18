@@ -13,13 +13,16 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ic_speedtest.xml" value="0.1965" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/infor_container.xml" value="0.2085" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/progress_color.xml" value="0.2825" />
-        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/activity_splash.xml" value="0.25" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/drawer_menu_item.xml" value="0.190625" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_analyzer.xml" value="0.13703140830800406" />
-        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_check_result.xml" value="0.13703140830800406" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_check_result.xml" value="0.25" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_home.xml" value="0.13703140830800406" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_speedtest.xml" value="0.22" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_result.xml" value="0.33" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_test.xml" value="0.21927083333333333" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_wifi_channel.xml" value="0.26979166666666665" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/drawer_view.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/menu_toolbar.xml" value="0.2" />

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@drawable/infor_container"
+    android:paddingHorizontal="16dp">
+
+    <ImageView
+        android:id="@+id/imv_wifi"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_wifi"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+
+        android:layout_marginStart="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imv_wifi"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_wifi_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Neko"
+            android:textColor="@color/white"
+           />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_internal_ip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="192.168.1.1"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:id="@+id/tv_security_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="WPA2"
+            android:textColor="@color/white"
+             />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_gravity="end"
+            android:id="@+id/tv_signal_strength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-63 dBm"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_gravity="end"
+            android:id="@+id/tv_hz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2458 MHz"
+            android:textColor="@color/white"
+            />
+
+        <TextView
+            android:layout_gravity="end"
+            android:id="@+id/tv_connected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đã kết nối"
+            android:textColor="@color/text_accent"
+            />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

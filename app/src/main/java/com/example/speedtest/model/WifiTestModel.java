@@ -12,8 +12,25 @@ public class WifiTestModel {
     private String downloadSpeed;
     private String upLoadSpeed;
     private String ping;
-//    private String jitter;
-//    private String loss;
+
+    public String getJitter() {
+        return jitter;
+    }
+
+    public void setJitter(String jitter) {
+        this.jitter = jitter;
+    }
+
+    public String getLoss() {
+        return loss;
+    }
+
+    public void setLoss(String loss) {
+        this.loss = loss;
+    }
+
+    private String jitter;
+    private String loss;
 
     public WifiTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping) {
         this.name = name;
@@ -22,10 +39,6 @@ public class WifiTestModel {
         this.upLoadSpeed = upLoadSpeed;
         this.ping = ping;
     }
-
-
-
-
 
     public int getId() {
         return id;
