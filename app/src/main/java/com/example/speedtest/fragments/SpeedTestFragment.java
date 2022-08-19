@@ -1,6 +1,4 @@
 package com.example.speedtest.fragments;
-
-
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -50,7 +48,6 @@ import kotlin.Unit;
 
 public class SpeedTestFragment extends Fragment implements View.OnClickListener {
     FragmentSpeedtestBinding binding;
-    WifiTestModel wifiTest;
     int duration = 0;
     Boolean isConnectivityChanged = false;
 
