@@ -1,0 +1,10 @@
+[
+  {
+    "name":"London",
+    "server":"https://lon.speedtest.clouvider.net/",
+    "dlURL":"backend/garbage.php",
+    "ulURL":"backend/empty.php",
+    "pingURL":"backend/empty.php",
+    "getIpURL":"backend/getIP.php"
+  }
+]

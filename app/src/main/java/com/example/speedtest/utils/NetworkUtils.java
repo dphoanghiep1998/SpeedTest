@@ -6,10 +6,19 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+
+import java.math.BigInteger;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.ByteOrder;
+import java.util.List;
 
 public class NetworkUtils {
     public static boolean isConnected(@NonNull Context context) {
@@ -24,6 +33,13 @@ public class NetworkUtils {
 
     public static boolean isWifiConnected(@NonNull Context context) {
         return isConnected(context, ConnectivityManager.TYPE_WIFI);
+    }
+
+    public static boolean isWifiConnected(@NonNull Context context,String wifi_name){
+        if(isWifiConnected(context) && getNameWifi(context) ==wifi_name){
+            return true;
+        }
+        return false;
     }
 
     public static boolean isMobileConnected(@NonNull Context context) {
@@ -111,6 +127,36 @@ public class NetworkUtils {
             }
         }
         return null;
+    }
+
+    public static List<ScanResult> getListWifi(Context context){
+        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        if (manager != null && manager.isWifiEnabled()) {
+            List<ScanResult> wifiList = manager.getScanResults();
+            return wifiList;
+        }
+        return null;
+    }
+    public static String wifiIpAddress(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        int ipAddress = wifiManager.getConnectionInfo().getIpAddress();
+
+        // Convert little-endian to big-endianif needed
+        if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            ipAddress = Integer.reverseBytes(ipAddress);
+        }
+
+        byte[] ipByteArray = BigInteger.valueOf(ipAddress).toByteArray();
+
+        String ipAddressString;
+        try {
+            ipAddressString = InetAddress.getByAddress(ipByteArray).getHostAddress();
+        } catch (UnknownHostException ex) {
+            Log.e("WIFIIP", "Unable to get host address.");
+            ipAddressString = null;
+        }
+
+        return ipAddressString;
     }
 
 

@@ -9,6 +9,7 @@ import android.graphics.Color;
 
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.SpannableString;
@@ -19,26 +20,35 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
+
 import androidx.fragment.app.Fragment;
 
 import com.example.speedtest.R;
+import com.example.speedtest.core.Speedtest;
+import com.example.speedtest.core.config.SpeedtestConfig;
+import com.example.speedtest.core.serverSelector.TestPoint;
 import com.example.speedtest.databinding.FragmentSpeedtestBinding;
-import com.example.speedtest.model.WifiTestModel;
 import com.example.speedtest.services.CheckISPIP;
 import com.example.speedtest.utils.NetworkUtils;
 import com.github.anastr.speedviewlib.Gauge;
 import com.github.anastr.speedviewlib.components.Style;
 
+import org.json.JSONArray;
+
+
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,6 +63,8 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     private BroadcastReceiver internetBroad;
     private IntentFilter internetFilter;
+    private static Speedtest st=null;
+
 
 
 
@@ -185,34 +197,16 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             }
             return null;
         });
-        binding.speedView.setOnSpeedChangeListener((gauge, isSpeedUp, isByTremple) -> this.onSpeedChange(gauge, isSpeedUp, isByTremple));
     }
 
-    public Unit onSpeedChange(Gauge gauge, boolean isSpeedUp, boolean isByTremple) {
-        Log.d("TAG", "onSpeedChange: " + isByTremple);
-        duration += 100;
-        if(duration >= 30000){
-            binding.speedView.speedTo(0);
-            binding.speedView.setWithTremble(false);
-            duration = 0;
-//            binding.tvDownloadSpeed.setText(downSpeed);
-        }
 
-        return null;
-    }
 
     public void onClickStartButton() {
         if (!NetworkUtils.isWifiConnected(this.getContext())) {
             Toast.makeText(this.getContext(), "No wifi connected", Toast.LENGTH_SHORT).show();
             return;
         }
-        ExecutorService executors = Executors.newFixedThreadPool(4);
-        Callable<String> callable = new CheckISPIP();
-        Future<String> future = executors.submit(callable);
-//        Callable<String> callable1 = new ApiBase(future.toString());
-//        Future<String> future1 = executors.submit(callable1);
-//        Log.d("TAG", "onClickStartButton: " + future1);
-//
+        loadServer();
 
 
     }
@@ -251,6 +245,146 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 onCickWifiName();
                 break;
         }
+    }
+
+
+    private String readFileFromAssets(String name) throws Exception{
+        BufferedReader b=new BufferedReader(new InputStreamReader(requireContext().getApplicationContext().getAssets().open(name)));
+        String ret="";
+        try{
+            for(;;){
+                String s=b.readLine();
+                if(s==null) break;
+                ret+=s;
+            }
+        }catch(EOFException e){}
+        return ret;
+    }
+
+    public void loadServer(){
+      new Thread(){
+          @Override
+          public void run() {
+              SpeedtestConfig config;
+              TestPoint server;
+              try{
+            String c;
+                  if(st!=null){
+                      try{st.abort();}catch (Throwable e){}
+                  }
+                  st=new Speedtest();
+                  c=readFileFromAssets("Server.json");
+                  if(c.startsWith("\"")||c.startsWith("'")){ //fetch server list from URL
+                      if(!st.loadServer(c.subSequence(1,c.length()-1).toString())){
+                          throw new Exception("Failed to load server list");
+                      }
+                  }else{ //use provided server list
+                      JSONArray a=new JSONArray(c);
+                      if(a.length()==0) throw new Exception("No test points");
+                      server = new TestPoint(a.getJSONObject(0));
+                      st.addTestPoint(server);
+                      runSpeedTest(server);
+                  }
+              } catch (Exception e) {
+                  e.printStackTrace();
+              }
+
+          }
+      }.start();
+    }
+    public void runSpeedTest(TestPoint tp){
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(100); //You can manage the blinking time with this parameter
+        anim.setStartOffset(50);
+        anim.setRepeatCount(Animation.INFINITE);
+        st.start(new Speedtest.SpeedtestHandler() {
+            @Override
+            public void onDownloadUpdate(double dl, double progress) {
+                if(progress == 0){
+                    binding.tvDownloadValue.startAnimation(anim);
+
+                }
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.speedView.speedTo((float) dl);
+
+                        if(progress >= 1){
+                            binding.tvDownloadValue.clearAnimation();
+                            binding.tvDownloadValue.setText(format(dl));
+                            binding.speedView.speedTo(0);
+                            binding.speedView.stop();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onUploadUpdate(double ul, double progress) {
+                if(progress == 0){
+                    binding.tvUploadValue.startAnimation(anim);
+                }
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.speedView.speedTo((float) ul);
+                        if(progress >= 1){
+                            binding.tvUploadValue.clearAnimation();
+                            binding.tvUploadValue.setText(format(ul));
+                            binding.speedView.setWithTremble(false);
+                            binding.speedView.speedTo(0);
+                            binding.speedView.stop();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onPingJitterUpdate(double ping, double jitter, double progress) {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.tvPingCount.setText(format(ping) + " ms");
+                        binding.tvJitterCount.setText(format(jitter)+ " ms");
+                    }
+                });
+            }
+
+            @Override
+            public void onIPInfoUpdate(String ipInfo) {
+                Log.d("TAG", "onIPInfoUpdate: "+ipInfo);
+            }
+
+            @Override
+            public void onEnd() {
+                requireActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        binding.speedView.speedTo(0);
+                        binding.speedView.stop();
+                        Log.d("TAG", "onEnd: ");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCriticalFailure(String err) {
+                Log.d("TAG", "onCriticalFailure: "+err);
+            }
+        });
+    }
+
+    private String format(double d){
+        Locale l=null;
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N) {
+            l = getResources().getConfiguration().getLocales().get(0);
+        }else{
+            l=getResources().getConfiguration().locale;
+        }
+        if(d<10) return String.format(l,"%.2f",d);
+        if(d<100) return String.format(l,"%.1f",d);
+        return ""+Math.round(d);
     }
 
 

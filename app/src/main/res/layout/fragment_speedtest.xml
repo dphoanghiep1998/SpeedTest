@@ -47,11 +47,12 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_download_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="________"
+                android:text="0"
                 android:textColor="#d7d7d7" />
         </LinearLayout>
 
@@ -96,11 +97,12 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_upload_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="________"
+                android:text="0"
                 android:textColor="#d7d7d7" />
         </LinearLayout>
 
@@ -135,6 +137,7 @@
                 android:src="@drawable/ic_up_arrow" />
 
             <TextView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -142,11 +145,12 @@
                 android:textColor="#d7d7d7" />
 
             <TextView
+                android:paddingLeft="4dp"
                 android:id="@+id/tv_pingCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="------"
+                android:text="0"
 
                 android:textColor="#D7D7D7" />
 
@@ -175,11 +179,12 @@
                 android:textColor="#d7d7d7" />
 
             <TextView
-                android:id="@+id/jitterCount"
+                android:paddingLeft="4dp"
+                android:id="@+id/tv_jitterCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="------"
+                android:text="0"
                 android:textColor="#D7D7D7" />
 
         </LinearLayout>
@@ -206,11 +211,12 @@
                 android:textColor="#d7d7d7" />
 
             <TextView
+                android:paddingLeft="4dp"
                 android:id="@+id/lossCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="------"
+                android:text="0"
                 android:textColor="#D7D7D7" />
 
         </LinearLayout>
