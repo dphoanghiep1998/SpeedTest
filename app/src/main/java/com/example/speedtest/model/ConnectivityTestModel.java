@@ -3,12 +3,10 @@ package com.example.speedtest.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "connect_model")
-public class WifiTestModel {
+@Entity(tableName = "connectivity_model")
+public class ConnectivityTestModel {
     @PrimaryKey(autoGenerate = true)
     private int id;
-
-
     private String name;
     private String date;
     private String downloadSpeed;
@@ -35,9 +33,7 @@ public class WifiTestModel {
     }
 
 
-
-
-    public WifiTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,String type) {
+    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping, String type) {
         this.name = name;
         this.date = date;
         this.downloadSpeed = downloadSpeed;

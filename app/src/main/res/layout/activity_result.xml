@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_main"
+    tools:context=".ResultActivity">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingHorizontal="8dp"
+        android:theme="@style/ToolBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+
+            android:id="@+id/close"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_close"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:text="Results"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold|italic"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imv_vip"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_vip"
+            android:layout_marginRight="8dp"
+            app:layout_goneMarginRight="0dp"
+            app:layout_constraintEnd_toStartOf="@+id/imv_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+
+            android:id="@+id/imv_share"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_share"
+            app:layout_constraintTop_toTopOf="@id/imv_vip"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:style="@drawable/infor_container"
+        >
+    <TextView
+        android:paddingTop="16dp"
+        android:id="@+id/tv_internetSignal"
+        android:text="Tín hiệu mạng"
+        android:textSize="18sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/white"/>
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/tv_signal_strength"
+            android:textStyle="bold"
+            android:text="BÌNH THƯỜNG"
+            android:textSize="26sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_internetSignal"
+            android:textColor="@color/text_color_medium"/>
+        <ProgressBar
+            android:layout_marginTop="10dp"
+            style="@style/CustomProgressBar"
+            android:id="@+id/pb_signal"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="32dp"
+            android:layout_height="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_signal_strength"
+            android:progress="100"
+            />
+        <TextView
+            android:paddingStart="8dp"
+            android:paddingBottom="16dp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/tv_worseSignal"
+            android:text="Cùi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pb_signal"
+            android:textColor="@color/white"/>
+        <TextView
+            android:text="Tàm tạm"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_worseSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:paddingEnd="8dp"
+            android:textColor="@color/white"
+            android:text="Tốt"
+            app:layout_constraintTop_toTopOf="@+id/tv_worseSignal"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

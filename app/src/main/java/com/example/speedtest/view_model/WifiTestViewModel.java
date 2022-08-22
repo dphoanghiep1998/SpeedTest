@@ -1,16 +1,33 @@
 package com.example.speedtest.view_model;
 
-import android.net.ConnectivityManager;
-import android.net.Network;
+import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
-public class WifiTestViewModel  extends ViewModel {
-    public MutableLiveData<Boolean> connected;
+import com.example.speedtest.model.ConnectivityTestModel;
+import com.example.speedtest.repository.AppRepository;
 
+import java.util.List;
 
+public class WifiTestViewModel  extends AndroidViewModel {
+    AppRepository appRepository;
 
-
+    public WifiTestViewModel(@NonNull Application application) {
+        super(application);
+        appRepository = new AppRepository(application);
+    }
+    public void insertResultTest(ConnectivityTestModel model){
+        appRepository.insertTestResult(model);
+    }
+    public void deleteResultTest(ConnectivityTestModel model){
+        appRepository.deleteTestResult(model);
+    }
+    public void deleteAllResultTest(){
+        appRepository.deleteAllTestResult();
+    }
+    public LiveData<List<ConnectivityTestModel>> getListResultTest(){
+        return appRepository.getTestResultList();
+    }
 }

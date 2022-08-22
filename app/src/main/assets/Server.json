@@ -1,7 +1,7 @@
 [
   {
-    "name":"London",
-    "server":"https://lon.speedtest.clouvider.net/",
+    "name":"Japan",
+    "server":"https://librespeed.a573.net/",
     "dlURL":"backend/garbage.php",
     "ulURL":"backend/empty.php",
     "pingURL":"backend/empty.php",

@@ -2,35 +2,47 @@ package com.example.speedtest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
 import com.example.speedtest.fragments.AnalyzerFragment;
 import com.example.speedtest.fragments.CheckResultFragment;
 import com.example.speedtest.fragments.SpeedTestFragment;
+import com.example.speedtest.model.Wifi;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     SpeedTestFragment speedTestFragment = new SpeedTestFragment();
     AnalyzerFragment analiyzerFragment = new AnalyzerFragment();
     CheckResultFragment checkResultFragment = new CheckResultFragment();
-    WifiTestViewModel viewModel;
+
+    boolean permission = false;
+    boolean isScanning = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         initView();
@@ -49,10 +61,23 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, speedTestFragment).commit();
                         return true;
                     case R.id.analist:
-                        binding.imvDelete.setVisibility(View.GONE);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, analiyzerFragment).commit();
-                        return true;
+                        if(isScanning){
+                            return false;
+                        }
+                        requestLocationPermission();
+                        if(permission){
+                            binding.imvDelete.setVisibility(View.GONE);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, analiyzerFragment).commit();
+                            return true;
+
+                        }else{
+                            return  false;
+                        }
+
                     case R.id.history:
+                        if(isScanning){
+                            return false;
+                        }
                         binding.imvDelete.setVisibility(View.VISIBLE);
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, checkResultFragment).commit();
                         return true;
@@ -79,5 +104,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void requestLocationPermission(){
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, SettingGlobal.REQUEST_CODE_LOCATION_PERMISSION);
+        }else {
+            permission = true;
+        }
+    }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == SettingGlobal.REQUEST_CODE_LOCATION_PERMISSION){
+            if(grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                permission = true;
+            }
+        }
+    }
+
+    public void setIsScanning(boolean status){
+        isScanning = status;
+    }
 }

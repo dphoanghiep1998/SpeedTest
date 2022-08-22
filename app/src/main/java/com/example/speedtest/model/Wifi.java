@@ -1,6 +1,8 @@
 package com.example.speedtest.model;
 
-public class Wifi {
+import java.io.Serializable;
+
+public class Wifi implements Serializable {
 
 
     private String wifi_name;

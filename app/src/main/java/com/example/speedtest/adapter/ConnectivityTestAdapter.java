@@ -10,26 +10,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.speedtest.R;
-import com.example.speedtest.model.WifiTestModel;
+import com.example.speedtest.model.ConnectivityTestModel;
 
 import java.util.List;
 
-public class WifiTestAdapter extends RecyclerView.Adapter<WifiTestAdapter.WifiTestViewHolder> {
-    private List<WifiTestModel> mList;
-    public void setData(List<WifiTestModel> mList){
+public class ConnectivityTestAdapter extends RecyclerView.Adapter<ConnectivityTestAdapter.ConnectivityTestViewHolder> {
+    private List<ConnectivityTestModel> mList;
+    public void setData(List<ConnectivityTestModel> mList){
         this.mList = mList;
         notifyDataSetChanged();
     }
     @NonNull
     @Override
-    public WifiTestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ConnectivityTestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_result,parent,false);
-        return new WifiTestViewHolder(view);
+        return new ConnectivityTestViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WifiTestViewHolder holder, int position) {
-        WifiTestModel model = mList.get(position);
+    public void onBindViewHolder(@NonNull ConnectivityTestViewHolder holder, int position) {
+        ConnectivityTestModel model = mList.get(position);
         if(model != null){
             holder.ssid.setText(model.getName());
             holder.date.setText(model.getDate());
@@ -47,14 +47,14 @@ public class WifiTestAdapter extends RecyclerView.Adapter<WifiTestAdapter.WifiTe
         return 0;
     }
 
-    public class WifiTestViewHolder extends RecyclerView.ViewHolder{
+    public class ConnectivityTestViewHolder extends RecyclerView.ViewHolder{
     TextView ssid;
     TextView date;
     TextView downloadRate;
     TextView uploadRate;
     TextView pingRate;
     ImageView connectionType;
-        public WifiTestViewHolder(@NonNull View itemView) {
+        public ConnectivityTestViewHolder(@NonNull View itemView) {
             super(itemView);
             ssid = itemView.findViewById(R.id.tv_ssid);
             date = itemView.findViewById(R.id.tv_dateScan);

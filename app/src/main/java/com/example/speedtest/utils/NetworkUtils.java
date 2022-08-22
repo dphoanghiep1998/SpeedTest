@@ -36,7 +36,8 @@ public class NetworkUtils {
     }
 
     public static boolean isWifiConnected(@NonNull Context context,String wifi_name){
-        if(isWifiConnected(context) && getNameWifi(context) ==wifi_name){
+        if(wifi_name.length() > 0  && isWifiConnected(context) && getNameWifi(context) == wifi_name){
+            Log.d("TAG", "isWifiConnected: " + wifi_name);
             return true;
         }
         return false;
@@ -122,15 +123,27 @@ public class NetworkUtils {
             if (wifiInfo != null) {
                 NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
                 if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
-                    return wifiInfo.getSSID();
+                    return wifiInfo.getSSID().substring(1,wifiInfo.getSSID().length()-1);
+                }
+            }
+        }
+        return null;
+    }
+    public static String getNameWifi(WifiManager manager) {
+        if (manager != null && manager.isWifiEnabled()) {
+            WifiInfo wifiInfo = manager.getConnectionInfo();
+            if (wifiInfo != null) {
+                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
+                    return wifiInfo.getSSID().substring(1,wifiInfo.getSSID().length()-1);
                 }
             }
         }
         return null;
     }
 
-    public static List<ScanResult> getListWifi(Context context){
-        WifiManager manager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    public static List<ScanResult> getListWifi(Context context,WifiManager manager){
+
         if (manager != null && manager.isWifiEnabled()) {
             List<ScanResult> wifiList = manager.getScanResults();
             return wifiList;

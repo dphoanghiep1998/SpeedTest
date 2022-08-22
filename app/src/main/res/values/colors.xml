@@ -18,5 +18,6 @@
     <color name="button_color_start">#12FFAC</color>
     <color name="button_color_end">#C603A9F4</color>
     <color name="text_accent">#00BCD4</color>
+    <color name="text_color_medium">#ff0</color>
 
 </resources>
