@@ -3,15 +3,20 @@ package com.example.speedtest.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "wifi_model")
+@Entity(tableName = "connect_model")
 public class WifiTestModel {
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+
     private String name;
     private String date;
     private String downloadSpeed;
     private String upLoadSpeed;
     private String ping;
+    private String type;
+    private String jitter;
+    private String loss;
 
     public String getJitter() {
         return jitter;
@@ -29,15 +34,16 @@ public class WifiTestModel {
         this.loss = loss;
     }
 
-    private String jitter;
-    private String loss;
 
-    public WifiTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping) {
+
+
+    public WifiTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,String type) {
         this.name = name;
         this.date = date;
         this.downloadSpeed = downloadSpeed;
         this.upLoadSpeed = upLoadSpeed;
         this.ping = ping;
+        this.type = type;
     }
 
     public int getId() {
@@ -85,5 +91,13 @@ public class WifiTestModel {
 
     public void setPing(String ping) {
         this.ping = ping;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
