@@ -3,8 +3,10 @@ package com.example.speedtest.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "connectivity_model")
-public class ConnectivityTestModel {
+public class ConnectivityTestModel implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
@@ -12,9 +14,32 @@ public class ConnectivityTestModel {
     private String downloadSpeed;
     private String upLoadSpeed;
     private String ping;
-    private String type;
     private String jitter;
     private String loss;
+    private Mobile mobile;
+    private Wifi wifi;
+
+
+
+    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,Mobile mobile,Wifi wifi,String type) {
+        this.name = name;
+        this.date = date;
+        this.downloadSpeed = downloadSpeed;
+        this.upLoadSpeed = upLoadSpeed;
+        this.ping = ping;
+        this.mobile = mobile;
+        this.wifi = wifi;
+        this.type = type;
+    }
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
 
     public String getJitter() {
         return jitter;
@@ -32,14 +57,22 @@ public class ConnectivityTestModel {
         this.loss = loss;
     }
 
+    public ConnectivityTestModel(){}
 
-    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping, String type) {
-        this.name = name;
-        this.date = date;
-        this.downloadSpeed = downloadSpeed;
-        this.upLoadSpeed = upLoadSpeed;
-        this.ping = ping;
-        this.type = type;
+    public Mobile getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(Mobile mobile) {
+        this.mobile = mobile;
+    }
+
+    public Wifi getWifi() {
+        return wifi;
+    }
+
+    public void setWifi(Wifi wifi) {
+        this.wifi = wifi;
     }
 
     public int getId() {
@@ -89,11 +122,5 @@ public class ConnectivityTestModel {
         this.ping = ping;
     }
 
-    public String getType() {
-        return type;
-    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
 }

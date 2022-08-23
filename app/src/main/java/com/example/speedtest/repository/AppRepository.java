@@ -20,28 +20,13 @@ public class AppRepository {
     }
 
     public void insertTestResult(ConnectivityTestModel model){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                connectivityTestDatabase.connectivityTestDAO().insertWifiTestResult(model);
-            }
-        });
+        executor.execute(() -> connectivityTestDatabase.connectivityTestDAO().insertWifiTestResult(model));
     }
     public void deleteAllTestResult(){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                connectivityTestDatabase.connectivityTestDAO().deleteAllWifiTestResult();
-            }
-        });
+        executor.execute(() -> connectivityTestDatabase.connectivityTestDAO().deleteAllWifiTestResult());
     }
     public void deleteTestResult(ConnectivityTestModel model){
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                connectivityTestDatabase.connectivityTestDAO().deleteWifiTestResult(model);
-            }
-        });
+        executor.execute(() -> connectivityTestDatabase.connectivityTestDAO().deleteWifiTestResult(model));
     }
     public LiveData<List<ConnectivityTestModel>> getTestResultList(){
         return connectivityTestDatabase.connectivityTestDAO().getAllWifiTestResults();

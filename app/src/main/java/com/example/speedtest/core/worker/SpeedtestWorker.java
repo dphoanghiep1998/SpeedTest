@@ -52,11 +52,11 @@ public abstract class SpeedtestWorker extends Thread{
             c = new Connection(backend.getServer(), config.getPing_connectTimeout(), config.getPing_soTimeout(), -1, -1);
         } catch (Throwable t) {
 
-//            if (config.getErrorHandlingMode().equals(SpeedtestConfig.ONERROR_FAIL)){
-//                abort();
-//                onCriticalFailure(t.toString());
-//            }
-//            return;
+            if (config.getErrorHandlingMode().equals(SpeedtestConfig.ONERROR_FAIL)){
+                abort();
+                onCriticalFailure(t.toString());
+            }
+            return;
         }
         GetIP g = new GetIP(c, backend.getGetIpURL(), config.getGetIP_isp(), config.getGetIP_distance()) {
             @Override
@@ -64,7 +64,7 @@ public abstract class SpeedtestWorker extends Thread{
                 ipIsp=data;
                 try{
                     data=new JSONObject(data).getString("processedString");
-                    Log.d("TAG", "onDataReceived: +" + data);
+                    Log.d("TAG", "onDataReceived: " + data);
                 }catch (Throwable t){
                     Log.d("TAG", "onDataReceived: " + t.getMessage());
                 }

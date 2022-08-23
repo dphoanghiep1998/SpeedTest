@@ -1,21 +1,34 @@
 package com.example.speedtest.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 
+@Entity(tableName = "wifi_model")
 public class Wifi implements Serializable {
 
-
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String wifi_name;
     private String wifi_internal_ip;
+    private String wifi_external_ip;
     private String wifi_secure_type;
     private String wifi_level;
     private String wifi_frequency;
     private String wifi_bssid;
     private String wifi_channel;
     private String wifi_distance;
+
+
+    private String wifi_ISP;
     private boolean wifi_isConnected;
 
-    public Wifi(String wifi_name, String wifi_internal_ip, String wifi_secure_type, String wifi_level, String wifi_frequency, String wifi_bssid, String wifi_channel, String wifi_distance, boolean wifi_isConnected) {
+    public Wifi(){
+
+    };
+
+    public Wifi(String wifi_name, String wifi_internal_ip,String wifi_external_ip, String wifi_secure_type, String wifi_level, String wifi_frequency, String wifi_bssid, String wifi_channel, String wifi_distance,String wifi_ISP ,boolean wifi_isConnected) {
         this.wifi_name = wifi_name;
         this.wifi_internal_ip = wifi_internal_ip;
         this.wifi_secure_type = wifi_secure_type;
@@ -25,6 +38,16 @@ public class Wifi implements Serializable {
         this.wifi_channel = wifi_channel;
         this.wifi_distance = wifi_distance;
         this.wifi_isConnected = wifi_isConnected;
+        this.wifi_external_ip = wifi_external_ip;
+        this.wifi_ISP = wifi_ISP;
+    }
+
+    public String getWifi_external_ip() {
+        return wifi_external_ip;
+    }
+
+    public void setWifi_external_ip(String wifi_external_ip) {
+        this.wifi_external_ip = wifi_external_ip;
     }
 
     public String getWifi_bssid() {
@@ -98,5 +121,13 @@ public class Wifi implements Serializable {
     public void setWifi_isConnected(boolean wifi_isConnected) {
         this.wifi_isConnected = wifi_isConnected;
     }
+    public String getWifi_ISP() {
+        return wifi_ISP;
+    }
+
+    public void setWifi_ISP(String wifi_ISP) {
+        this.wifi_ISP = wifi_ISP;
+    }
+
 
 }

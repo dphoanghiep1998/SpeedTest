@@ -13,16 +13,21 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.speedtest.R;
+import com.example.speedtest.interfaces.ItemTouchHelper;
 import com.example.speedtest.model.Wifi;
 
 import java.util.List;
 
 public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.WifiChannelViewHolder> {
     private List<Wifi> mList;
-
+    private ItemTouchHelper helper;
     public void setData(List<Wifi> mList) {
         this.mList = mList;
         notifyDataSetChanged();
+    }
+
+    public WifiChannelAdapter(ItemTouchHelper helper) {
+        this.helper = helper;
     }
 
     @NonNull
@@ -36,8 +41,8 @@ public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.
     public void onBindViewHolder(@NonNull WifiChannelViewHolder holder, int position) {
         Wifi wifiModel = mList.get(position);
         if (wifiModel != null) {
-            holder.tv_frequency.setText(wifiModel.getWifi_frequency().toString());
-            holder.tv_strength.setText(wifiModel.getWifi_level().toString());
+            holder.tv_frequency.setText(wifiModel.getWifi_frequency().toString() +" MHz");
+            holder.tv_strength.setText(wifiModel.getWifi_level().toString() +" dBm");
             holder.tv_internalIp.setText(wifiModel.getWifi_internal_ip());
             holder.tv_secureType.setText(wifiModel.getWifi_secure_type());
             holder.tv_wifiName.setText(wifiModel.getWifi_name());
@@ -63,7 +68,11 @@ public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.
                 holder.tv_connected.setVisibility(View.GONE);
 
             }
+            holder.itemView.setOnClickListener(view -> {
+                helper.onClickItem(wifiModel);
+            });
         }
+
     }
 
     @Override

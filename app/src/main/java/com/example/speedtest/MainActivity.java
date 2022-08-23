@@ -1,5 +1,12 @@
 package com.example.speedtest;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -7,33 +14,21 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.MenuItem;
-import android.view.View;
-
 import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
 import com.example.speedtest.fragments.AnalyzerFragment;
 import com.example.speedtest.fragments.CheckResultFragment;
 import com.example.speedtest.fragments.SpeedTestFragment;
-import com.example.speedtest.model.Wifi;
+import com.example.speedtest.utils.NetworkUtils;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
+   public ActivityMainBinding binding;
     SpeedTestFragment speedTestFragment = new SpeedTestFragment();
     AnalyzerFragment analiyzerFragment = new AnalyzerFragment();
     CheckResultFragment checkResultFragment = new CheckResultFragment();
-
+    public WifiTestViewModel viewModel;
     boolean permission = false;
     boolean isScanning = false;
 
@@ -43,10 +38,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        viewModel = new ViewModelProvider(this).get(WifiTestViewModel .class);
+        checkMobileConnected();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         initView();
         setActionMenu();
+    }
+    public void checkMobileConnected(){
+        Log.d("TAG", "checkMobileConnected: "+ NetworkUtils.isMobileConnected(getApplication()));
+        Log.d("TAG", "checkMobileConnected: "+NetworkUtils.getInforMobileConnected(getApplication()).getSubtypeName());
+
     }
 
     public void initView() {

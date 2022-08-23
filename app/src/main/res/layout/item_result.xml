@@ -27,7 +27,8 @@
                 android:id="@+id/imv_connectionType"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_wifi" />
+                android:src="@drawable/ic_wifi"
+                android:layout_marginBottom="4dp"/>
 
             <TextView
                 android:id="@+id/tv_ssid"
@@ -38,8 +39,11 @@
                 android:singleLine="true"
                 android:text="qeqweqwewqq"
                 android:textColor="@color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeStepGranularity="1sp"
+                android:autoSizeMinTextSize="8sp"
+                android:maxLines="1"
+                 />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

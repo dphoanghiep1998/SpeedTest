@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:height="14dp"
+        android:id="@android:id/progress" >
+
+        <clip
+            android:drawable="@color/progress_bar" />
+    </item>
+    <item
+        android:id="@android:id/secondaryProgress" >
+        <clip
+            android:drawable="@color/second_progressbar" />
+    </item>
+</layer-list>

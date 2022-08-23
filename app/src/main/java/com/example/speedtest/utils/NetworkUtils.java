@@ -24,7 +24,7 @@ public class NetworkUtils {
     public static boolean isConnected(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if(netInfo != null){
+        if (netInfo != null) {
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
             return networkInfo != null && networkInfo.isConnected();
         }
@@ -35,8 +35,8 @@ public class NetworkUtils {
         return isConnected(context, ConnectivityManager.TYPE_WIFI);
     }
 
-    public static boolean isWifiConnected(@NonNull Context context,String wifi_name){
-        if(wifi_name.length() > 0  && isWifiConnected(context) && getNameWifi(context) == wifi_name){
+    public static boolean isWifiConnected(@NonNull Context context, String wifi_name) {
+        if (wifi_name.length() > 0 && isWifiConnected(context) && getNameWifi(context) == wifi_name) {
             Log.d("TAG", "isWifiConnected: " + wifi_name);
             return true;
         }
@@ -47,11 +47,22 @@ public class NetworkUtils {
         return isConnected(context, ConnectivityManager.TYPE_MOBILE);
     }
 
+    public static NetworkInfo getInforMobileConnected(@NonNull Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
+        if (cm != null) {
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+            return networkInfo;
+        }
+        return null;
+
+
+    }
+
     private static boolean isConnected(@NonNull Context context, int type) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
-        if(netInfo != null){
+        if (netInfo != null) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 NetworkInfo networkInfo = cm.getNetworkInfo(type);
                 return networkInfo != null && networkInfo.isConnected();
@@ -76,11 +87,11 @@ public class NetworkUtils {
         return false;
     }
 
-    public static int getDownloadSpeed(@NonNull Context context){
+    public static int getDownloadSpeed(@NonNull Context context) {
         int downloadSpeed = 0;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
-        if( isWifiConnected(context)){
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (isWifiConnected(context)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 NetworkCapabilities nc = cm.getNetworkCapabilities(cm.getActiveNetwork());
                 downloadSpeed = nc.getLinkDownstreamBandwidthKbps();
                 return downloadSpeed;
@@ -90,18 +101,19 @@ public class NetworkUtils {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    public static int getUploadSpeed(@NonNull Context context){
+    public static int getUploadSpeed(@NonNull Context context) {
         int uploadSpeed = 0;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);
 
-        if(isWifiConnected(context)){
+        if (isWifiConnected(context)) {
             NetworkCapabilities nc = cm.getNetworkCapabilities(cm.getActiveNetwork());
             uploadSpeed = nc.getLinkUpstreamBandwidthKbps();
             return uploadSpeed;
         }
         return uploadSpeed;
     }
-    public static WifiInfo getWifiInfo(@NonNull Context context){
+
+    public static WifiInfo getWifiInfo(@NonNull Context context) {
         WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(context.WIFI_SERVICE);
         return cm.getConnectionInfo();
     }
@@ -123,26 +135,27 @@ public class NetworkUtils {
             if (wifiInfo != null) {
                 NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
                 if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
-                    return wifiInfo.getSSID().substring(1,wifiInfo.getSSID().length()-1);
-                }
-            }
-        }
-        return null;
-    }
-    public static String getNameWifi(WifiManager manager) {
-        if (manager != null && manager.isWifiEnabled()) {
-            WifiInfo wifiInfo = manager.getConnectionInfo();
-            if (wifiInfo != null) {
-                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
-                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
-                    return wifiInfo.getSSID().substring(1,wifiInfo.getSSID().length()-1);
+                    return wifiInfo.getSSID().substring(1, wifiInfo.getSSID().length() - 1);
                 }
             }
         }
         return null;
     }
 
-    public static List<ScanResult> getListWifi(Context context,WifiManager manager){
+    public static String getNameWifi(WifiManager manager) {
+        if (manager != null && manager.isWifiEnabled()) {
+            WifiInfo wifiInfo = manager.getConnectionInfo();
+            if (wifiInfo != null) {
+                NetworkInfo.DetailedState state = WifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState());
+                if (state == NetworkInfo.DetailedState.CONNECTED || state == NetworkInfo.DetailedState.OBTAINING_IPADDR) {
+                    return wifiInfo.getSSID().substring(1, wifiInfo.getSSID().length() - 1);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static List<ScanResult> getListWifi(Context context, WifiManager manager) {
 
         if (manager != null && manager.isWifiEnabled()) {
             List<ScanResult> wifiList = manager.getScanResults();
@@ -150,6 +163,7 @@ public class NetworkUtils {
         }
         return null;
     }
+
     public static String wifiIpAddress(Context context) {
         WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         int ipAddress = wifiManager.getConnectionInfo().getIpAddress();

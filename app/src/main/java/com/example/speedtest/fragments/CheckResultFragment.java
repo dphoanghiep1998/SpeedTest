@@ -1,6 +1,8 @@
 package com.example.speedtest.fragments;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.adapter.ConnectivityTestAdapter;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.databinding.FragmentCheckResultBinding;
@@ -23,14 +26,14 @@ import java.util.List;
 
 public class CheckResultFragment extends Fragment {
     FragmentCheckResultBinding binding;
-    WifiTestViewModel viewModel;
+
     ConnectivityTestAdapter adapter = new ConnectivityTestAdapter();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentCheckResultBinding.inflate(inflater,container,false);
-        viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
+        binding = FragmentCheckResultBinding.inflate(inflater, container, false);
+
         rcv_init();
         return binding.getRoot();
     }
@@ -38,14 +41,36 @@ public class CheckResultFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView();
     }
 
-    public void rcv_init(){
+    private void initView() {
+        ((MainActivity) getActivity()).binding.imvDelete.setOnClickListener(view -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+                    .setTitle("Do you wanna delete all results ?")
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ((MainActivity) requireActivity()).viewModel.deleteAllResultTest();
+                        }
+                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }).create();
+            alertDialog.show();
+
+        });
+    }
+
+
+    public void rcv_init() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcvConnectTestResult.setLayoutManager(linearLayoutManager);
         binding.rcvConnectTestResult.setAdapter(adapter);
-        viewModel.getListResultTest().observe(requireActivity(), new Observer<List<ConnectivityTestModel>>() {
+        ((MainActivity) requireActivity()).viewModel.getListResultTest().observe(requireActivity(), new Observer<List<ConnectivityTestModel>>() {
             @Override
             public void onChanged(List<ConnectivityTestModel> list) {
                 adapter.setData(list);

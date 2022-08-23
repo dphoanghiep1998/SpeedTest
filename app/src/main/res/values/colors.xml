@@ -19,5 +19,11 @@
     <color name="button_color_end">#C603A9F4</color>
     <color name="text_accent">#00BCD4</color>
     <color name="text_color_medium">#ff0</color>
+    <color name="progress_bar">#615D5D</color>
+    <color name="second_progressbar">#FBBD00</color>
+    <color name="signal_poor">#F44336</color>
+    <color name="signal_normal">#FFEB3B</color>
+    <color name="signal_good">#15CD1C</color>
+
 
 </resources>

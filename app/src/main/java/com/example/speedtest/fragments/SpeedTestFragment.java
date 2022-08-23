@@ -1,14 +1,13 @@
 package com.example.speedtest.fragments;
-import android.Manifest;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -26,33 +25,30 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
+import com.example.speedtest.ResultActivity;
 import com.example.speedtest.core.Speedtest;
 import com.example.speedtest.core.config.SpeedtestConfig;
 import com.example.speedtest.core.serverSelector.TestPoint;
 import com.example.speedtest.databinding.FragmentSpeedtestBinding;
 import com.example.speedtest.model.ConnectivityTestModel;
-import com.example.speedtest.services.CheckISPIP;
+import com.example.speedtest.model.Mobile;
+import com.example.speedtest.model.Wifi;
 import com.example.speedtest.utils.DateTimeUtils;
 import com.example.speedtest.utils.NetworkUtils;
-import com.example.speedtest.view_model.WifiTestViewModel;
 import com.github.anastr.speedviewlib.Gauge;
 import com.github.anastr.speedviewlib.components.Style;
 
 import org.json.JSONArray;
-
 
 import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,21 +56,28 @@ import java.util.Locale;
 public class SpeedTestFragment extends Fragment implements View.OnClickListener {
     FragmentSpeedtestBinding binding;
     private boolean isConnectivityChanged = true;
+    private boolean isFragmentFreezing = false;
     private boolean isScanning = false;
     private BroadcastReceiver internetBroad;
     private IntentFilter internetFilter;
-    private static Speedtest st=null;
-    WifiTestViewModel viewModel;
+    private static Speedtest st = null;
+    private Wifi wifi = new Wifi();
+    private Mobile mobile = new Mobile();
+    private String type;
 
 
-
+    @Override
+    public void onPause() {
+        super.onPause();
+        isFragmentFreezing = true;
+        Log.d("TAG", "onPause: ");
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSpeedtestBinding.inflate(inflater, container, false);
         initBroadCast();
-        viewModel = new ViewModelProvider(requireActivity()).get(WifiTestViewModel.class);
         getActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         return binding.getRoot();
     }
@@ -91,11 +94,25 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         Log.d("msg", "onResume: ");
         super.onResume();
-        if(isConnectivityChanged){
-            if(NetworkUtils.isWifiConnected(getContext())){
+        isFragmentFreezing = false;
+        if (isConnectivityChanged) {
+            if (NetworkUtils.isWifiConnected(getContext())) {
                 SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
                 content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
                 binding.tvWifiName.setText(content);
+                type = "wifi";
+            } else if (NetworkUtils.isMobileConnected(getContext())) {
+                NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
+                String type = info.getTypeName() + " - " + info.getSubtypeName();
+                SpannableString content = new SpannableString(type);
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                binding.tvWifiName.setText(content);
+                type = "mobile";
+            } else {
+                SpannableString content = new SpannableString("No connection");
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                binding.tvWifiName.setText(content);
+                type = "no-connection";
             }
         }
         isConnectivityChanged = false;
@@ -107,10 +124,32 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onReceive(Context context, Intent intent) {
                 isConnectivityChanged = true;
+                if (isConnectivityChanged && !isFragmentFreezing) {
+                    if (NetworkUtils.isWifiConnected(getContext())) {
+                        Log.d("TAG", "onReceive: " + NetworkUtils.getWifiInfo(requireContext()));
+                        SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        binding.tvWifiName.setText(content);
+                        type = "wifi";
+
+                    } else if (NetworkUtils.isMobileConnected(getContext())) {
+                        NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
+                        String type = info.getTypeName() + " - " + info.getSubtypeName();
+                        SpannableString content = new SpannableString(type);
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        binding.tvWifiName.setText(content);
+                        type = "mobile";
+                    } else {
+                        SpannableString content = new SpannableString("No connection");
+                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                        binding.tvWifiName.setText(content);
+                        type = "no-connection";
+                    }
+                    isConnectivityChanged = false;
+                }
             }
         };
     }
-
 
 
     private void unRegisterBroadCast() {
@@ -144,7 +183,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void customTick() {
         List<Float> arList = new ArrayList<>(Arrays.asList(0f, 0.05f, 0.1f, 0.15f, 0.20f, 0.30f, 0.5f, 0.75f, 1f));
         binding.speedView.clearSections();
-        binding.speedView.makeSections(1,Color.GRAY, Style.BUTT);
+        binding.speedView.makeSections(1, Color.GRAY, Style.BUTT);
 
         binding.speedView.setTicks(arList);
         binding.speedView.setSpeedTextPosition(Gauge.Position.BOTTOM_CENTER);
@@ -202,10 +241,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     }
 
 
-
     public void onClickStartButton() {
-        if (!NetworkUtils.isWifiConnected(this.getContext())) {
-            Toast.makeText(this.getContext(), "No wifi connected", Toast.LENGTH_SHORT).show();
+        if (!NetworkUtils.isWifiConnected(this.getContext()) && !NetworkUtils.isMobileConnected(this.getContext())) {
+            Toast.makeText(this.getContext(), "No connectivity!", Toast.LENGTH_SHORT).show();
             return;
         }
         binding.btnStartScan.setEnabled(false);
@@ -224,7 +262,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_start_scan:
-                ((MainActivity)requireActivity()).setIsScanning(true);
+                ((MainActivity) requireActivity()).setIsScanning(true);
 
                 onClickStartButton();
                 break;
@@ -236,51 +274,57 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     }
 
 
-    private String readFileFromAssets(String name) throws Exception{
-        BufferedReader b=new BufferedReader(new InputStreamReader(requireContext().getApplicationContext().getAssets().open(name)));
-        String ret="";
-        try{
-            for(;;){
-                String s=b.readLine();
-                if(s==null) break;
-                ret+=s;
+    private String readFileFromAssets(String name) throws Exception {
+        BufferedReader b = new BufferedReader(new InputStreamReader(requireContext().getApplicationContext().getAssets().open(name)));
+        String ret = "";
+        try {
+            for (; ; ) {
+                String s = b.readLine();
+                if (s == null) break;
+                ret += s;
             }
-        }catch(EOFException e){}
+        } catch (EOFException e) {
+        }
         return ret;
     }
 
-    public void loadServer(){
-      new Thread(){
-          @Override
-          public void run() {
-              SpeedtestConfig config;
-              TestPoint server;
-              try{
-            String c;
-                  if(st!=null){
-                      try{st.abort();}catch (Throwable e){}
-                  }
-                  st=new Speedtest();
-                  c=readFileFromAssets("Server.json");
-                  if(c.startsWith("\"")||c.startsWith("'")){ //fetch server list from URL
-                      if(!st.loadServer(c.subSequence(1,c.length()-1).toString())){
-                          throw new Exception("Failed to load server list");
-                      }
-                  }else{ //use provided server list
-                      JSONArray a=new JSONArray(c);
-                      if(a.length()==0) throw new Exception("No test points");
-                      server = new TestPoint(a.getJSONObject(0));
-                      st.addTestPoint(server);
-                      runSpeedTest(server);
-                  }
-              } catch (Exception e) {
-                  e.printStackTrace();
-              }
+    public void loadServer() {
+        new Thread() {
+            @Override
+            public void run() {
+                SpeedtestConfig config;
+                TestPoint server;
+                try {
+                    String c;
+                    if (st != null) {
+                        try {
+                            st.abort();
+                        } catch (Throwable e) {
+                        }
+                    }
+                    st = new Speedtest();
+                    c = readFileFromAssets("Server.json");
+                    if (c.startsWith("\"") || c.startsWith("'")) { //fetch server list from URL
+                        if (!st.loadServer(c.subSequence(1, c.length() - 1).toString())) {
+                            throw new Exception("Failed to load server list");
+                        }
+                    } else { //use provided server list
+                        JSONArray a = new JSONArray(c);
+                        if (a.length() == 0) throw new Exception("No test points");
+                        server = new TestPoint(a.getJSONObject(0));
+                        st.addTestPoint(server);
+                        runSpeedTest(server);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-          }
-      }.start();
+            }
+        }.start();
     }
-    public void runSpeedTest(TestPoint tp){
+
+    public void runSpeedTest(TestPoint tp) {
+        getConnection();
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(100); //You can manage the blinking time with this parameter
         anim.setStartOffset(50);
@@ -288,7 +332,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         st.start(new Speedtest.SpeedtestHandler() {
             @Override
             public void onDownloadUpdate(double dl, double progress) {
-                if(progress == 0){
+                if (progress == 0) {
                     binding.tvDownloadValue.startAnimation(anim);
 
                 }
@@ -297,7 +341,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     public void run() {
                         binding.speedView.speedTo((float) dl);
 
-                        if(progress >= 1){
+                        if (progress >= 1) {
                             binding.tvDownloadValue.clearAnimation();
                             binding.tvDownloadValue.setText(format(dl));
                             binding.speedView.speedTo(0);
@@ -309,14 +353,14 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onUploadUpdate(double ul, double progress) {
-                if(progress == 0){
+                if (progress == 0) {
                     binding.tvUploadValue.startAnimation(anim);
                 }
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         binding.speedView.speedTo((float) ul);
-                        if(progress >= 1){
+                        if (progress >= 1) {
                             binding.tvUploadValue.clearAnimation();
                             binding.tvUploadValue.setText(format(ul));
                             binding.speedView.speedTo(0);
@@ -332,7 +376,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void run() {
                         binding.tvPingCount.setText(format(ping) + " ms");
-                        binding.tvJitterCount.setText(format(jitter)+ " ms");
+                        binding.tvJitterCount.setText(format(jitter) + " ms");
                     }
                 });
             }
@@ -343,30 +387,60 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     @Override
                     public void run() {
                         binding.btnStartScan.setText("ĐANG CHẠY ...");
+                        String[] array = ipInfo.split("-");
+                        if (type == "wifi") {
+                            wifi.setWifi_external_ip(array[0]);
+                            wifi.setWifi_ISP(array[1]);
+                        } else {
+                            mobile.setMobile_external_ip(array[0]);
+                            mobile.setMobile_isp(array[1]);
+                        }
+
                     }
                 });
             }
 
             @Override
             public void onEnd() {
-                ((MainActivity)requireActivity()).setIsScanning(false);
+                Intent intent = new Intent(getActivity(), ResultActivity.class);
+                ((MainActivity) requireActivity()).setIsScanning(false);
+
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         binding.speedView.speedTo(0);
+                        if (type == "wifi") {
+                            ConnectivityTestModel connectivityTestModel = new ConnectivityTestModel(binding.tvWifiName.getText().toString(),
+                                    DateTimeUtils.getDateNowConverted(),
+                                    binding.tvDownloadValue.getText().toString(),
+                                    binding.tvUploadValue.getText().toString(),
+                                    binding.tvPingCount.getText().toString().replace(" ms", ""),
+                                    null,
+                                    wifi,type);
+                            ;
+                            ((MainActivity) requireActivity()).viewModel.insertResultTest(connectivityTestModel);
+                            intent.putExtra("test_result",connectivityTestModel);
 
-                        viewModel.insertResultTest(new ConnectivityTestModel(binding.tvWifiName.getText().toString(), DateTimeUtils.getDateNowConverted(),binding.tvDownloadValue.getText().toString(),binding.tvUploadValue.getText().toString(),binding.tvPingCount.getText().toString().replace(" ms",""),"wifi"));
+                        } else {
+                            ConnectivityTestModel connectivityTestModel = new ConnectivityTestModel(binding.tvWifiName.getText().toString(),
+                                    DateTimeUtils.getDateNowConverted(),
+                                    binding.tvDownloadValue.getText().toString(),
+                                    binding.tvUploadValue.getText().toString(),
+                                    binding.tvPingCount.getText().toString().replace(" ms", ""),
+                                    mobile,
+                                    null,type);
+                            ((MainActivity) requireActivity()).viewModel.insertResultTest(connectivityTestModel);
+                            intent.putExtra("test_result",connectivityTestModel);
+
+                        }
                         binding.btnStartScan.setText("BẮT ĐẦU NGAY");
                         binding.btnStartScan.setEnabled(true);
                         binding.tvDownloadValue.setText("0");
                         binding.tvUploadValue.setText("0");
                         binding.tvPingCount.setText("0");
                         binding.tvJitterCount.setText("0");
+                        startActivity(intent);
 
-
-
-
-                        Log.d("TAG", "onEnd: ");
                     }
                 });
 
@@ -374,7 +448,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onCriticalFailure(String err) {
-                ((MainActivity)requireActivity()).setIsScanning(false);
+                ((MainActivity) requireActivity()).setIsScanning(false);
 
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
@@ -387,21 +461,51 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                         binding.tvJitterCount.setText("0");
                     }
                 });
-                Log.d("TAG", "onCriticalFailure: "+err);
+                Log.d("TAG", "onCriticalFailure: " + err);
             }
         });
     }
 
-    private String format(double d){
-        Locale l=null;
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.N) {
+    private String format(double d) {
+        Locale l = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             l = getResources().getConfiguration().getLocales().get(0);
-        }else{
-            l=getResources().getConfiguration().locale;
+        } else {
+            l = getResources().getConfiguration().locale;
         }
-        if(d<10) return String.format(l,"%.2f",d);
-        if(d<100) return String.format(l,"%.1f",d);
-        return ""+Math.round(d);
+        if (d < 10) return String.format(l, "%.2f", d);
+        if (d < 100) return String.format(l, "%.1f", d);
+        return "" + Math.round(d);
+    }
+
+    private void getConnection() {
+        if (NetworkUtils.isWifiConnected(requireContext().getApplicationContext())) {
+            WifiInfo wifiInfo = NetworkUtils.getWifiInfo(requireContext().getApplicationContext());
+            Log.d("TAG", "getConnection: " + wifiInfo);
+            if (wifiInfo != null) {
+                wifi.setWifi_name(wifiInfo.getSSID());
+                wifi.setWifi_bssid(wifiInfo.getBSSID());
+                wifi.setWifi_level(String.valueOf(wifiInfo.getRssi()));
+                wifi.setWifi_frequency(String.valueOf(wifiInfo.getFrequency()));
+                double exp = (27.55 - (20 * Math.log10(wifiInfo.getFrequency())) + Math.abs(wifiInfo.getRssi())) / 20.0;
+                double distanceM = Math.pow(10.0, exp);
+                wifi.setWifi_distance(distanceM + "");
+                wifi.setWifi_isConnected(true);
+                wifi.setWifi_internal_ip(NetworkUtils.wifiIpAddress(requireContext().getApplicationContext()));
+                wifi.setWifi_channel(0 + "");
+            }
+
+        } else if (NetworkUtils.isMobileConnected(requireContext().getApplicationContext())) {
+            NetworkInfo networkInfo = NetworkUtils.getInforMobileConnected(requireContext().getApplicationContext());
+            if (networkInfo != null) {
+                String type = networkInfo.getTypeName() + " - " + networkInfo.getSubtypeName();
+                mobile.setMobile_name(type);
+                mobile.setMobile_external_ip("0.0.0.0");
+                mobile.setMobile_internal_ip("0.0.0.0");
+                mobile.setMobile_isConnected(true);
+            }
+
+        }
     }
 
 
