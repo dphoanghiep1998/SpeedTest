@@ -335,7 +335,7 @@
                     android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="16dp"
-                    android:src="@drawable/ic_star" />
+                    android:src="@drawable/ic_fanpage" />
 
                 <TextView
                     android:id="@+id/tv_fanpage"
@@ -344,7 +344,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
                     android:layout_toRightOf="@+id/imv_fanpage"
-                    android:text="Đánh giá ứng dụng"
+                    android:text="FanPage Speedtest"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 

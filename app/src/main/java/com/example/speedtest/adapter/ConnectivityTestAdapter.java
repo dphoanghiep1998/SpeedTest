@@ -10,15 +10,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.speedtest.R;
+import com.example.speedtest.interfaces.ResultTouchHelper;
 import com.example.speedtest.model.ConnectivityTestModel;
 
 import java.util.List;
 
 public class ConnectivityTestAdapter extends RecyclerView.Adapter<ConnectivityTestAdapter.ConnectivityTestViewHolder> {
     private List<ConnectivityTestModel> mList;
+    private ResultTouchHelper resultTouchHelper;
     public void setData(List<ConnectivityTestModel> mList){
         this.mList = mList;
         notifyDataSetChanged();
+    }
+    public ConnectivityTestAdapter(ResultTouchHelper resultTouchHelper){
+        this.resultTouchHelper = resultTouchHelper;
     }
     @NonNull
     @Override
@@ -31,11 +36,19 @@ public class ConnectivityTestAdapter extends RecyclerView.Adapter<ConnectivityTe
     public void onBindViewHolder(@NonNull ConnectivityTestViewHolder holder, int position) {
         ConnectivityTestModel model = mList.get(position);
         if(model != null){
+            if(model.getType().equals("wifi")){
+                holder.connectionType.setImageResource(R.drawable.ic_wifi);
+            }else {
+                holder.connectionType.setImageResource(R.drawable.ic_mobiledata);
+            }
             holder.ssid.setText(model.getName());
             holder.date.setText(model.getDate());
             holder.uploadRate.setText(model.getUpLoadSpeed());
             holder.downloadRate.setText(model.getDownloadSpeed());
             holder.pingRate.setText(model.getPing());
+            holder.itemView.setOnClickListener(view ->{
+                resultTouchHelper.onClickResultTest(model);
+            });
         }
     }
 

@@ -69,7 +69,7 @@ public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.
 
             }
             holder.itemView.setOnClickListener(view -> {
-                helper.onClickItem(wifiModel);
+                helper.onClickItemWifi(wifiModel);
             });
         }
 

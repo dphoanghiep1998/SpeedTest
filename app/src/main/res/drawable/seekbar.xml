@@ -2,9 +2,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
-        android:height="14dp"
+        android:height="1dp"
         android:id="@android:id/progress" >
-
         <clip
             android:drawable="@color/progress_bar" />
     </item>

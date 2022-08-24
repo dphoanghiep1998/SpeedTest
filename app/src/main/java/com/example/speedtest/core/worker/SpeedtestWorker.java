@@ -131,6 +131,7 @@ public abstract class SpeedtestWorker extends Thread{
     }
 
     private boolean ulCalled=false;
+
     private void ulTest(){
         if(ulCalled) return; else ulCalled=true;
         final long start=System.currentTimeMillis();

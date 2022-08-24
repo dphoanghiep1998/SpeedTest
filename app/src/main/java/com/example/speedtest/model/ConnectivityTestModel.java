@@ -21,7 +21,7 @@ public class ConnectivityTestModel implements Serializable {
 
 
 
-    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,Mobile mobile,Wifi wifi,String type) {
+    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,String jitter,String loss,Mobile mobile,Wifi wifi,String type) {
         this.name = name;
         this.date = date;
         this.downloadSpeed = downloadSpeed;
@@ -29,6 +29,8 @@ public class ConnectivityTestModel implements Serializable {
         this.ping = ping;
         this.mobile = mobile;
         this.wifi = wifi;
+        this.jitter = jitter;
+        this.loss = loss;
         this.type = type;
     }
     public String getType() {

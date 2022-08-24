@@ -3,7 +3,7 @@
     <item
         android:id="@android:id/background"
         android:drawable="@drawable/seekbar" />
-    <item android:id="@android:id/progress" android:height="14dp">
+    <item android:id="@android:id/progress" android:height="9dp">
         <clip android:drawable="@drawable/background_remove_ads" />
     </item>
 </layer-list>

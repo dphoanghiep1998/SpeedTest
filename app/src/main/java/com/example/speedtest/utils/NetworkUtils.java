@@ -42,6 +42,10 @@ public class NetworkUtils {
         }
         return false;
     }
+    public static boolean isWifiEnabled(@NonNull Context context){
+        WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(context.WIFI_SERVICE);
+        return cm==null && cm.isWifiEnabled();
+    }
 
     public static boolean isMobileConnected(@NonNull Context context) {
         return isConnected(context, ConnectivityManager.TYPE_MOBILE);
@@ -185,6 +189,8 @@ public class NetworkUtils {
 
         return ipAddressString;
     }
+
+
 
 
 }

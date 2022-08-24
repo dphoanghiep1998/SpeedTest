@@ -3,6 +3,7 @@ package com.example.speedtest.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +17,20 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.speedtest.MainActivity;
+import com.example.speedtest.ResultActivity;
 import com.example.speedtest.adapter.ConnectivityTestAdapter;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.databinding.FragmentCheckResultBinding;
+import com.example.speedtest.interfaces.ResultTouchHelper;
 import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.view_model.WifiTestViewModel;
 
 import java.util.List;
 
-public class CheckResultFragment extends Fragment {
+public class CheckResultFragment extends Fragment implements ResultTouchHelper {
     FragmentCheckResultBinding binding;
 
-    ConnectivityTestAdapter adapter = new ConnectivityTestAdapter();
+    ConnectivityTestAdapter adapter = new ConnectivityTestAdapter(this);
 
     @Nullable
     @Override
@@ -76,5 +79,12 @@ public class CheckResultFragment extends Fragment {
                 adapter.setData(list);
             }
         });
+    }
+
+    @Override
+    public void onClickResultTest(ConnectivityTestModel connectivityTestModel) {
+        Intent intent = new Intent(requireActivity(), ResultActivity.class);
+        intent.putExtra("test_result",connectivityTestModel);
+        startActivity(intent);
     }
 }

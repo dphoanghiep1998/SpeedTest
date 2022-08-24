@@ -1,7 +1,10 @@
 package com.example.speedtest;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -39,16 +42,12 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(WifiTestViewModel .class);
-        checkMobileConnected();
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         initView();
         setActionMenu();
     }
-    public void checkMobileConnected(){
-        Log.d("TAG", "checkMobileConnected: "+ NetworkUtils.isMobileConnected(getApplication()));
-        Log.d("TAG", "checkMobileConnected: "+NetworkUtils.getInforMobileConnected(getApplication()).getSubtypeName());
 
-    }
+
 
     public void initView() {
         binding.imvDelete.setVisibility(View.GONE);
@@ -67,6 +66,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         requestLocationPermission();
                         if(permission){
+                            if(!NetworkUtils.isWifiEnabled(getApplicationContext())){
+//                                IntentFilter intent = new IntentFilter(ACTION)
+                            }
                             binding.imvDelete.setVisibility(View.GONE);
                             getSupportFragmentManager().beginTransaction().replace(R.id.frame_container, analiyzerFragment).commit();
                             return true;
@@ -89,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.containerRate.setOnClickListener(view -> openLink("http://www.google.com"));
+        binding.containerPolicy.setOnClickListener(view -> openLink("http://www.google.com"));
+        binding.containerFanpage.setOnClickListener(view -> openLink("http://www.facebook.com"));
+        binding.containerOtherApp.setOnClickListener(view -> openLink("http://www.google.com"));
+        binding.containerShare.setOnClickListener(view -> shareApp());
+
     }
     public void setActionMenu(){
         binding.menu.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +129,29 @@ public class MainActivity extends AppCompatActivity {
                 permission = true;
             }
         }
+    }
+    public void openLink(String strUri){
+        try{
+            Uri uri = Uri.parse(strUri);
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            startActivity(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+    public void shareApp(){
+        try{
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT,"Speedtest");
+            String shareMessage = "Very good speed test app ~~";
+            shareIntent.putExtra(Intent.EXTRA_TEXT,shareMessage);
+            startActivity(Intent.createChooser(shareIntent,"Choose one"));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     public void setIsScanning(boolean status){

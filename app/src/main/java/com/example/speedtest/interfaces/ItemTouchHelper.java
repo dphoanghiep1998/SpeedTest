@@ -1,7 +1,8 @@
 package com.example.speedtest.interfaces;
 
+import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.model.Wifi;
 
 public interface ItemTouchHelper {
-    void onClickItem(Wifi wifi);
+    void onClickItemWifi(Wifi wifi);
 }

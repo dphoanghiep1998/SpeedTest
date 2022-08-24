@@ -99,7 +99,6 @@
             app:layout_constraintTop_toBottomOf="@id/tv_internetSignal" />
 
         <androidx.appcompat.widget.AppCompatSeekBar
-
             android:id="@+id/pb_signal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -312,7 +311,7 @@
                 android:layout_width="20dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_up_arrow" />
+                android:src="@drawable/ic_ping" />
 
             <TextView
 
@@ -347,7 +346,7 @@
                 android:layout_width="20dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_up_arrow" />
+                android:src="@drawable/ic_jitter" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -379,7 +378,7 @@
                 android:layout_width="20dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_up_arrow" />
+                android:src="@drawable/ic_loss" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -390,7 +389,7 @@
 
             <TextView
                 android:paddingLeft="4dp"
-                android:id="@+id/lossCount"
+                android:id="@+id/tv_lossCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

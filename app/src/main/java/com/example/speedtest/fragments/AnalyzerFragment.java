@@ -64,8 +64,31 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("FRAG", "onCreate: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("FRAG", "onResume: ");
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d("FRAG", "onStart: ");
+
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("FRAG", "onDestroy: ");
+
+
 
     }
 
@@ -81,17 +104,19 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
     public void initBroadcast() {
         wifiReciver = new BroadcastReceiver() {
+            @RequiresApi(api = Build.VERSION_CODES.S)
             @Override
             public void onReceive(Context context, Intent intent) {
 
                 scanResultList = NetworkUtils.getListWifi(getContext(), mainWifi);
                 String activeWifiName = NetworkUtils.getNameWifi(getContext());
-                Log.d("TAG", "onReceive: "+scanResultList +activeWifiName);
                 if (scanResultList != null) {
                     for (ScanResult result : scanResultList) {
                         if (result != null) {
                             String level = String.valueOf(result.level);
                             String frequency = String.valueOf(result.frequency);
+                            Log.d("TAG", "onReceive: "+result.SSID + ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency));
+
                             String channelWidth = null;
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                                 channelWidth = String.valueOf(result.channelWidth);
@@ -137,7 +162,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     }
 
     @Override
-    public void onClickItem(Wifi wifi) {
+    public void onClickItemWifi(Wifi wifi) {
         Intent intent = new Intent(requireActivity(), AnalyticActivity.class);
         intent.putExtra("wifi",wifi);
         startActivity(intent);
