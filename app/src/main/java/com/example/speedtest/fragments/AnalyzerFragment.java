@@ -73,6 +73,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mainWifi.startScan();
+
     }
 
     @Override
@@ -97,11 +98,11 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     }
 
     public void initBroadcast() {
+        binding.loadingPanel.setVisibility(View.VISIBLE);
         wifiReciver = new BroadcastReceiver() {
             @RequiresApi(api = Build.VERSION_CODES.S)
             @Override
             public void onReceive(Context context, Intent intent) {
-
                 scanResultList = NetworkUtils.getListWifi(getContext(), mainWifi);
                 String activeWifiName = NetworkUtils.getNameWifi(getContext());
                 if (scanResultList != null) {
@@ -142,6 +143,8 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                 }
                 adapter.setData(wifiList);
                 setDataChart(wifiList);
+                binding.loadingPanel.setVisibility(View.GONE);
+
             }
         };
 

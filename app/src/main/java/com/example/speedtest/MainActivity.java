@@ -56,6 +56,24 @@ public class MainActivity extends AppCompatActivity {
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
         binding.vpContainerFrament.setAdapter(viewPager);
+        binding.vpContainerFrament.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                binding.navBottom.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                Log.d("TAG", "onPageScrollStateChanged: "+state);
+                super.onPageScrollStateChanged(state);
+            }
+        });
         binding.imvDelete.setVisibility(View.GONE);
         binding.navBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override

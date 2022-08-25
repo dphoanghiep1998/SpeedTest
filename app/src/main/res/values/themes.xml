@@ -3,7 +3,9 @@
     <style name="Theme.SpeedTest" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="colorPrimary">@color/black</item>
-<!--        <item name="colorOnPrimary">@color/background</item>-->
+        <item name="android:windowEnableSplitTouch">false</item>
+
+        <!--        <item name="colorOnPrimary">@color/background</item>-->
 
 <!--        <item name="colorSecondary">@color/background</item>-->
 <!--        <item name="colorOnSecondary">@color/black</item>-->
