@@ -1,14 +1,21 @@
 package com.example.speedtest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ClipDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.SeekBar;
 
 import com.example.speedtest.databinding.ActivityResultBinding;
 import com.example.speedtest.model.ConnectivityTestModel;
@@ -35,6 +42,7 @@ public class ResultActivity extends AppCompatActivity {
         binding.pbSignal.setProgress(progress);
         binding.pbSignal.setEnabled(false);
         binding.tvSignalStrength.setTextColor(level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
+        setProgressBarColor(binding.pbSignal,level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
 
         binding.tvSignalStrength.setText(status);
         binding.tvDownloadValue.setText(connectivityTestModel.getDownloadSpeed());
@@ -70,6 +78,16 @@ public class ResultActivity extends AppCompatActivity {
                 finish();
             });
         }
+    }
+    public void setProgressBarColor(SeekBar progressBar, int newColor){
+        LayerDrawable ld = (LayerDrawable) progressBar.getProgressDrawable();
+        ClipDrawable d1 = (ClipDrawable) ld.findDrawableByLayerId(android.R.id.progress);
+        d1.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
+
+
+        LayerDrawable thumb = (LayerDrawable) progressBar.getThumb();
+        thumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
+
     }
 
 

@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -17,15 +18,28 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.speedtest.AnalyticActivity;
+import com.example.speedtest.R;
 import com.example.speedtest.adapter.WifiChannelAdapter;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.interfaces.ItemTouchHelper;
 import com.example.speedtest.model.Wifi;
 import com.example.speedtest.utils.NetworkUtils;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+import com.github.mikephil.charting.model.GradientColor;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +59,13 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.d("FRAG", "onCreate: ");
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false);
         intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         mainWifi = (WifiManager) requireContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         rcvWifi_init();
         initBroadcast();
-        requireActivity().registerReceiver(wifiReciver,intentFilter);
-
+        requireActivity().registerReceiver(wifiReciver, intentFilter);
         return binding.getRoot();
     }
 
@@ -59,7 +73,12 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mainWifi.startScan();
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("FRAG", "onDestroy: ");
 
     }
 
@@ -69,38 +88,13 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
         Log.d("FRAG", "onCreate: ");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d("FRAG", "onResume: ");
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d("FRAG", "onStart: ");
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("FRAG", "onDestroy: ");
-
-
-
-    }
-
     public void rcvWifi_init() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcvWifi.setLayoutManager(linearLayoutManager);
         binding.rcvWifi.setAdapter(adapter);
 
-
     }
-
 
     public void initBroadcast() {
         wifiReciver = new BroadcastReceiver() {
@@ -115,7 +109,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                         if (result != null) {
                             String level = String.valueOf(result.level);
                             String frequency = String.valueOf(result.frequency);
-                            Log.d("TAG", "onReceive: "+result.SSID + ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency));
+                            Log.d("TAG", "onReceive: " + ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency));
 
                             String channelWidth = null;
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -135,23 +129,25 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                             }
                             if (activeWifiName.equals(result.SSID)) {
                                 if (!duplicated) {
-                                    wifiList.add(0, new Wifi(name, NetworkUtils.wifiIpAddress(requireContext()),"0.0.0.0" ,secure, level+"", frequency+"", result.BSSID, channelWidth, "100 m","" ,true));
+                                    wifiList.add(0, new Wifi(name, NetworkUtils.wifiIpAddress(requireContext()), "0.0.0.0", secure, level + "", frequency + "", result.BSSID, ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency) + "", "100 m", "", true));
                                     duplicated = true;
                                 }
 
                             } else {
-                                wifiList.add(new Wifi(name, "0.0.0.0","0.0.0.0" ,secure, level +"", frequency + "", result.BSSID, channelWidth, "100 m","" ,false));
+                                wifiList.add(new Wifi(name, "0.0.0.0", "0.0.0.0", secure, level + "", frequency + "", result.BSSID, ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency) + "", "100 m", "", false));
                             }
                         }
                     }
 
                 }
                 adapter.setData(wifiList);
+                setDataChart(wifiList);
             }
         };
 
     }
-    private void unregisterReceiver(){
+
+    private void unregisterReceiver() {
         requireActivity().unregisterReceiver(wifiReciver);
     }
 
@@ -164,7 +160,52 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     @Override
     public void onClickItemWifi(Wifi wifi) {
         Intent intent = new Intent(requireActivity(), AnalyticActivity.class);
-        intent.putExtra("wifi",wifi);
+        intent.putExtra("wifi", wifi);
         startActivity(intent);
+    }
+
+
+    private void setDataChart(List<Wifi> wifiList) {
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        String title = "Wifi channel";
+        ArrayList<String> xAxisValues = new ArrayList<>();
+        for (int i = 0; i <= 14; i++) {
+            xAxisValues.add(i + "");
+        }
+
+
+        binding.lcWifiChannel.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
+
+        for (Wifi wifi : wifiList) {
+            if (Integer.parseInt(wifi.getWifi_channel()) < 14) {
+                BarEntry barEntry = new BarEntry(Integer.parseInt(wifi.getWifi_channel()), Integer.parseInt(wifi.getWifi_level()) );
+                entries.add(barEntry);
+            }
+        }
+
+        BarDataSet barDataSet = new BarDataSet(entries, title);
+        BarData data = new BarData(barDataSet);
+
+        binding.lcWifiChannel.getXAxis().setCenterAxisLabels(true);
+
+        binding.lcWifiChannel.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+        binding.lcWifiChannel.getXAxis().setTextColor(getResources().getColor(R.color.white));
+        binding.lcWifiChannel.getAxisLeft().setTextColor(getResources().getColor(R.color.white));
+        binding.lcWifiChannel.getXAxis().setLabelCount(10, false);
+        binding.lcWifiChannel.getLegend().setTextColor(getResources().getColor(R.color.white));
+        binding.lcWifiChannel.getXAxis().setAxisMinimum(0f);
+        binding.lcWifiChannel.getXAxis().setAxisMaximum(13f);
+        binding.lcWifiChannel.getAxisLeft().setStartAtZero(false);
+
+        binding.lcWifiChannel.getAxisLeft().setAxisMinimum(-100);
+        binding.lcWifiChannel.getAxisLeft().setAxisMaximum(-50);
+
+        binding.lcWifiChannel.setTouchEnabled(false);
+        binding.lcWifiChannel.setData(data);
+        binding.lcWifiChannel.notifyDataSetChanged();
+        binding.lcWifiChannel.setDrawValueAboveBar(false);
+        binding.lcWifiChannel.animateX(1000);
+        binding.lcWifiChannel.invalidate();
+
     }
 }
