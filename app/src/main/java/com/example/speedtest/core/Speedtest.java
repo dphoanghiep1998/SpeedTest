@@ -35,7 +35,6 @@ public class Speedtest {
             if (state == 0) state = 1;
             if (state > 1) throw new IllegalStateException("Cannot add test points at this moment");
          server = t;
-            Log.d("TAG", "addTestPoint: "+t.getName() + t.getServer() + t.getGetIpURL() + t.getDlURL());
          state = 3;
         }
     }
@@ -149,6 +148,13 @@ public class Speedtest {
                     }
                     callback.onCriticalFailure(err);
                 }
+
+                @Override
+                public void onAbort() {
+
+                    callback.onAbort();
+                }
+
             };
         }
     }
@@ -158,6 +164,7 @@ public class Speedtest {
         synchronized (mutex) {
             if (state == 4) st.abort();
             state = 5;
+
         }
     }
 
@@ -167,6 +174,7 @@ public class Speedtest {
         public abstract void onPingJitterUpdate(double ping, double jitter, double progress);
         public abstract void onIPInfoUpdate(String ipInfo);
         public abstract void onEnd();
+        public abstract void onAbort();
         public abstract void onCriticalFailure(String err);
     }
 }

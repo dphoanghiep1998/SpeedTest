@@ -52,6 +52,36 @@
             android:layout_height="wrap_content"
             android:indeterminate="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:focusable="true"
+        android:clickable="true"
+        android:id="@+id/requestContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_main">
+       <TextView
+           android:id="@+id/tv_request_text"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           app:layout_constraintTop_toTopOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           android:textColor="@color/white"
+           android:textSize="20sp"
+           android:text="Yêu cầu quyền truy cập vị trí"/>
+        <Button
+            android:id="@+id/btnSetting"
+            android:paddingHorizontal="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_background_start"
+            android:text="Đi tới cài đặt"
+            app:layout_constraintTop_toBottomOf="@+id/tv_request_text"
+            app:layout_constraintStart_toStartOf="@+id/tv_request_text"
+            app:layout_constraintEnd_toEndOf="@id/tv_request_text"
+            android:layout_marginTop="24dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

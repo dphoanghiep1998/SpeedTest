@@ -32,6 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
     CountDownTimer countDownTimer;
+    private SpeedApplication application;
 
     Intent intent;
     int i = 0;
@@ -39,6 +40,8 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        application = SpeedApplication.create(this);
+        application.getShareData().isScanning.postValue(false);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);

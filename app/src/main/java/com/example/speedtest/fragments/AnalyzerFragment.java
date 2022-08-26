@@ -1,15 +1,19 @@
 package com.example.speedtest.fragments;
 
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +22,18 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.speedtest.AnalyticActivity;
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
+import com.example.speedtest.SpeedApplication;
 import com.example.speedtest.adapter.WifiChannelAdapter;
+import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.interfaces.ItemTouchHelper;
 import com.example.speedtest.model.Wifi;
@@ -53,16 +62,18 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     boolean duplicated = false;
     WifiManager mainWifi;
     List<Wifi> wifiList = new ArrayList<>();
+    private SpeedApplication application;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.d("FRAG", "onCreate: ");
+        application = SpeedApplication.create(requireContext());
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false);
         intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         mainWifi = (WifiManager) requireContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        initView();
         rcvWifi_init();
         initBroadcast();
         requireActivity().registerReceiver(wifiReciver, intentFilter);
@@ -72,21 +83,19 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainWifi.startScan();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            application.getShareData().isPermissionRequested.postValue(true);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("FRAG", "onDestroy: ");
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.d("FRAG", "onCreate: ");
     }
 
     public void rcvWifi_init() {
@@ -95,6 +104,27 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
         binding.rcvWifi.setLayoutManager(linearLayoutManager);
         binding.rcvWifi.setAdapter(adapter);
 
+    }
+
+    public void initView() {
+        binding.btnSetting.setOnClickListener(view -> {
+            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
+            intent.setData(uri);
+            requireActivity().startActivity(intent);
+        });
+        application.getShareData().isPermissionRequested.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isPermissionRequested) {
+                if (isPermissionRequested) {
+                    binding.requestContainer.setVisibility(View.GONE);
+                    mainWifi.startScan();
+                } else {
+                    binding.requestContainer.setVisibility(View.VISIBLE);
+
+                }
+            }
+        });
     }
 
     public void initBroadcast() {
@@ -181,7 +211,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
         for (Wifi wifi : wifiList) {
             if (Integer.parseInt(wifi.getWifi_channel()) < 14) {
-                BarEntry barEntry = new BarEntry(Integer.parseInt(wifi.getWifi_channel()), Integer.parseInt(wifi.getWifi_level()) );
+                BarEntry barEntry = new BarEntry(Integer.parseInt(wifi.getWifi_channel()), Integer.parseInt(wifi.getWifi_level()));
                 entries.add(barEntry);
             }
         }

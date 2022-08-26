@@ -30,17 +30,20 @@ public abstract class SpeedtestWorker extends Thread{
     public void run(){
         try {
             for (char t : config.getTest_order().toCharArray()) {
-                if(stopASAP) break;
+
                 if (t == '_') Utils.sleep(1000);
                 if (t == 'I') getIP();
                 if (t == 'D') dlTest();
                 if (t == 'U') ulTest();
                 if (t == 'P') pingTest();
+                if(stopASAP) {
+                    return;
+                }
             }
+            onEnd();
         }catch (Throwable t){
             onCriticalFailure(t.toString());
         }
-        onEnd();
     }
 
     private boolean getIPCalled=false;
@@ -229,6 +232,7 @@ public abstract class SpeedtestWorker extends Thread{
     public void abort(){
         if(stopASAP) return;
         stopASAP=true;
+        onAbort();
     }
 
     public abstract void onDownloadUpdate(double dl, double progress);
@@ -237,5 +241,6 @@ public abstract class SpeedtestWorker extends Thread{
     public abstract void onIPInfoUpdate(String ipInfo);
     public abstract void onEnd();
     public abstract void onCriticalFailure(String err);
+    public abstract void onAbort();
 
 }
