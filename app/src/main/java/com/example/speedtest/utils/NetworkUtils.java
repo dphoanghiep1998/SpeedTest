@@ -14,8 +14,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.ByteOrder;
 import java.util.List;
@@ -190,6 +193,21 @@ public class NetworkUtils {
         return ipAddressString;
     }
 
+    public static boolean hasActiveInternetConnection(Context context) {
+        if (isConnected(context)) {
+            try {
+                HttpURLConnection urlc = (HttpURLConnection) (new URL("http://www.google.com").openConnection());
+                urlc.setRequestProperty("User-Agent", "Test");
+                urlc.setRequestProperty("Connection", "close");
+                urlc.setConnectTimeout(1500);
+                urlc.connect();
+                return (urlc.getResponseCode() == 200);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
 
 
 

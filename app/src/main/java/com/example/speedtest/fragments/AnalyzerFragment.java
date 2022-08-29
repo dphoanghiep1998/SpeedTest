@@ -140,7 +140,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                         if (result != null) {
                             String level = String.valueOf(result.level);
                             String frequency = String.valueOf(result.frequency);
-                            Log.d("TAG", "onReceive: " + ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency));
 
                             String channelWidth = null;
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

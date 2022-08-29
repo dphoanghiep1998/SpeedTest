@@ -3,11 +3,13 @@ package com.example.speedtest;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,9 +64,10 @@ public class MainActivity extends AppCompatActivity {
         });
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        requestLocationPermission();
+//        getISPName();
         viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        requestLocationPermission();
         initView();
         setActionMenu();
     }
@@ -102,10 +105,8 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.analist:
 
-                            if (!NetworkUtils.isWifiEnabled(getApplicationContext())) {
-//                                IntentFilter intent = new IntentFilter(ACTION)
-                            }
-                            binding.imvDelete.setVisibility(View.GONE);
+
+                        binding.imvDelete.setVisibility(View.GONE);
                             binding.vpContainerFrament.setCurrentItem(1);
                             return true;
 
@@ -160,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 application.getShareData().isPermissionRequested.postValue(true);
             }
+        }else{
+            application.getShareData().isPermissionRequested.postValue(false);
         }
     }
 
@@ -249,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
             });
             YoYo.with(Techniques.FadeIn).playOn(binding.menu);
         }).playOn(binding.menu);
+    }
+    public void getISPName(){
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        Log.d("TAG", "getISPName: " + manager.getNetworkOperatorName());
     }
 
 }
