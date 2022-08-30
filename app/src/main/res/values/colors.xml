@@ -7,14 +7,15 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="bottom_nav_checked">#28ADE9</color>
-    <color name="bottom_nav_unChecked">#ddd</color>
-    <color name="background_main">#FF000000</color>
+    <color name="bottom_nav_checked_start">#00FACC</color>
+    <color name="bottom_nav_checked_end">#36E7E7</color>
+    <color name="bottom_nav_unChecked">#4E4B66</color>
+    <color name="background_main">#1A1B2F</color>
     <color name="background_ads_start">#FF80F0FF</color>
     <color name="background_ads_stop">#FF80F0FF</color>
     <color name="background_ads_center">#FF168FEF</color>
     <color name="border_color">#5CDDDDDD</color>
-    <color name="infor_container">#322C2C</color>
+    <color name="infor_container">#11101C</color>
     <color name="button_color_start">#12FFAC</color>
     <color name="button_color_end">#C603A9F4</color>
     <color name="text_accent">#00BCD4</color>
@@ -24,6 +25,22 @@
     <color name="signal_poor">#F44336</color>
     <color name="signal_normal">#FFEB3B</color>
     <color name="signal_good">#15CD1C</color>
+    <color name="gray_600">#4E4B66</color>
+    <color name="gray_400">#A0A3BD</color>
+    <color name="gradient_green_start">#00FACC</color>
+    <color name="gradient_green_end">#36E7E7</color>
+    <color name="gradient_orange_start">#FF981F</color>
+    <color name="gradient_orange_end">#FF7F0A</color>
+    <color name="gradient_red_start">#E73636</color>
+    <color name="gradient_red_end">#EC3901</color>
+    <color name="gradient_yellow_start">#FF9A02</color>
+    <color name="gradient_yellow_center">#FFC122</color>
+    <color name="gradient_yellow_end">#FFC602</color>
+    <color name="gradient_strong_start">#01EC51</color>
+    <color name="gradient_strong_end">#36E7E7</color>
+
+
+
 
 
 </resources>

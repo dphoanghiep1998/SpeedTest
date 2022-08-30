@@ -7,4 +7,5 @@
     <dimen name="container_item_channel_height_min">60dp</dimen>
     <dimen name="container_imageView_height_min">15dp</dimen>
     <dimen name="container_imageView_width_min">15dp</dimen>
+
 </resources>

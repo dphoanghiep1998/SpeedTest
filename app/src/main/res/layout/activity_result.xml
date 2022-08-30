@@ -171,7 +171,7 @@
                     android:id="@+id/imv_downArrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_down_arrow" />
+                    android:src="@drawable/ic_download" />
 
                 <TextView
                     android:id="@+id/tv_downloadSpeed"
@@ -243,7 +243,7 @@
                     android:id="@+id/imv_upArrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_up_arrow" />
+                    android:src="@drawable/ic_upload" />
 
                 <TextView
                     android:id="@+id/tv_uploadSpeed"

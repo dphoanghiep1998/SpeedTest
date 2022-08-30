@@ -1,10 +1,10 @@
 [
   {
     "name":"Japan",
-    "server":"https://librespeed.a573.net/",
-    "dlURL":"backend/garbage.php",
-    "ulURL":"backend/empty.php",
-    "pingURL":"backend/empty.php",
-    "getIpURL":"backend/getIP.php"
+    "server":"speedtesthni2.viettel.vn:8080/",
+    "dlURL":"speedtest",
+    "ulURL":"speedtest/upload",
+    "pingURL":"speedtest",
+    "getIpURL":"speedtest"
   }
 ]

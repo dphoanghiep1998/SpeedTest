@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_main">
@@ -16,11 +17,12 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_download_upload"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
+                android:layout_height="120dp"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/infor_container"
 
@@ -28,63 +30,66 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
-                    android:layout_marginVertical="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginVertical="8dp"
                     android:gravity="center"
+                    android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/v_view"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <RelativeLayout
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/imv_downArrow"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_down_arrow" />
+                            android:src="@drawable/ic_download" />
 
                         <TextView
                             android:id="@+id/tv_downloadSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/imv_downArrow"
+                            android:paddingStart="8dp"
                             android:text="Tải xuống"
                             android:textColor="#D7D7D7"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
-                    </RelativeLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/tv_download_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="0"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
                             android:paddingTop="4dp"
-                            android:textColor="@color/button_color_start" />
+                            android:text="0"
+                            android:textColor="@color/button_color_start"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:paddingStart="4dp"
                             android:id="@+id/tv_download_currency"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:text=" Mpbs"
-                            android:textSize="12sp"
+                            android:paddingStart="4dp"
                             android:paddingTop="4dp"
+                            android:text=" Mpbs"
                             android:textColor="#ddd"
-                            />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
 
@@ -101,61 +106,64 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
-                    android:gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/v_view"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <RelativeLayout
-
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/imv_upArrow"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/ic_up_arrow" />
+                            android:src="@drawable/ic_upload" />
 
                         <TextView
                             android:id="@+id/tv_uploadSpeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/imv_upArrow"
+                            android:paddingStart="8dp"
                             android:text="Tải lên"
                             android:textColor="#D7D7D7"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
-                    </RelativeLayout>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:id="@+id/tv_upload_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="0"
-                            android:textStyle="bold"
-                            android:textSize="20sp"
                             android:paddingTop="4dp"
-                            android:textColor="@color/purple_200"
-                            />
+                            android:text="0"
+                            android:textColor="@color/gray_400"
+                            android:textSize="30sp"
+                            android:textStyle="bold" />
+
                         <TextView
-                            android:paddingStart="4dp"
                             android:id="@+id/tv_upload_currency"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
+                            android:paddingStart="4dp"
                             android:text="Mbps"
-                            android:textSize="12sp"
-                            android:textColor="#d7d7d7" />
+                            android:textColor="#d7d7d7"
+                            android:textSize="12sp" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -193,20 +201,20 @@
                         android:src="@drawable/ic_ping" />
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
                         android:text="Ping"
                         android:textColor="#d7d7d7" />
 
                     <TextView
-                        android:paddingLeft="4dp"
                         android:id="@+id/tv_pingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="0"
+                        android:text="0ms"
 
                         android:textColor="#D7D7D7" />
 
@@ -231,16 +239,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
                         android:text="Jitter"
                         android:textColor="#d7d7d7" />
 
                     <TextView
-                        android:paddingLeft="4dp"
                         android:id="@+id/tv_jitterCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="0"
+                        android:paddingLeft="4dp"
+                        android:text="0ms"
                         android:textColor="#D7D7D7" />
 
                 </LinearLayout>
@@ -263,16 +273,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
                         android:text="Loss"
                         android:textColor="#d7d7d7" />
 
                     <TextView
-                        android:paddingLeft="4dp"
                         android:id="@+id/tv_lossCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="0"
+                        android:paddingLeft="4dp"
+                        android:text="0%"
                         android:textColor="#D7D7D7" />
 
                 </LinearLayout>
@@ -282,92 +294,231 @@
                 android:id="@+id/speedView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:sv_backgroundCircleColor="@android:color/transparent"
+                android:layout_marginTop="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="50dp"
                 app:layout_constraintTop_toBottomOf="@id/container_ping_loss_jitter"
-                app:sv_speedTextColor="@android:color/transparent"
-                app:sv_unit=""
+                app:sv_backgroundCircleColor="@android:color/transparent"
                 app:sv_indicatorColor="#ddd"
+                app:sv_speedTextColor="@android:color/transparent"
                 app:sv_speedometerColor="@color/background_ads_start"
                 app:sv_speedometerWidth="24dp"
-                />
+                app:sv_unit="" />
+
             <TextView
                 android:id="@+id/tv_speed_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-40dp"
+                android:text="0.0"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:text="0.0"
-                app:layout_constraintTop_toBottomOf="@id/speedView"
-                app:layout_constraintStart_toStartOf="@id/speedView"
                 app:layout_constraintEnd_toEndOf="@id/speedView"
-                android:layout_marginTop="-40dp"
-                />
+                app:layout_constraintStart_toStartOf="@id/speedView"
+                app:layout_constraintTop_toBottomOf="@id/speedView" />
 
             <TextView
                 android:id="@+id/tv_mbps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Mbps"
                 android:textColor="#d7d7d7"
                 android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/speedView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/speedView"
                 app:layout_constraintStart_toStartOf="@id/speedView"
-                app:layout_constraintEnd_toEndOf="@id/speedView"/>
+                app:layout_constraintTop_toBottomOf="@+id/speedView" />
 
             <Button
                 android:id="@+id/btn_start_scan"
-                app:layout_constraintTop_toBottomOf="@+id/tv_mbps"
-                app:layout_constraintStart_toStartOf="@id/tv_mbps"
-                app:layout_constraintEnd_toEndOf="@id/tv_mbps"
-                android:layout_marginTop="40dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/button_background_start"
+                android:paddingHorizontal="64dp"
+                android:paddingVertical="8dp"
                 android:text="Bắt đầu ngay"
                 android:textColor="@color/black"
-                android:paddingVertical="8dp"
-                android:paddingHorizontal="64dp"
                 android:textSize="18sp"
-                android:background="@drawable/button_background_start"
-                />
+                app:layout_constraintEnd_toEndOf="@id/tv_mbps"
+                app:layout_constraintStart_toStartOf="@id/tv_mbps"
+                app:layout_constraintTop_toBottomOf="@+id/tv_mbps" />
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_expand_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/background_gradient_config"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_start_scan"
-                app:layout_constraintStart_toStartOf="@id/btn_start_scan"
-                app:layout_constraintEnd_toEndOf="@id/btn_start_scan"
-                android:gravity="center"
-                android:layout_marginTop="16dp">
-                <ImageView
-                    android:id="@+id/imv_wifi"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/ic_wifi"
-                    android:paddingEnd="4dp"
-                    />
-                <TextView
-                    android:id="@+id/tv_wifi_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/text_accent"
-                    android:text="@string/neko"
-                    android:paddingStart="4dp"
-                    android:textSize="18sp"
-                    />
-            </LinearLayout>
+                app:layout_constraintWidth_percent="0.9"
+                >
+                <androidx.constraintlayout.widget.ConstraintLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container_config"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:paddingEnd="16dp"
+                        app:layout_constraintStart_toStartOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imv_wifi"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="16dp"
+                            android:paddingEnd="4dp"
+                            android:src="@drawable/ic_wifi"
+                            app:layout_constraintBottom_toTopOf="@id/imv_global_isp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_wifi_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxWidth="120dp"
+                            android:maxLines="1"
+                            android:paddingStart="8dp"
+                            android:text="@string/neko"
+                            android:textColor="@color/text_accent"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="@id/imv_wifi"
+                            app:layout_constraintStart_toEndOf="@id/imv_wifi"
+                            app:layout_constraintTop_toTopOf="@id/imv_wifi" />
+
+                        <ImageView
+                            android:id="@+id/imv_global_isp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_global_isp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/imv_wifi"
+                            app:layout_constraintTop_toBottomOf="@id/imv_wifi" />
+
+                        <TextView
+                            android:id="@+id/tv_isp_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="8dp"
+                            android:text="FPT TELECOM"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="@id/imv_global_isp"
+                            app:layout_constraintStart_toEndOf="@id/imv_global_isp"
+                            app:layout_constraintTop_toTopOf="@id/imv_global_isp" />
+
+                        <androidx.constraintlayout.widget.Barrier
+                            android:id="@+id/barrier"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:barrierDirection="end"
+                            app:constraint_referenced_ids="tv_isp_name,tv_wifi_name" />
+
+                        <View
+                            android:layout_width="2dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/gradient_background"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/barrier"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/container_config_2"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/container_config">
+
+                        <TextView
+                            android:id="@+id/tv_mbps_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mbps"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toTopOf="@id/tv_mbps_value"
+                            app:layout_constraintEnd_toStartOf="@id/tv_mbps_type"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_mbs_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="MB/s"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toStartOf="@id/tv_kbs_type"
+                            app:layout_constraintStart_toEndOf="@+id/tv_mbps_type"
+                            app:layout_constraintTop_toTopOf="@+id/tv_mbps_type" />
+
+                        <TextView
+                            android:id="@+id/tv_kbs_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Kb/s"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/tv_mbs_type"
+                            app:layout_constraintTop_toTopOf="@+id/tv_mbps_type"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_mbps_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="100"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@id/tv_mbps_type"
+                            app:layout_constraintStart_toStartOf="@id/tv_mbps_type"
+                            app:layout_constraintTop_toBottomOf="@id/tv_mbps_type"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_mbs_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@id/tv_mbs_type"
+                            app:layout_constraintStart_toStartOf="@id/tv_mbs_type"
+                            app:layout_constraintTop_toBottomOf="@id/tv_mbs_type"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_kbs_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1000"
+                            android:textColor="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@id/tv_kbs_type"
+                            app:layout_constraintStart_toStartOf="@id/tv_kbs_type"
+                            app:layout_constraintTop_toBottomOf="@id/tv_kbs_type"
+
+                            />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

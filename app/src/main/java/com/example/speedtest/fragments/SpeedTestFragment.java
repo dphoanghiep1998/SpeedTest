@@ -1,7 +1,7 @@
 package com.example.speedtest.fragments;
 
 import android.animation.Animator;
-import android.app.Activity;
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,12 +25,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
@@ -50,16 +48,12 @@ import com.example.speedtest.model.Wifi;
 import com.example.speedtest.utils.DateTimeUtils;
 import com.example.speedtest.utils.NetworkUtils;
 import com.github.anastr.speedviewlib.Gauge;
-import com.github.anastr.speedviewlib.components.Style;
 
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -120,7 +114,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                             binding.btnStartScan.setText("Đang chạy ...");
                         }
                     }).playOn(binding.btnStartScan);
-                    ((MainActivity)requireActivity()).binding.imvVip.setEnabled(false);
+                    ((MainActivity) requireActivity()).binding.imvVip.setEnabled(false);
                     loadServer();
 
                 } else {
@@ -209,6 +203,8 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         unRegisterBroadCast();
     }
 
+    boolean isExpanded = false;
+
     public void setupView() {
         // Underline wifi name
         String wifi_name = binding.tvWifiName.getText().toString();
@@ -223,6 +219,31 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
         //select Wifi
         binding.tvWifiName.setOnClickListener(this);
+
+        ValueAnimator anim = ValueAnimator.ofInt(binding.containerExpandView.getMeasuredWidth(),600);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = valueAnimator.getAnimatedValue();
+                binding.containerExpandView.getLayoutParams();
+            }
+        });
+        binding.containerExpandView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isExpanded){
+                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+                    view.setLayoutParams(layoutParams);
+                    isExpanded = true;
+                }else{
+                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+                    layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+                    view.setLayoutParams(layoutParams);
+                    isExpanded = false;
+                }
+            }
+        });
 
 
     }

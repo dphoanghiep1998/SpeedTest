@@ -109,11 +109,13 @@ public class MainActivity extends AppCompatActivity {
                             binding.vpContainerFrament.setCurrentItem(1);
                             return true;
 
-
+                    case R.id.vpn:
+                        binding.vpContainerFrament.setCurrentItem(2);
+                        return true;
                     case R.id.history:
 
                         binding.imvDelete.setVisibility(View.VISIBLE);
-                        binding.vpContainerFrament.setCurrentItem(2);
+                        binding.vpContainerFrament.setCurrentItem(3);
                         return true;
 
                 }
