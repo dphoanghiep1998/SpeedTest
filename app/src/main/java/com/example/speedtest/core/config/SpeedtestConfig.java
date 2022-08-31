@@ -21,7 +21,9 @@ public class SpeedtestConfig {
     private String getIP_distance=DISTANCE_KM;
     public static final String DISTANCE_NO="no", DISTANCE_MILES="mi", DISTANCE_KM="km";
     private boolean useMebibits=false;
-    private String test_order="IP_D_U";
+//    private String test_order="IP_D_U";
+private String test_order="P_D_U";
+
 
     private void check(){
         if(dl_ckSize<1) throw new IllegalArgumentException("dl_ckSize must be at least 1");

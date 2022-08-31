@@ -1,60 +1,143 @@
 package com.example.speedtest.core.getIP;
 
 
-import com.example.speedtest.core.base.Connection;
-import com.example.speedtest.core.base.Utils;
-import com.example.speedtest.core.config.SpeedtestConfig;
-
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
-public abstract class GetIP extends Thread{
-    private Connection c;
-    private String path;
-    private boolean isp;
-    private String distance;
-    public GetIP(Connection c, String path, boolean isp, String distance){
-        this.c=c;
-        this.path=path;
-        this.isp=isp;
-        if(!(distance==null||distance.equals(SpeedtestConfig.DISTANCE_KM)||distance.equals(SpeedtestConfig.DISTANCE_MILES))) throw new IllegalArgumentException("Distance must be null, mi or km");
-        this.distance=distance;
-        start();
+
+public class GetIP extends Thread {
+
+    HashMap<Integer, String> mapKey = new HashMap<>();
+    HashMap<Integer, List<String>> mapValue = new HashMap<>();
+    double selfLat = 0.0;
+    double selfLon = 0.0;
+
+    public String getSelfIsp() {
+        return selfIsp;
     }
 
-    public void run(){
-        try{
-            String s=path;
-            if(isp){
-                s+= Utils.url_sep(s)+"isp=true";
-                if(!distance.equals(SpeedtestConfig.DISTANCE_NO)){
-                    s+=Utils.url_sep(s)+"distance="+distance;
+    public void setSelfIsp(String selfIsp) {
+        this.selfIsp = selfIsp;
+    }
+
+    public String getSelfIspIp() {
+        return selfIspIp;
+    }
+
+    public void setSelfIspIp(String selfIspIp) {
+        this.selfIspIp = selfIspIp;
+    }
+
+    String selfIsp = "";
+    String selfIspIp = "";
+    boolean finished = false;
+
+
+    public HashMap<Integer, String> getMapKey() {
+        return mapKey;
+    }
+
+    public HashMap<Integer, List<String>> getMapValue() {
+        return mapValue;
+    }
+
+    public double getSelfLat() {
+        return selfLat;
+    }
+
+    public double getSelfLon() {
+        return selfLon;
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    @Override
+    public void run() {
+        //Get latitude, longitude
+        try {
+            URL url = new URL("https://www.speedtest.net/speedtest-config.php");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            int code = urlConnection.getResponseCode();
+
+            if (code == 200) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                urlConnection.getInputStream()));
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (!line.contains("isp=")) {
+                        continue;
+                    }
+                    selfLat = Double.parseDouble(line.split("lat=\"")[1].split(" ")[0].replace("\"", ""));
+                    selfLon = Double.parseDouble(line.split("lon=\"")[1].split(" ")[0].replace("\"", ""));
+                    selfIsp = line.split("isp=\"")[1].split(" ")[0].replace("\"", "");
+                    selfIspIp = line.split("ip=\"")[1].split(" ")[0].replace("\"", "");
+                    break;
                 }
-            }
-            c.GET(s,true);
-            HashMap<String,String> h=c.parseResponseHeaders();
-            BufferedReader br=new BufferedReader(c.getInputStreamReader());
-            if(h.get("content-length")!=null){
-                //standard encoding
-                char[] buf=new char[Integer.parseInt(h.get("content-length"))];
-                br.read(buf);
-                String data=new String(buf);
-                onDataReceived(data);
-            }else{
-                //chunked encoding hack. TODO: improve this garbage with proper chunked support
-                c.readLineUnbuffered(); //ignore first line
-                String data=c.readLineUnbuffered(); //actual info we want
-                c.readLineUnbuffered(); //ignore last line (0)
-                onDataReceived(data);
+
+                br.close();
             }
 
-            c.close();
-        }catch(Throwable t){
-            try{c.close();}catch(Throwable t1){}
-            onError(t.toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return;
         }
-    }
 
-    public abstract void onDataReceived(String data);
-    public abstract void onError(String err);
+        String uploadAddress = "";
+        String name = "";
+        String country = "";
+        String cc = "";
+        String sponsor = "";
+        String lat = "";
+        String lon = "";
+        String host = "";
+
+
+        //Best server
+        int count = 0;
+        try {
+            URL url = new URL("https://www.speedtest.net/speedtest-servers-static.php");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            int code = urlConnection.getResponseCode();
+
+            if (code == 200) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(
+                                urlConnection.getInputStream()));
+
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.contains("<server url")) {
+                        uploadAddress = line.split("server url=\"")[1].split("\"")[0];
+                        lat = line.split("lat=\"")[1].split("\"")[0];
+                        lon = line.split("lon=\"")[1].split("\"")[0];
+                        name = line.split("name=\"")[1].split("\"")[0];
+                        country = line.split("country=\"")[1].split("\"")[0];
+                        cc = line.split("cc=\"")[1].split("\"")[0];
+                        sponsor = line.split("sponsor=\"")[1].split("\"")[0];
+                        host = line.split("host=\"")[1].split("\"")[0];
+
+                        List<String> ls = Arrays.asList(lat, lon, name, country, cc, sponsor, host);
+                        mapKey.put(count, uploadAddress);
+                        mapValue.put(count, ls);
+                        count++;
+                    }
+                }
+
+                br.close();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        finished = true;
+    }
 }

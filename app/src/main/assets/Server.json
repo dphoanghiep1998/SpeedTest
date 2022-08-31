@@ -1,10 +1,9 @@
 [
   {
     "name":"Japan",
-    "server":"speedtesthni2.viettel.vn:8080/",
-    "dlURL":"speedtest",
+    "server":"http://speedtesthni2.viettel.vn:8080/",
+    "dlURL":"speedtest/",
     "ulURL":"speedtest/upload",
-    "pingURL":"speedtest",
-    "getIpURL":"speedtest"
+    "pingURL":""
   }
 ]

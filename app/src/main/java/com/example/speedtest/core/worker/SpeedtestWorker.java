@@ -18,7 +18,7 @@ public abstract class SpeedtestWorker extends Thread{
     private SpeedtestConfig config;
     private boolean stopASAP=false;
     private double dl=-1, ul=-1, ping=-1, jitter=-1;
-    private String ipIsp="";
+
 
     public SpeedtestWorker(TestPoint backend, SpeedtestConfig config){
         this.backend=backend;
@@ -30,9 +30,7 @@ public abstract class SpeedtestWorker extends Thread{
     public void run(){
         try {
             for (char t : config.getTest_order().toCharArray()) {
-
-                if (t == '_') Utils.sleep(1000);
-                if (t == 'I') getIP();
+                if (t == '_') Utils.sleep(100);
                 if (t == 'D') dlTest();
                 if (t == 'U') ulTest();
                 if (t == 'P') pingTest();
@@ -46,42 +44,6 @@ public abstract class SpeedtestWorker extends Thread{
         }
     }
 
-    private boolean getIPCalled=false;
-    private void getIP(){
-        if(getIPCalled) return; else getIPCalled=true;
-        final long start=System.currentTimeMillis();
-        Connection c = null;
-        try {
-            c = new Connection(backend.getServer(), config.getPing_connectTimeout(), config.getPing_soTimeout(), -1, -1);
-        } catch (Throwable t) {
-
-            if (config.getErrorHandlingMode().equals(SpeedtestConfig.ONERROR_FAIL)){
-                abort();
-                onCriticalFailure(t.toString());
-            }
-            return;
-        }
-        GetIP g = new GetIP(c, backend.getGetIpURL(), config.getGetIP_isp(), config.getGetIP_distance()) {
-            @Override
-            public void onDataReceived(String data) {
-                ipIsp=data;
-                try{
-                    data=new JSONObject(data).getString("processedString");
-                    Log.d("TAG", "onDataReceived: " + data);
-                }catch (Throwable t){
-                    Log.d("TAG", "onDataReceived: " + t.getMessage());
-                }
-                onIPInfoUpdate(data);
-            }
-
-            @Override
-            public void onError(String err) {
-                abort();
-                onCriticalFailure(err);
-            }
-        };
-        while (g.isAlive()) Utils.sleep(0, 100);
-    }
 
     private boolean dlCalled=false;
     private void dlTest(){
@@ -103,7 +65,7 @@ public abstract class SpeedtestWorker extends Thread{
         long startT=System.currentTimeMillis(), bonusT=0;
         for(;;){
             double t=System.currentTimeMillis()-startT;
-            if(!graceTimeDone&&t>=config.getDl_graceTime()*1000){
+            if(!graceTimeDone && t >= config.getDl_graceTime()*1000){
                 graceTimeDone=true;
                 for(DownloadStream d:streams) d.resetDownloadCounter();
                 startT=System.currentTimeMillis();
@@ -122,11 +84,16 @@ public abstract class SpeedtestWorker extends Thread{
                     double b = (2.5 * speed) / 100000.0;
                     bonusT += b > 200 ? 200 : b;
                 }
-                double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
-                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
+                    double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
+                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 3000000.0);
                 dl = speed;
-                onDownloadUpdate(dl, progress>1?1:progress);
+                if(progress >=1){
+                    break;
+                }
+                onDownloadUpdate(dl, progress>=1?1:progress);
             }
+            Log.d("TAG", "dlTest: " + (t+bonusT>=config.getTime_dl_max()*1000));
+
             Utils.sleep(100);
         }
         if(stopASAP) return;
@@ -134,7 +101,6 @@ public abstract class SpeedtestWorker extends Thread{
     }
 
     private boolean ulCalled=false;
-
     private void ulTest(){
         if(ulCalled) return; else ulCalled=true;
         final long start=System.currentTimeMillis();
@@ -238,7 +204,6 @@ public abstract class SpeedtestWorker extends Thread{
     public abstract void onDownloadUpdate(double dl, double progress);
     public abstract void onUploadUpdate(double ul, double progress);
     public abstract void onPingJitterUpdate(double ping, double jitter, double progress);
-    public abstract void onIPInfoUpdate(String ipInfo);
     public abstract void onEnd();
     public abstract void onCriticalFailure(String err);
     public abstract void onAbort();

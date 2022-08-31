@@ -3,25 +3,24 @@ package com.example.speedtest;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.daimajia.androidanimations.library.Techniques;
@@ -29,9 +28,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.example.speedtest.adapter.ViewPagerAdapter;
 import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
-import com.example.speedtest.fragments.AnalyzerFragment;
-import com.example.speedtest.fragments.CheckResultFragment;
-import com.example.speedtest.fragments.SpeedTestFragment;
 import com.example.speedtest.utils.NetworkUtils;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
@@ -45,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         setActionMenu();
     }
+
 
 
     public void initView() {

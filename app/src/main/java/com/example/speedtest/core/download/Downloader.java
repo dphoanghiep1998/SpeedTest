@@ -5,6 +5,7 @@ import com.example.speedtest.core.base.Connection;
 import com.example.speedtest.core.base.Utils;
 
 import java.io.InputStream;
+import java.net.URL;
 
 public abstract class Downloader extends Thread{
     private Connection c;
@@ -20,11 +21,13 @@ public abstract class Downloader extends Thread{
         start();
     }
 
-    private static final int BUFFER_SIZE=16384;
+    private static final int BUFFER_SIZE=10240;
     public void run(){
         try{
             String s=path;
-            s+= Utils.url_sep(s)+"ckSize="+ckSize;
+//            fileUrls.add(fileURL + "random4000x4000.jpg");
+//            fileUrls.add(fileURL + "random3000x3000.jpg");
+            s+= "random4000x4000.jpg";
             long lastProgressEvent=System.currentTimeMillis();
             long ckBytes=ckSize*1048576, newRequestThreshold=ckBytes/4;
             long bytesLeft=0;
@@ -44,6 +47,7 @@ public abstract class Downloader extends Thread{
                     totDownloaded=0;
                     resetASAP=false;
                 }
+                if(stopASAP) break;
                 totDownloaded+=l;
                 if(System.currentTimeMillis()-lastProgressEvent>200){
                     lastProgressEvent=System.currentTimeMillis();

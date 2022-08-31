@@ -32,68 +32,19 @@ public class Speedtest {
 
     public void addTestPoint(TestPoint t){
         synchronized (mutex) {
-            if (state == 0) state = 1;
-            if (state > 1) throw new IllegalStateException("Cannot add test points at this moment");
+            if (state == 0)
+                state = 1;
+            if (state > 1)
+                throw new IllegalStateException("Cannot add test points at this moment");
          server = t;
          state = 3;
         }
     }
 
 
-    public void addTestPoint(JSONObject json){
-        synchronized (mutex) {
-            addTestPoint(new TestPoint(json));
-        }
-    }
 
-    public boolean loadServer(String url){
-        synchronized (mutex) {
-            if (state == 0) state = 1;
-            if (state > 1) throw new IllegalStateException("Cannot add test points at this moment");
-            TestPoint pts= ServerLoader.loadServer(url);
-            if(pts!=null){
-                addTestPoint(pts);
-                return true;
-            }else return false;
-        }
-    }
 
-    private static class ServerLoader {
-        private static String read(String url){
-            try{
-                URL u=new URL(url);
-                InputStream in=u.openStream();
-                BufferedReader br=new BufferedReader(new InputStreamReader(u.openStream()));
-                String s="";
-                try{
-                    for(;;){
-                        String r=br.readLine();
-                        if(r==null) break; else s+=r;
-                    }
-                }catch(Throwable t){}
-                br.close();
-                in.close();
-                return s;
-            }catch(Throwable t){
-                return null;
-            }
-        }
 
-        public static TestPoint loadServer(String url){
-            try{
-                String s=null;
-                if(url.startsWith("//")){
-                    s=read("https:"+url);
-                    if(s==null) s=read("http:"+url);
-                }else s=read(url);
-                if(s==null) throw new Exception("Failed");
-                JSONArray a=new JSONArray(s);
-                return new TestPoint(a.getJSONObject(0));
-            }catch(Throwable t){
-                return null;
-            }
-        }
-    }
 
 
     private SpeedtestWorker st=null;
@@ -115,21 +66,16 @@ public class Speedtest {
                 public void onDownloadUpdate(double dl, double progress) {
                     callback.onDownloadUpdate(dl, progress);
                 }
-
                 @Override
                 public void onUploadUpdate(double ul, double progress) {
                     callback.onUploadUpdate(ul, progress);
                 }
-
                 @Override
                 public void onPingJitterUpdate(double ping, double jitter, double progress) {
                     callback.onPingJitterUpdate(ping, jitter, progress);
                 }
 
-                @Override
-                public void onIPInfoUpdate(String ipInfo) {
-                    callback.onIPInfoUpdate(ipInfo);
-                }
+
 
 
 
@@ -172,7 +118,6 @@ public class Speedtest {
         public abstract void onDownloadUpdate(double dl, double progress);
         public abstract void onUploadUpdate(double ul, double progress);
         public abstract void onPingJitterUpdate(double ping, double jitter, double progress);
-        public abstract void onIPInfoUpdate(String ipInfo);
         public abstract void onEnd();
         public abstract void onAbort();
         public abstract void onCriticalFailure(String err);
