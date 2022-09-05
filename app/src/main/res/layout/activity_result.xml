@@ -62,8 +62,37 @@
             app:layout_constraintTop_toTopOf="@id/imv_vip" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/imv_clock"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_clock"/>
+    <TextView
+        android:paddingStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/imv_clock"
+        app:layout_constraintTop_toTopOf="@+id/imv_clock"
+        android:textColor="@color/white"
+        android:text="alo day la dai tieng noi viet nam"
+        app:layout_constraintBottom_toBottomOf="@id/imv_clock"
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <ImageView
+        android:id="@+id/btn_delete"
+        app:layout_constraintTop_toTopOf="@id/tv_time"
+        app:layout_constraintBottom_toBottomOf="@id/tv_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_delete" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="8dp"
         android:id="@+id/container_upper"
         android:layout_width="match_parent"
@@ -71,7 +100,7 @@
         android:background="@drawable/infor_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/imv_clock">
 
         <TextView
             android:id="@+id/tv_internetSignal"
@@ -163,7 +192,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -171,19 +202,21 @@
                     android:id="@+id/imv_downArrow"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/ic_download" />
+                    android:src="@drawable/ic_download"
+                    android:layout_centerVertical="true"/>
 
                 <TextView
                     android:id="@+id/tv_downloadSpeed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/imv_downArrow"
+                    android:paddingHorizontal="4dp"
                     android:text="Tải xuống"
                     android:textColor="#D7D7D7"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -234,8 +267,9 @@
             app:layout_constraintStart_toEndOf="@+id/v_view"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RelativeLayout
-
+            <LinearLayout
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -251,11 +285,12 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/imv_upArrow"
                     android:text="Tải lên"
+                    android:paddingHorizontal="4dp"
                     android:textColor="#D7D7D7"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-            </RelativeLayout>
+            </LinearLayout>
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">

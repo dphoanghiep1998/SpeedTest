@@ -4,13 +4,14 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity(tableName = "connectivity_model")
 public class ConnectivityTestModel implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
-    private String date;
+    private Date date;
     private String downloadSpeed;
     private String upLoadSpeed;
     private String ping;
@@ -21,7 +22,7 @@ public class ConnectivityTestModel implements Serializable {
 
 
 
-    public ConnectivityTestModel(String name, String date, String downloadSpeed, String upLoadSpeed, String ping,String jitter,String loss,Mobile mobile,Wifi wifi,String type) {
+    public ConnectivityTestModel(String name, Date date, String downloadSpeed, String upLoadSpeed, String ping,String jitter,String loss,Mobile mobile,Wifi wifi,String type) {
         this.name = name;
         this.date = date;
         this.downloadSpeed = downloadSpeed;
@@ -92,11 +93,11 @@ public class ConnectivityTestModel implements Serializable {
         this.name = name;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

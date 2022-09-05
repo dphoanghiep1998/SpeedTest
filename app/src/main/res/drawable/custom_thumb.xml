@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:id="@+id/bg_thumb">
         <shape android:shape="oval">
             <solid android:color="@color/second_progressbar"/>
             <size
@@ -8,4 +8,5 @@
                 android:height="30dp"/>
         </shape>
     </item>
+    <item android:drawable="@drawable/ic_wifi" android:width="20dp" android:height="20dp" android:gravity="center" />
 </layer-list>

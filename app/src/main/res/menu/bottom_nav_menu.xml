@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/speedtest"
-        android:icon="@drawable/ic_speed_icon"
+        android:icon="@drawable/ic_speed"
         android:title="Speed Test" />
     <item
         android:id="@+id/analist"

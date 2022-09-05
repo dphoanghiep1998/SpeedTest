@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.history:
 
-                        binding.imvDelete.setVisibility(View.VISIBLE);
+                        binding.imvDelete.setVisibility(View.GONE);
                         binding.vpContainerFrament.setCurrentItem(3);
                         return true;
 

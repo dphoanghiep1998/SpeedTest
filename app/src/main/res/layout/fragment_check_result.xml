@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background_main"
-    android:paddingHorizontal="8dp">
+    android:background="@color/background_main">
 
     <androidx.appcompat.widget.LinearLayoutCompat
+        android:background="@color/gray_600"
         android:id="@+id/container_header"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
@@ -28,14 +28,7 @@
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
-                android:text="Loại"/>
-            <ImageView
-                android:layout_marginTop="4dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_wifi"
-                />
+                android:text="Type"/>
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center"
@@ -46,88 +39,88 @@
             android:layout_height="wrap_content">
             <TextView
                 android:textSize="10sp"
-                android:layout_marginBottom="4dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ngày"/>
-            <ImageView
-                android:layout_marginTop="4dp"
+                android:text="Date"/>
 
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_wifi"
-                />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center"
             android:layout_marginHorizontal="4dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_weight="1.1"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_download_inactive"
+                />
             <TextView
-                android:layout_marginBottom="4dp"
+                android:paddingStart="2dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="10sp"
-                android:text="Download"/>
-            <ImageView
-                android:layout_marginTop="4dp"
+                android:text="Mbps"/>
 
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_wifi"
-                />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center"
             android:layout_marginHorizontal="4dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_weight="1.1"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_upload_inactive"
+                />
             <TextView
-                android:textSize="10sp"
-                android:layout_marginBottom="4dp"
+                android:paddingStart="2dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload"/>
-            <ImageView
-                android:layout_marginTop="4dp"
+                android:textSize="10sp"
+                android:text="Mbps"/>
 
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_wifi"
-                />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <androidx.appcompat.widget.LinearLayoutCompat
             android:gravity="center"
             android:layout_marginHorizontal="4dp"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_weight="1.1"
             android:layout_width="0dp"
             android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_download_inactive"
+                />
             <TextView
-                android:textSize="10sp"
-                android:layout_marginBottom="4dp"
+                android:paddingStart="2dp"
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ping"/>
-            <ImageView
-                android:layout_marginTop="4dp"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_wifi"
-                />
+                android:textSize="10sp"
+                android:text="Mbps"/>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
         <LinearLayout
+            android:id="@+id/btn_delete"
+            android:gravity="center"
+            android:orientation="horizontal"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_weight="0.5"/>
+            android:layout_height="match_parent"
+            android:layout_weight="0.5">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_delete"
+                />
+        </LinearLayout>
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

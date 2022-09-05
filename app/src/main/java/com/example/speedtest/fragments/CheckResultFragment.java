@@ -19,15 +19,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.speedtest.MainActivity;
 import com.example.speedtest.ResultActivity;
 import com.example.speedtest.adapter.ConnectivityTestAdapter;
+import com.example.speedtest.common.CustomDialog;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.databinding.FragmentCheckResultBinding;
+import com.example.speedtest.interfaces.OnDialogClickListener;
 import com.example.speedtest.interfaces.ResultTouchHelper;
 import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.view_model.WifiTestViewModel;
 
 import java.util.List;
 
-public class CheckResultFragment extends Fragment implements ResultTouchHelper {
+public class CheckResultFragment extends Fragment implements ResultTouchHelper, OnDialogClickListener {
     FragmentCheckResultBinding binding;
 
     ConnectivityTestAdapter adapter = new ConnectivityTestAdapter(this);
@@ -48,21 +50,25 @@ public class CheckResultFragment extends Fragment implements ResultTouchHelper {
     }
 
     private void initView() {
-        ((MainActivity) getActivity()).binding.imvDelete.setOnClickListener(view -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
-                    .setTitle("Do you wanna delete all results ?")
-                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            ((MainActivity) requireActivity()).viewModel.deleteAllResultTest();
-                        }
-                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    }).create();
-            alertDialog.show();
+        binding.btnDelete.setOnClickListener(view -> {
+//            AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
+//                    .setTitle("Do you wanna delete all results ?")
+//                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            ((MainActivity) requireActivity()).viewModel.deleteAllResultTest();
+//                        }
+//                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            dialogInterface.dismiss();
+//                        }
+//                    }).create();
+//            alertDialog.show();
+            CustomDialog customDialog = new CustomDialog(requireActivity(),this);
+            customDialog.show();
+            customDialog.setTitle("DELETE ALL RESULTS ?");
+            customDialog.setContent("All results will be deleted");
 
         });
     }
@@ -86,5 +92,10 @@ public class CheckResultFragment extends Fragment implements ResultTouchHelper {
         Intent intent = new Intent(requireActivity(), ResultActivity.class);
         intent.putExtra("test_result",connectivityTestModel);
         startActivity(intent);
+    }
+
+    @Override
+    public void onClickPositiveButton() {
+       ((MainActivity)requireActivity()).viewModel.deleteAllResultTest();
     }
 }

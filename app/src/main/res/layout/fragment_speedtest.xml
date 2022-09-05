@@ -86,7 +86,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:paddingStart="4dp"
-                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
                             android:text=" Mpbs"
                             android:textColor="#ddd"
                             android:textSize="12sp" />
@@ -160,6 +160,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
+                            android:paddingBottom="4dp"
                             android:paddingStart="4dp"
                             android:text="Mbps"
                             android:textColor="#d7d7d7"

@@ -3,7 +3,9 @@ package com.example.speedtest;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -17,33 +19,47 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.example.speedtest.common.CustomDialog;
 import com.example.speedtest.databinding.ActivityResultBinding;
+import com.example.speedtest.interfaces.OnDialogClickListener;
 import com.example.speedtest.model.ConnectivityTestModel;
+import com.example.speedtest.utils.DateTimeUtils;
+import com.example.speedtest.view_model.WifiTestViewModel;
 
-public class ResultActivity extends AppCompatActivity {
+public class ResultActivity extends AppCompatActivity implements OnDialogClickListener {
     ActivityResultBinding binding;
-
+    WifiTestViewModel viewModel;
+    ConnectivityTestModel connectivityTestModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityResultBinding.inflate(getLayoutInflater());
+        viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
+        connectivityTestModel = (ConnectivityTestModel) getIntent().getSerializableExtra("test_result");
         setContentView(binding.getRoot());
         initView();
     }
 
     private void initView() {
-        ConnectivityTestModel connectivityTestModel = (ConnectivityTestModel) getIntent().getSerializableExtra("test_result");
+        if(connectivityTestModel == null){
+            return;
+        }
         String afterScan = getIntent().getStringExtra("EXTRA_MESS_1");
-        Log.d("TAG", "initView: " + afterScan);
-
         int level = connectivityTestModel.getType().equals("wifi") ? Integer.parseInt(connectivityTestModel.getWifi().getWifi_level()) : 0;
-        String status = level >= -60 ? "TỐT" : level < -60 && level >= -90 ? "BÌNH THƯỜNG" : "YẾU";
         int progress = level >= -60 ? 100 : level < -60 && level >= -90 ? 50 : 0;
-        binding.pbSignal.setProgress(progress);
+        ValueAnimator anim = ValueAnimator.ofInt(0, progress);
+        anim.setDuration(600);
+        anim.addUpdateListener(animation -> {
+            int animProgress = (Integer) animation.getAnimatedValue();
+            binding.pbSignal.setProgress(animProgress);
+        });
+        anim.start();
+        String status = level >= -60 ? "TỐT" : level < -60 && level >= -90 ? "BÌNH THƯỜNG" : "YẾU";
+//        binding.pbSignal.setProgress(progress);
         binding.pbSignal.setEnabled(false);
         binding.tvSignalStrength.setTextColor(level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
-        setProgressBarColor(binding.pbSignal,level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
-
+        setProgressBarColor(binding.pbSignal, level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
+        binding.tvTime.setText(DateTimeUtils.getDateConvertedToResult(connectivityTestModel.getDate()));
         binding.tvSignalStrength.setText(status);
         binding.tvDownloadValue.setText(connectivityTestModel.getDownloadSpeed());
         binding.tvUploadValue.setText(connectivityTestModel.getUpLoadSpeed());
@@ -65,6 +81,16 @@ public class ResultActivity extends AppCompatActivity {
         binding.btnClose.setOnClickListener(view -> {
             finish();
         });
+        binding.btnDelete.setOnClickListener(view -> {
+            if(connectivityTestModel == null){
+                return;
+            }
+
+            CustomDialog customDialog = new CustomDialog(this,this);
+            customDialog.show();
+            customDialog.setTitle("DELETE RESULT");
+            customDialog.setContent("This result will be deleted from your history");
+        });
 
         if (afterScan == null) {
             binding.btnScanAgain.setVisibility(View.GONE);
@@ -79,16 +105,24 @@ public class ResultActivity extends AppCompatActivity {
             });
         }
     }
-    public void setProgressBarColor(SeekBar progressBar, int newColor){
+
+    public void setProgressBarColor(SeekBar progressBar, int newColor) {
         LayerDrawable ld = (LayerDrawable) progressBar.getProgressDrawable();
         ClipDrawable d1 = (ClipDrawable) ld.findDrawableByLayerId(android.R.id.progress);
         d1.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
-
-
-        LayerDrawable thumb = (LayerDrawable) progressBar.getThumb();
-        thumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
+        LayerDrawable thumb = (LayerDrawable) getResources().getDrawable(R.drawable.custom_thumb);
+        Drawable bgThumb = thumb.findDrawableByLayerId(R.id.bg_thumb);
+        bgThumb.setColorFilter(newColor,PorterDuff.Mode.SRC_IN);
+        progressBar.setThumb(thumb);
+//        LayerDrawable thumb = (LayerDrawable) progressBar.getThumb();
+//        thumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
 
     }
 
 
+    @Override
+    public void onClickPositiveButton() {
+        viewModel.deleteResultTest(connectivityTestModel);
+        finish();
+    }
 }

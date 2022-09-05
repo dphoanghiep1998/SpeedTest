@@ -85,14 +85,15 @@ public abstract class SpeedtestWorker extends Thread{
                     bonusT += b > 200 ? 200 : b;
                 }
                     double progress = (t + bonusT) / (double) (config.getTime_dl_max() * 1000);
-                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 3000000.0);
+                speed = (speed * 8 * config.getOverheadCompensationFactor()) / (config.getUseMebibits() ? 1048576.0 : 1000000.0);
+                Log.d("TAG", "dlTest: "+ speed);
+
                 dl = speed;
                 if(progress >=1){
                     break;
                 }
                 onDownloadUpdate(dl, progress>=1?1:progress);
             }
-            Log.d("TAG", "dlTest: " + (t+bonusT>=config.getTime_dl_max()*1000));
 
             Utils.sleep(100);
         }

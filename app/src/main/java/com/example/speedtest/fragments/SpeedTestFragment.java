@@ -47,6 +47,7 @@ import com.example.speedtest.utils.DateTimeUtils;
 import com.example.speedtest.utils.NetworkUtils;
 import com.github.anastr.speedviewlib.Gauge;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -380,7 +381,6 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     binding.speedView.speedTo((float) dl);
                     binding.tvSpeedValue.setText(format((float) dl));
                     if (progress >= 1) {
-                        Log.d("TAG", "DownloadEnd: ");
                         binding.tvDownloadValue.clearAnimation();
                         binding.tvDownloadValue.setText(format(dl));
                         binding.speedView.speedTo(0);
@@ -393,7 +393,6 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onUploadUpdate(double ul, double progress) {
-                Log.d("TAG", "onUploadUpdate: ");
                 if (progress == 0) {
                     binding.tvUploadValue.startAnimation(anim);
                     binding.speedView.setSpeedometerColor(getResources().getColor(R.color.purple_200));
@@ -434,12 +433,12 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                         binding.speedView.speedTo(0);
                         if (type.equals("wifi")) {
                             ConnectivityTestModel connectivityTestModel = new ConnectivityTestModel(binding.tvWifiName.getText().toString(),
-                                    DateTimeUtils.getDateNowConverted(),
+                                    new Date(),
                                     binding.tvDownloadValue.getText().toString(),
                                     binding.tvUploadValue.getText().toString(),
                                     binding.tvPingCount.getText().toString().replace(" ms", ""),
                                     binding.tvJitterCount.getText().toString().replace(" ms", ""),
-                                    binding.tvLossCount.getText().toString().replace(" %", ""),
+                                    binding.tvLossCount.getText().toString().replace("%", ""),
                                     null,
                                     wifi, type);
                             ((MainActivity) requireActivity()).viewModel.insertResultTest(connectivityTestModel);
@@ -448,12 +447,12 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
                         } else {
                             ConnectivityTestModel connectivityTestModel = new ConnectivityTestModel(binding.tvWifiName.getText().toString(),
-                                    DateTimeUtils.getDateNowConverted(),
+                                    new Date(),
                                     binding.tvDownloadValue.getText().toString(),
                                     binding.tvUploadValue.getText().toString(),
                                     binding.tvPingCount.getText().toString().replace(" ms", ""),
                                     binding.tvJitterCount.getText().toString().replace(" ms", ""),
-                                    binding.tvLossCount.getText().toString().replace(" %", ""),
+                                    binding.tvLossCount.getText().toString().replace("%", ""),
                                     mobile,
                                     null, type);
                             ((MainActivity) requireActivity()).viewModel.insertResultTest(connectivityTestModel);

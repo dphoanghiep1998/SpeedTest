@@ -14,7 +14,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.speedtest.model.ConnectivityTestModel;
 
-@Database(entities = ConnectivityTestModel.class, version = 2)
+@Database(entities = ConnectivityTestModel.class, version = 3)
 @TypeConverters({Convertes.class})
 public abstract class ConnectivityTestDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "wifiTestDB.db";
