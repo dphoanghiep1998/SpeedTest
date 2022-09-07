@@ -22,6 +22,8 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -271,12 +273,14 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onClick(View view) {
                 if (!isExpanded) {
+                    TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
                     ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
                     layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
                     view.setLayoutParams(layoutParams);
 
                     isExpanded = true;
                 } else {
+                    TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
                     ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
                     layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
                     view.setLayoutParams(layoutParams);
