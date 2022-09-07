@@ -5,7 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Matrix;
+import android.graphics.Shader;
 import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,12 +22,15 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,9 +51,10 @@ import com.example.speedtest.databinding.FragmentSpeedtestBinding;
 import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.model.Mobile;
 import com.example.speedtest.model.Wifi;
-import com.example.speedtest.utils.DateTimeUtils;
+import com.example.speedtest.utils.GaugeView;
 import com.example.speedtest.utils.NetworkUtils;
-import com.github.anastr.speedviewlib.Gauge;
+import com.github.anastr.speedviewlib.components.indicators.ImageIndicator;
+import com.github.anastr.speedviewlib.components.indicators.Indicator;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -88,7 +97,37 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         initBroadCast();
         checkFirstWhenStart();
         getActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(1500);
+                } catch (Throwable t) {
+                }
+                try {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    final ImageView v = (ImageView) getView().findViewById(R.id.bg_thumb);
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(getResources(), R.drawable.testbackground, options);
+                    int ih = options.outHeight, iw = options.outWidth;
+                    if (4 * ih * iw > 16 * 1024 * 1024) throw new Exception("Too big");
+                    options.inJustDecodeBounds = false;
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int vh = displayMetrics.heightPixels, vw = displayMetrics.widthPixels;
+                    double desired = Math.max(vw, vh) * 0.7;
+                    double scale = desired / Math.max(iw, ih);
+                    final Bitmap b = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.testbackground, options), (int) (iw * scale), (int) (ih * scale), true);
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            v.setImageBitmap(b);
+                        }
+                    });
+                } catch (Throwable t) {
+                    System.err.println("Failed to load testbackground (" + t.getMessage() + ")");
+                }
+            }
+        }.start();
         return binding.getRoot();
     }
 
@@ -107,13 +146,14 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     return;
                 }
                 ((MainActivity) requireActivity()).hideBottomTabWhenScan();
-                ((MainActivity) requireActivity()).showCloseBtn();
-                binding.btnStartScan.setEnabled(false);
+                ((MainActivity) requireActivity()).showStopBtn();
+                binding.btnStart.setEnabled(false);
                 binding.tvWifiName.setEnabled(false);
-                YoYo.with(Techniques.FadeInDown).onEnd(animator -> binding.btnStartScan.setText("Đang chạy ...")).playOn(binding.btnStartScan);
+//                YoYo.with(Techniques.FadeInDown).onEnd(animator -> binding.btnStartScan.setText("Đang chạy ...")).playOn(binding.btnStartScan);
                 ((MainActivity) requireActivity()).binding.imvVip.setEnabled(false);
                 runSpeedTest();
             } else {
+//                binding.testBackground.setValue(0);
                 if (speedTest != null) {
                     Log.e("OnConecctivityChange", " false");
                     speedTest.abort();
@@ -202,16 +242,20 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     boolean isExpanded = false;
 
     public void setupView() {
+
+        Shader shader = new LinearGradient(0, 0, 0, binding.tvGo.getLineHeight(),
+                getResources().getColor(R.color.gradient_green_start), getResources().getColor(R.color.gradient_green_end), Shader.TileMode.REPEAT);
+        binding.tvGo.getPaint().setShader(shader);
         // Underline wifi name
         String wifi_name = binding.tvWifiName.getText().toString();
         SpannableString underlineWifiName = new SpannableString(wifi_name);
         underlineWifiName.setSpan(new UnderlineSpan(), 0, wifi_name.length(), 0);
         binding.tvWifiName.setText(underlineWifiName);
         // custom tick
-        customTick();
+        initSpeedView();
 
         //onClick start scan
-        binding.btnStartScan.setOnClickListener(this);
+        binding.btnStart.setOnClickListener(this);
 
         //select Wifi
         binding.tvWifiName.setOnClickListener(this);
@@ -244,21 +288,39 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     }
 
-    public void customTick() {
 
-        binding.speedView.setSpeedTextPosition(Gauge.Position.BOTTOM_CENTER);
-        binding.speedView.setUnit("");
-
-        binding.speedView.setOnPrintTickLabel((tickPosition, tick) -> {
-            int convertedTick = Math.round(tick);
-            if (tick == 100) {
-                SpannableString tickLabel = new SpannableString(convertedTick + "");
-                tickLabel.setSpan(new ForegroundColorSpan(Color.WHITE), 0, tickLabel.toString().trim().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                return tickLabel;
-
+    public void initSpeedView() {
+        new Thread() {
+            public void run() {
+                try {
+                    sleep(1500);
+                } catch (Throwable t) {
+                }
+                try {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    final ImageView v = (ImageView) getView().findViewById(R.id.bg_thumb);
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeResource(getResources(), R.drawable.testbackground, options);
+                    int ih = options.outHeight, iw = options.outWidth;
+                    if (4 * ih * iw > 16 * 1024 * 1024) throw new Exception("Too big");
+                    options.inJustDecodeBounds = false;
+                    DisplayMetrics displayMetrics = new DisplayMetrics();
+                    requireActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                    int vh = displayMetrics.heightPixels, vw = displayMetrics.widthPixels;
+                    double desired = Math.max(vw, vh) * 0.7;
+                    double scale = desired / Math.max(iw, ih);
+                    final Bitmap b = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.testbackground, options), (int) (iw * scale), (int) (ih * scale), true);
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            v.setImageBitmap(b);
+                        }
+                    });
+                } catch (Throwable t) {
+                    System.err.println("Failed to load testbackground (" + t.getMessage() + ")");
+                }
             }
-            return null;
-        });
+        }.start();
     }
 
 
@@ -278,7 +340,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_start_scan:
+            case R.id.btn_start:
 
                 onClickStartButton();
                 break;
@@ -352,7 +414,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     } else {
                         testPoint = new TestPoint(info.get(3).toString(), "http://" + info.get(6).toString(), "speedtest/", "speedtest/upload", "");
                         Log.d("TAG", "run: " + testPoint);
-                        speedTest.addTestPoint(testPoint);
+//                        speedTest.addTestPoint(testPoint);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -361,7 +423,14 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         }.start();
     }
 
+    private int mbpsToGauge(double s) {
+        return (int) (1000 * (1 - (1 / (Math.pow(1.3, Math.sqrt(s))))));
+    }
+
     public void runSpeedTest() {
+        speedTest = new Speedtest();
+        speedTest.addTestPoint(testPoint);
+
         getConnection();
         Animation anim = new AlphaAnimation(0.0f, 1.0f);
         anim.setDuration(100); //You can manage the blinking time with this parameter
@@ -374,19 +443,17 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
                 if (progress == 0) {
                     binding.tvDownloadValue.startAnimation(anim);
-                    binding.speedView.setSpeedometerColor(getResources().getColor(R.color.button_color_start));
-
                 }
                 requireActivity().runOnUiThread(() -> {
-                    binding.speedView.speedTo((float) dl);
+//                    binding.testBackground.setValue(progress==0?0:mbpsToGauge(dl));
                     binding.tvSpeedValue.setText(format((float) dl));
                     if (progress >= 1) {
                         binding.tvDownloadValue.clearAnimation();
                         binding.tvDownloadValue.setText(format(dl));
-                        binding.speedView.speedTo(0);
-                        binding.speedView.stop();
+//                        binding.speedView.speedTo(0);
+//                        binding.speedView.stop();
                         binding.tvSpeedValue.setText(0.0 + "");
-
+//                        binding.testBackground.setValue(0);
                     }
                 });
             }
@@ -395,18 +462,20 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             public void onUploadUpdate(double ul, double progress) {
                 if (progress == 0) {
                     binding.tvUploadValue.startAnimation(anim);
-                    binding.speedView.setSpeedometerColor(getResources().getColor(R.color.purple_200));
+//                    binding.speedView.setSpeedometerColor(getResources().getColor(R.color.purple_200));
                 }
                 requireActivity().runOnUiThread(() -> {
-                    binding.speedView.speedTo((float) ul);
+//                    binding.speedView.speedTo((float) ul);
                     binding.tvSpeedValue.setText(format((float) ul));
+//                    binding.testBackground.setValue(progress==0?0:mbpsToGauge(ul));
 
                     if (progress >= 1) {
                         binding.tvUploadValue.clearAnimation();
                         binding.tvUploadValue.setText(format(ul));
-                        binding.speedView.speedTo(0);
-                        binding.speedView.setWithTremble(false);
+//                        binding.speedView.speedTo(0);
+//                        binding.speedView.setWithTremble(false);
                         binding.tvSpeedValue.setText(0.0 + "");
+//                        binding.testBackground.setValue(0);
 
                     }
                 });
@@ -430,7 +499,8 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 requireActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        binding.speedView.speedTo(0);
+//                        binding.speedView.speedTo(0);
+
                         if (type.equals("wifi")) {
                             ConnectivityTestModel connectivityTestModel = new ConnectivityTestModel(binding.tvWifiName.getText().toString(),
                                     new Date(),
@@ -441,6 +511,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                                     binding.tvLossCount.getText().toString().replace("%", ""),
                                     null,
                                     wifi, type);
+
                             ((MainActivity) requireActivity()).viewModel.insertResultTest(connectivityTestModel);
                             intent.putExtra("test_result", connectivityTestModel);
                             intent.putExtra("EXTRA_MESS_1", "from_scan_activity");
@@ -558,10 +629,10 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         binding.tvSpeedValue.setText("0");
         binding.tvDownloadValue.clearAnimation();
         binding.tvUploadValue.clearAnimation();
-        binding.speedView.setWithTremble(false);
-        binding.speedView.speedTo(0);
-        binding.btnStartScan.setText("BẮT ĐẦU NGAY");
-        binding.btnStartScan.setEnabled(true);
+//        binding.speedView.setWithTremble(false);
+//        binding.speedView.speedTo(0);
+//        binding.btnStartScan.setText("BẮT ĐẦU NGAY");
+//        binding.btnStartScan.setEnabled(true);
         binding.tvWifiName.setEnabled(true);
         binding.tvDownloadValue.setText("0");
         binding.tvUploadValue.setText("0");

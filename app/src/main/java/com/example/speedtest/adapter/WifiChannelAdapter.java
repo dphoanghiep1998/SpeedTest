@@ -21,6 +21,7 @@ import java.util.List;
 public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.WifiChannelViewHolder> {
     private List<Wifi> mList;
     private ItemTouchHelper helper;
+
     public void setData(List<Wifi> mList) {
         this.mList = mList;
         notifyDataSetChanged();
@@ -41,28 +42,23 @@ public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.
     public void onBindViewHolder(@NonNull WifiChannelViewHolder holder, int position) {
         Wifi wifiModel = mList.get(position);
         if (wifiModel != null) {
-            holder.tv_frequency.setText(wifiModel.getWifi_frequency().toString() +" MHz");
-            holder.tv_strength.setText(wifiModel.getWifi_level().toString() +" dBm");
+            int level = Integer.parseInt(wifiModel.getWifi_level());
+            int source = level >= -60 ? R.drawable.ic_signal_good : level < -60 && level >= -90 ? R.drawable.ic_signal_normal : R.drawable.ic_signal_low;
+            holder.imv_wifi.setImageResource(source);
+            holder.tv_frequency.setText(wifiModel.getWifi_frequency().toString() + " MHz");
+            holder.tv_strength.setText(wifiModel.getWifi_level().toString() + " dBm");
             holder.tv_internalIp.setText(wifiModel.getWifi_internal_ip());
             holder.tv_secureType.setText(wifiModel.getWifi_secure_type());
             holder.tv_wifiName.setText(wifiModel.getWifi_name());
             if (wifiModel.isWifi_isConnected()) {
-                holder.itemView.setBackground(holder.itemView.getResources().getDrawable(R.drawable.background_remove_ads));
-                holder.itemView.getLayoutParams().height = (int) holder.itemView.getResources().getDimension(R.dimen.container_item_channel_height);
-                holder.imv_wifi.getLayoutParams().width = (int) holder.itemView.getResources().getDimension(R.dimen.container_imageView_width);
-                holder.imv_wifi.getLayoutParams().height = (int) holder.itemView.getResources().getDimension(R.dimen.container_imageView_height);
-
-                holder.tv_internalIp.setVisibility(View.VISIBLE);
-                holder.tv_frequency.setVisibility(View.VISIBLE);
+                holder.tv_internalIp.setVisibility(View.GONE);
+                holder.tv_frequency.setVisibility(View.GONE);
                 holder.tv_connected.setVisibility(View.VISIBLE);
                 //setdata
                 holder.tv_connected.setText("Đã kết nối");
 
             } else {
                 holder.itemView.setBackground(holder.itemView.getResources().getDrawable(R.drawable.infor_container));
-                holder.itemView.getLayoutParams().height = (int) holder.itemView.getResources().getDimension(R.dimen.container_item_channel_height_min);
-                holder.imv_wifi.getLayoutParams().width = (int) holder.itemView.getResources().getDimension(R.dimen.container_imageView_width_min);
-                holder.imv_wifi.getLayoutParams().height = (int) holder.itemView.getResources().getDimension(R.dimen.container_imageView_height_min);
                 holder.tv_internalIp.setVisibility(View.GONE);
                 holder.tv_frequency.setVisibility(View.GONE);
                 holder.tv_connected.setVisibility(View.GONE);
@@ -74,6 +70,7 @@ public class WifiChannelAdapter extends RecyclerView.Adapter<WifiChannelAdapter.
         }
 
     }
+
 
     @Override
     public int getItemCount() {

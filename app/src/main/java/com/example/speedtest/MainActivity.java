@@ -3,8 +3,6 @@ package com.example.speedtest;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -36,10 +34,8 @@ public class MainActivity extends AppCompatActivity {
     public ActivityMainBinding binding;
     ViewPagerAdapter viewPager;
     public WifiTestViewModel viewModel;
-    public boolean first_time=true;
+    public boolean first_time = true;
     private SpeedApplication application;
-
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -50,10 +46,10 @@ public class MainActivity extends AppCompatActivity {
         application.getShareData().isScanning.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(!aBoolean && !first_time){
-                    showMenuBtn();
+                if (!aBoolean && !first_time) {
+                    showVipBtn();
                     binding.imvVip.setEnabled(true);
-                }else{
+                } else {
                     binding.imvVip.setEnabled(false);
                 }
             }
@@ -66,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
         setActionMenu();
     }
-
 
 
     public void initView() {
@@ -89,31 +84,29 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageScrollStateChanged(state);
             }
         });
-        binding.imvDelete.setVisibility(View.GONE);
         binding.navBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
                 switch (item.getItemId()) {
                     case R.id.speedtest:
-                        binding.imvDelete.setVisibility(View.GONE);
+                        binding.tvTitle.setText("SPEEDTEST");
                         binding.vpContainerFrament.setCurrentItem(0);
                         return true;
                     case R.id.analist:
-
-                            if (!NetworkUtils.isWifiEnabled(getApplicationContext())) {
+                        binding.tvTitle.setText("WIFI ANALYZER");
+                        if (!NetworkUtils.isWifiEnabled(getApplicationContext())) {
 //                                IntentFilter intent = new IntentFilter(ACTION)
-                            }
-                            binding.imvDelete.setVisibility(View.GONE);
-                            binding.vpContainerFrament.setCurrentItem(1);
-                            return true;
+                        }
+                        binding.vpContainerFrament.setCurrentItem(1);
+                        return true;
 
                     case R.id.vpn:
+                        binding.tvTitle.setText("VPN");
                         binding.vpContainerFrament.setCurrentItem(2);
                         return true;
                     case R.id.history:
-
-                        binding.imvDelete.setVisibility(View.GONE);
+                        binding.tvTitle.setText("RESULTS");
                         binding.vpContainerFrament.setCurrentItem(3);
                         return true;
 
@@ -128,29 +121,26 @@ public class MainActivity extends AppCompatActivity {
         binding.containerFanpage.setOnClickListener(view -> openLink("http://www.facebook.com"));
         binding.containerOtherApp.setOnClickListener(view -> openLink("http://www.google.com"));
         binding.containerShare.setOnClickListener(view -> shareApp());
+        binding.imvStop.setOnClickListener(view1 -> {
+            application.getShareData().isScanning.postValue(false);
+        });
+        binding.imvVip.setOnClickListener(view -> {
+            Intent intent = new Intent();
+        });
+
 
     }
 
     public void setActionMenu() {
-        binding.menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.drawerContainer.openDrawer(GravityCompat.START);
-            }
-        });
-        binding.imvBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                binding.drawerContainer.close();
-            }
-        });
+        binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START));
+        binding.imvBack.setOnClickListener(view -> binding.drawerContainer.close());
     }
 
     public void requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, SettingGlobal.REQUEST_CODE_LOCATION_PERMISSION);
         } else {
-           application.getShareData().isPermissionRequested.postValue(true);
+            application.getShareData().isPermissionRequested.postValue(true);
         }
     }
 
@@ -190,17 +180,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    public void hideBottomTabWhenScan(){
+    public void hideBottomTabWhenScan() {
 
         setViewGone(binding.navBottom);
         binding.vpContainerFrament.setUserInputEnabled(false);
     }
-    public void showBottomTabAfterScan(){
+
+    public void showBottomTabAfterScan() {
         setViewVisible(binding.navBottom);
         binding.vpContainerFrament.setUserInputEnabled(true);
 
     }
+
     private void setViewGone(final View view) {
 
         view.animate()
@@ -228,28 +219,25 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-    public void showCloseBtn(){
+
+    public void showStopBtn() {
         YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
-            binding.menu.setImageResource(R.drawable.ic_close);
-            binding.menu.setOnClickListener(view1 -> {
-                application.getShareData().isScanning.postValue(false);
-            });
-            YoYo.with(Techniques.FadeIn).playOn(binding.menu);
-        }).playOn(binding.menu);
+            binding.imvVip.setVisibility(View.GONE);
+        }).playOn(binding.imvVip);
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
+            binding.imvStop.setVisibility(View.VISIBLE);
+        }).playOn(binding.imvStop);
 
 
     }
-    public void showMenuBtn(){
+
+    public void showVipBtn() {
         YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
-            binding.menu.setImageResource(R.drawable.ic_menu);
-            binding.menu.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    binding.drawerContainer.openDrawer(GravityCompat.START);
-                }
-            });
-            YoYo.with(Techniques.FadeIn).playOn(binding.menu);
-        }).playOn(binding.menu);
+            binding.imvStop.setVisibility(View.GONE);
+        }).playOn(binding.imvStop);
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
+            binding.imvVip.setVisibility(View.VISIBLE);
+        }).playOn(binding.imvVip);
     }
 
 }

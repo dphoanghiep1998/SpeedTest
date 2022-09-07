@@ -39,9 +39,8 @@
     <color name="gradient_yellow_end">#FFC602</color>
     <color name="gradient_strong_start">#01EC51</color>
     <color name="gradient_strong_end">#36E7E7</color>
-
-
-
+    <color name="gray_800">#151529</color>
+    <color name="gray_100">#F7F7FC</color>
 
 
 </resources>

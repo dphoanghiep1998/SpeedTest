@@ -160,8 +160,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:paddingBottom="4dp"
                             android:paddingStart="4dp"
+                            android:paddingBottom="4dp"
                             android:text="Mbps"
                             android:textColor="#d7d7d7"
                             android:textSize="12sp" />
@@ -290,72 +290,111 @@
 
                 </LinearLayout>
             </LinearLayout>
-
-            <com.github.anastr.speedviewlib.PointerSpeedometer
-                android:id="@+id/speedView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
+            <!--            <com.example.speedtest.utils.GaugeView-->
+            <!--                app:gauge_startAngle="135"-->
+            <!--                app:gauge_angles="270"-->
+            <!--                app:gauge_strokeWidth="@dimen/gaugeThickness"-->
+            <!--                app:gauge_backgroundColor="@color/gray_400"-->
+            <!--                app:gauge_fillColor="@color/gradient_green_start"-->
+            <!--                android:id="@+id/testBackground"-->
+            <!--                android:src="@drawable/testbackground"-->
+            <!--                android:layout_width="250dp"-->
+            <!--                android:layout_height="250dp"-->
+            <!--                android:layout_marginTop="50dp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/container_ping_loss_jitter"-->
+            <!--                app:sv_unit="" />-->
+            <FrameLayout
+                android:id="@+id/testBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/container_ping_loss_jitter"
-                app:sv_backgroundCircleColor="@android:color/transparent"
-                app:sv_indicatorColor="#ddd"
-                app:sv_speedTextColor="@android:color/transparent"
-                app:sv_speedometerColor="@color/background_ads_start"
-                app:sv_speedometerWidth="24dp"
-                app:sv_unit="" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/btn_start"
+                android:layout_width="@dimen/_250sdp"
+                android:layout_height="@dimen/_250sdp"
+                android:scrollbarFadeDuration="200"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/start_anim" />
+
+                <TextView
+                    android:textSize="@dimen/_30ssp"
+                    android:id="@+id/tv_go"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="GO"/>
+            </FrameLayout>
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/needle"-->
+            <!--                android:layout_marginTop="-18dp"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="@dimen/_60sdp"-->
+            <!--                android:src="@drawable/ic_needle"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/testBackground"-->
+            <!--                app:layout_constraintStart_toStartOf="@id/testBackground"-->
+            <!--                app:layout_constraintEnd_toEndOf="@id/testBackground"/>-->
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_speed_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-40dp"
+                android:layout_marginTop="0dp"
                 android:text="0.0"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@id/speedView"
-                app:layout_constraintStart_toStartOf="@id/speedView"
-                app:layout_constraintTop_toBottomOf="@id/speedView" />
+                app:layout_constraintEnd_toEndOf="@id/testBackground"
+                app:layout_constraintStart_toStartOf="@id/testBackground"
+                app:layout_constraintTop_toBottomOf="@id/testBackground" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_mbps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-20dp"
                 android:text="Mbps"
                 android:textColor="#d7d7d7"
                 android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="@id/speedView"
-                app:layout_constraintStart_toStartOf="@id/speedView"
-                app:layout_constraintTop_toBottomOf="@+id/speedView" />
+                app:layout_constraintEnd_toEndOf="@id/testBackground"
+                app:layout_constraintStart_toStartOf="@id/testBackground"
+                app:layout_constraintTop_toBottomOf="@+id/testBackground" />
 
-            <Button
-                android:id="@+id/btn_start_scan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/button_background_start"
-                android:paddingHorizontal="64dp"
-                android:paddingVertical="8dp"
-                android:text="Bắt đầu ngay"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@id/tv_mbps"
-                app:layout_constraintStart_toStartOf="@id/tv_mbps"
-                app:layout_constraintTop_toBottomOf="@+id/tv_mbps" />
+<!--            <Button-->
+<!--                android:id="@+id/btn_start_scan"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:background="@drawable/button_background_start"-->
+<!--                android:paddingHorizontal="64dp"-->
+<!--                android:paddingVertical="8dp"-->
+<!--                android:text="Bắt đầu ngay"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="18sp"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/tv_mbps"-->
+<!--                app:layout_constraintStart_toStartOf="@id/tv_mbps"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_mbps" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/container_expand_view"
                 android:layout_width="wrap_content"
-                android:layout_marginEnd="32dp"
                 android:layout_height="80dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginEnd="32dp"
                 android:background="@drawable/background_gradient_config"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_start_scan"
-                app:layout_constraintWidth_percent="0.9"
-                >
+                app:layout_constraintTop_toBottomOf="@id/tv_speed_value"
+                app:layout_constraintWidth_percent="0.9">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
 
                     android:layout_width="match_parent"
