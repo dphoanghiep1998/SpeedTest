@@ -50,6 +50,7 @@ public class ChangeLocationFragment extends Fragment {
         Shader shader = new LinearGradient(0, 0, 0, tv.getLineHeight(),
                 getResources().getColor(R.color.gradient_text_premium_start), getResources().getColor(R.color.gradient_text_premium_end), Shader.TileMode.REPEAT);
         tv.getPaint().setShader(shader);
+        tv.setTextColor(getResources().getColor(R.color.gradient_text_premium_start));
         tv.setText("Premium");
         binding.tabLayout.getTabAt(1).setCustomView(tv);
         binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

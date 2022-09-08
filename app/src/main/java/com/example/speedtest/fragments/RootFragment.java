@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,13 @@ public class RootFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        Log.d("TAG", "onResume: ");
+        super.onResume();
         FragmentManager manager = requireActivity().getSupportFragmentManager();
         manager.beginTransaction().add(R.id.root_fragment, new VpnFragment()).commit();
-
-//        transaction.commit();
     }
 }

@@ -158,7 +158,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                             if (result.capabilities.contains("WPS")) {
                                 secure = "WPS ";
                             }
-                            if (activeWifiName.equals(result.SSID)) {
+                            if (activeWifiName!= null &&  activeWifiName.equals(result.SSID)) {
                                 if (!duplicated) {
                                     wifiList.add(0, new Wifi(name, NetworkUtils.wifiIpAddress(requireContext()), "0.0.0.0", secure, level + "", frequency + "", result.BSSID, ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency) + "", "100 m", "", true));
                                     duplicated = true;

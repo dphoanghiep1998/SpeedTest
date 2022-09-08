@@ -6,6 +6,7 @@
     android:background="@color/background_main"
     android:layout_height="match_parent">
     <com.google.android.material.tabs.TabLayout
+        android:layout_marginTop="@dimen/_32sdp"
         android:background="@drawable/background_tab_item"
         app:tabTextAppearance="@style/TabTextAppearance"
         app:tabBackground="@drawable/background_tab_item"
