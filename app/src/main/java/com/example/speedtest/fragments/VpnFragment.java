@@ -1,31 +1,34 @@
 package com.example.speedtest.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.example.speedtest.MainActivity;
 import com.example.speedtest.R;
 import com.example.speedtest.databinding.FragmentVpnBinding;
 
 public class VpnFragment extends Fragment {
 
-FragmentVpnBinding binding;
+    FragmentVpnBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentVpnBinding.inflate(inflater,container,false);
+        binding = FragmentVpnBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -35,7 +38,7 @@ FragmentVpnBinding binding;
         initView();
     }
 
-    public void initView(){
+    public void initView() {
         binding.containerInfor.setOnClickListener(view -> {
             if (binding.containerHidden.getVisibility() == View.VISIBLE) {
                 // The transition of the hiddenView is carried out by the TransitionManager class.
@@ -54,5 +57,13 @@ FragmentVpnBinding binding;
                 binding.imvArrowDown2.setRotation(180);
             }
         });
+
+        binding.containerSelector.setOnClickListener(view -> {
+            TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.root_fragment,new ChangeLocationFragment(),null).addToBackStack("vpn").commit();
+            ((MainActivity)requireActivity()).showBackBtn();
+        });
     }
+
 }

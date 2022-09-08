@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -63,6 +64,13 @@ public class MainActivity extends AppCompatActivity {
         setActionMenu();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            application.getShareData().isPermissionRequested.postValue(true);
+        }
+    }
 
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
@@ -82,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageScrollStateChanged(int state) {
                 super.onPageScrollStateChanged(state);
+            }
+        });
+        binding.vpContainerFrament.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                switch (position){
+                    case 0:
+                        binding.tvTitle.setText("SPEEDTEST");
+                        break;
+                    case 1:
+                        binding.tvTitle.setText("WIFI ANALYZER");
+                        break;
+                    case 2:
+                        binding.tvTitle.setText("VPN");
+                        break;
+                    case 3:
+                        binding.tvTitle.setText("RESULTS");
+                        break;
+                    default:
+                        binding.tvTitle.setText("SPEEDTEST");
+                        break;
+
+                }
             }
         });
         binding.navBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -127,8 +159,10 @@ public class MainActivity extends AppCompatActivity {
         binding.imvVip.setOnClickListener(view -> {
             Intent intent = new Intent();
         });
-
-
+        binding.backBtn.setOnClickListener(view -> {
+            onBackPressed();
+            showMenu();
+        });
     }
 
     public void setActionMenu() {
@@ -238,6 +272,25 @@ public class MainActivity extends AppCompatActivity {
         YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
             binding.imvVip.setVisibility(View.VISIBLE);
         }).playOn(binding.imvVip);
+    }
+    public void showBackBtn(){
+        binding.tvTitle.setText("CHANGE LOCATION");
+        YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
+            binding.menu.setVisibility(View.GONE);
+        }).playOn(binding.menu);
+
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
+            binding.backBtn.setVisibility(View.VISIBLE);
+        }).playOn(binding.backBtn);
+    }
+    public void showMenu(){
+        binding.tvTitle.setText("VPN");
+        YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
+            binding.backBtn.setVisibility(View.GONE);
+        }).playOn(binding.backBtn);
+        YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
+            binding.menu.setVisibility(View.VISIBLE);
+        }).playOn(binding.menu);
     }
 
 }

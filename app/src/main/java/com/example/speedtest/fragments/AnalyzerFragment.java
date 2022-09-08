@@ -69,6 +69,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.d("TAG", "onCreateView: ");
         application = SpeedApplication.create(requireContext());
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false);
         intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -87,10 +88,9 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
     @Override
     public void onResume() {
+        Log.d("TAG", "onResume: ");
         super.onResume();
-        if (ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            application.getShareData().isPermissionRequested.postValue(true);
-        }
+
     }
 
     @Override
@@ -117,6 +117,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
             @Override
             public void onChanged(Boolean isPermissionRequested) {
                 if (isPermissionRequested) {
+                    Log.d("TAG", "onChanged: ");
                     binding.requestContainer.setVisibility(View.GONE);
                     mainWifi.startScan();
                 } else {
@@ -140,7 +141,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                         if (result != null) {
                             String level = String.valueOf(result.level);
                             String frequency = String.valueOf(result.frequency);
-                            Log.d("TAG", "onReceive: " + result.channelWidth);
 
                             String channelWidth = null;
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
