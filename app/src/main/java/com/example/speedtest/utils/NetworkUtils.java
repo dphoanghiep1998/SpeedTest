@@ -42,9 +42,10 @@ public class NetworkUtils {
         }
         return false;
     }
-    public static boolean isWifiEnabled(@NonNull Context context){
+
+    public static boolean isWifiEnabled(@NonNull Context context) {
         WifiManager cm = (WifiManager) context.getApplicationContext().getSystemService(context.WIFI_SERVICE);
-        return cm==null && cm.isWifiEnabled();
+        return cm == null && cm.isWifiEnabled();
     }
 
     public static boolean isMobileConnected(@NonNull Context context) {
@@ -190,7 +191,35 @@ public class NetworkUtils {
         return ipAddressString;
     }
 
+    public static int[] getRangeWifi(int channel, int type) {
+        int r_range = 0;
+        int l_range = 0;
+        switch (type) {
+            case 0:
+                if (channel <= 2) {
+                    r_range = 0;
+                    l_range = 4;
+                } else {
+                    r_range = channel - 2;
+                    l_range = channel + 2;
+                }
+                break;
 
+            case 1:
+                if (channel - 4 > 0) {
+                    r_range = channel - 2 > 0 ? channel - 2 : 0;
+                    l_range = r_range + 8;
+                } else if (channel + 4 > 14) {
+                    l_range = channel + 2 < 14 ? channel + 2 : 14;
+                    r_range = l_range - 8;
+                }
+                break;
+
+        }
+
+        int result[] = {r_range, l_range};
+        return result;
+    }
 
 
 }

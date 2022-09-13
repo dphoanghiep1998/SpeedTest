@@ -21,6 +21,10 @@ public class Wifi implements Serializable {
     private String wifi_distance;
 
 
+
+    private int wifi_l_range;
+
+
     private String wifi_ISP;
     private boolean wifi_isConnected;
 
@@ -28,7 +32,7 @@ public class Wifi implements Serializable {
 
     };
 
-    public Wifi(String wifi_name, String wifi_internal_ip,String wifi_external_ip, String wifi_secure_type, String wifi_level, String wifi_frequency, String wifi_bssid, String wifi_channel, String wifi_distance,String wifi_ISP ,boolean wifi_isConnected) {
+    public Wifi(String wifi_name, String wifi_internal_ip,String wifi_external_ip, String wifi_secure_type, String wifi_level, String wifi_frequency, String wifi_bssid, String wifi_channel, String wifi_distance,String wifi_ISP ,boolean wifi_isConnected,int wifi_r_range,int wifi_l_range) {
         this.wifi_name = wifi_name;
         this.wifi_internal_ip = wifi_internal_ip;
         this.wifi_secure_type = wifi_secure_type;
@@ -40,6 +44,26 @@ public class Wifi implements Serializable {
         this.wifi_isConnected = wifi_isConnected;
         this.wifi_external_ip = wifi_external_ip;
         this.wifi_ISP = wifi_ISP;
+        this.wifi_l_range = wifi_l_range;
+        this.wifi_r_range = wifi_r_range;
+    }
+
+    public int getWifi_r_range() {
+        return wifi_r_range;
+    }
+
+    public void setWifi_r_range(int wifi_r_range) {
+        this.wifi_r_range = wifi_r_range;
+    }
+
+    private int wifi_r_range;
+
+    public int getWifi_l_range() {
+        return wifi_l_range;
+    }
+
+    public void setWifi_l_range(int wifi_l_range) {
+        this.wifi_l_range = wifi_l_range;
     }
 
     public String getWifi_external_ip() {

@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -69,9 +70,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             application.getShareData().isPermissionRequested.postValue(true);
+        } else {
+            application.getShareData().isPermissionRequested.postValue(false);
+
         }
     }
-
+    private boolean isBottomClicked = false;
+    private boolean isScrolling = false;
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
         binding.vpContainerFrament.setAdapter(viewPager);
@@ -85,18 +90,8 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 binding.navBottom.getMenu().getItem(position).setChecked(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
-            }
-        });
-        binding.vpContainerFrament.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                switch (position){
+                showMenu();
+                switch (position) {
                     case 0:
                         binding.tvTitle.setText("SPEEDTEST");
                         break;
@@ -115,31 +110,40 @@ public class MainActivity extends AppCompatActivity {
 
                 }
             }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
         });
+
         binding.navBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                showMenu();
 
                 switch (item.getItemId()) {
                     case R.id.speedtest:
                         binding.tvTitle.setText("SPEEDTEST");
                         binding.vpContainerFrament.setCurrentItem(0);
+
                         return true;
                     case R.id.analist:
                         binding.tvTitle.setText("WIFI ANALYZER");
-                        if (!NetworkUtils.isWifiEnabled(getApplicationContext())) {
-//                                IntentFilter intent = new IntentFilter(ACTION)
-                        }
+
+
                         binding.vpContainerFrament.setCurrentItem(1);
                         return true;
 
                     case R.id.vpn:
                         binding.tvTitle.setText("VPN");
                         binding.vpContainerFrament.setCurrentItem(2);
+
                         return true;
                     case R.id.history:
                         binding.tvTitle.setText("RESULTS");
                         binding.vpContainerFrament.setCurrentItem(3);
+
                         return true;
 
                 }
@@ -150,8 +154,8 @@ public class MainActivity extends AppCompatActivity {
         binding.vpContainerFrament.setCurrentItem(0);
         binding.containerRate.setOnClickListener(view -> openLink("http://www.google.com"));
         binding.containerPolicy.setOnClickListener(view -> openLink("http://www.google.com"));
-        binding.containerFanpage.setOnClickListener(view -> openLink("http://www.facebook.com"));
-        binding.containerOtherApp.setOnClickListener(view -> openLink("http://www.google.com"));
+//        binding.containerFanpage.setOnClickListener(view -> openLink("http://www.facebook.com"));
+//        binding.containerOtherApp.setOnClickListener(view -> openLink("http://www.google.com"));
         binding.containerShare.setOnClickListener(view -> shareApp());
         binding.imvStop.setOnClickListener(view1 -> {
             application.getShareData().isScanning.postValue(false);
@@ -164,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
             showMenu();
         });
     }
-
     public void setActionMenu() {
         binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START));
         binding.imvBack.setOnClickListener(view -> binding.drawerContainer.close());
@@ -273,7 +276,8 @@ public class MainActivity extends AppCompatActivity {
             binding.imvVip.setVisibility(View.VISIBLE);
         }).playOn(binding.imvVip);
     }
-    public void showBackBtn(){
+
+    public void showBackBtn() {
         binding.tvTitle.setText("CHANGE LOCATION");
         YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
             binding.menu.setVisibility(View.GONE);
@@ -283,8 +287,13 @@ public class MainActivity extends AppCompatActivity {
             binding.backBtn.setVisibility(View.VISIBLE);
         }).playOn(binding.backBtn);
     }
-    public void showMenu(){
+
+    public void showMenu() {
+        if (binding.menu.getVisibility() == View.VISIBLE) {
+            return;
+        }
         binding.tvTitle.setText("VPN");
+
         YoYo.with(Techniques.FadeOut).duration(400).onEnd(animator -> {
             binding.backBtn.setVisibility(View.GONE);
         }).playOn(binding.backBtn);

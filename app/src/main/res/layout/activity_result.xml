@@ -29,11 +29,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:text="Results"
+            android:text="RESULTS"
             android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold|italic"
+            android:textSize="@dimen/_18ssp"
+            android:textStyle="bold"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -219,29 +218,28 @@
             </LinearLayout>
 
             <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:textAlignment="gravity"
                     android:id="@+id/tv_download_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
                     android:text="112.64"
                     android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:paddingTop="4dp"
+                    android:textSize="@dimen/_20ssp"
+                    android:paddingTop="@dimen/_4sdp"
                     android:textColor="@color/button_color_start" />
                 <TextView
                     android:paddingStart="4dp"
                     android:id="@+id/tv_download_currency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
                     android:text=" Mpbs"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/_10ssp"
                     android:paddingTop="4dp"
-                    android:textColor="#ddd"
+                    android:textColor="@color/gray_400"
                    />
             </LinearLayout>
 
@@ -298,12 +296,11 @@
                     android:id="@+id/tv_upload_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
+                    android:layout_gravity="bottom"
                     android:text="112.64"
                     android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:paddingTop="4dp"
+                    android:textSize="@dimen/_20ssp"
+                    android:paddingTop="@dimen/_4sdp"
                     android:textColor="@color/purple_200"
                 />
                 <TextView
@@ -313,8 +310,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:text="Mbps"
-                    android:textSize="12sp"
-                    android:textColor="#d7d7d7" />
+                    android:textSize="@dimen/_10ssp"
+                    android:textColor="@color/gray_400" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 
