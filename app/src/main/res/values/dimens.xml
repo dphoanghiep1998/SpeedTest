@@ -15,6 +15,7 @@
     <dimen name="pingJitterText">32dp</dimen>
     <dimen name="gaugeLabel">18dp</dimen>
     <dimen name="gaugeText">36dp</dimen>
+    <dimen name="sizeText">30sp</dimen>
     <dimen name="gaugeSize">150dp</dimen>
     <dimen name="gaugeThickness">10dp</dimen>
     <dimen name="progressSize">80dp</dimen>

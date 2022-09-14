@@ -1,8 +1,6 @@
 package com.example.speedtest.fragments;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,19 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.speedtest.MainActivity;
-import com.example.speedtest.ResultActivity;
+import com.example.speedtest.activities.MainActivity;
+import com.example.speedtest.activities.ResultActivity;
 import com.example.speedtest.adapter.ConnectivityTestAdapter;
 import com.example.speedtest.common.CustomDialog;
-import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.databinding.FragmentCheckResultBinding;
 import com.example.speedtest.interfaces.OnDialogClickListener;
 import com.example.speedtest.interfaces.ResultTouchHelper;
 import com.example.speedtest.model.ConnectivityTestModel;
-import com.example.speedtest.view_model.WifiTestViewModel;
 
 import java.util.List;
 

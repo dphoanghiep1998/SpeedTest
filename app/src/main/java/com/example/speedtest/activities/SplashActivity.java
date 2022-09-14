@@ -1,33 +1,13 @@
-package com.example.speedtest;
+package com.example.speedtest.activities;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 
 import com.example.speedtest.databinding.ActivitySplashBinding;
-import com.example.speedtest.model.Wifi;
-import com.example.speedtest.utils.NetworkUtils;
-import com.github.pwittchen.reactivewifi.ReactiveWifi;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;

@@ -305,7 +305,9 @@
                     android:id="@+id/btn_start"
                     android:layout_width="@dimen/_200sdp"
                     android:layout_height="@dimen/_200sdp"
+                    android:background="@drawable/ripple_effect_fg"
                     android:scrollbarFadeDuration="200"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -318,9 +320,11 @@
                     android:id="@+id/tv_go"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:text="@string/go"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_30ssp"
+                    android:textSize="@dimen/sizeText"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -360,13 +364,25 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:sv_backgroundCircleColor="@android:color/transparent"
-                    app:sv_indicator="KiteIndicator"
+                    app:sv_image="@drawable/ic_speedview"
+                    app:sv_indicator="NormalSmallIndicator"
                     app:sv_indicatorColor="#ddd"
                     app:sv_indicatorWidth="10dp"
                     app:sv_speedTextColor="@android:color/transparent"
                     app:sv_speedometerColor="@color/background_ads_start"
                     app:sv_speedometerWidth="18dp"
                     app:sv_unit="" />
+
+<!--                <com.example.speedtest.utils.GaugeView-->
+<!--                    android:id="@+id/gauge"-->
+<!--                    android:layout_width="@dimen/_200sdp"-->
+<!--                    android:layout_height="@dimen/_200sdp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:sv_backgroundCircleColor="@android:color/transparent" />-->
+
 
                 <TextView
                     android:id="@+id/tv_speed_value"

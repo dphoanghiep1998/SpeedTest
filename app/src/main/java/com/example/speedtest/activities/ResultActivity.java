@@ -1,4 +1,4 @@
-package com.example.speedtest;
+package com.example.speedtest.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.example.speedtest.R;
 import com.example.speedtest.common.CustomDialog;
 import com.example.speedtest.databinding.ActivityResultBinding;
 import com.example.speedtest.interfaces.OnDialogClickListener;

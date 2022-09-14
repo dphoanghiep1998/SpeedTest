@@ -22,22 +22,13 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.speedtest.AnalyticActivity;
-import com.example.speedtest.R;
-import com.example.speedtest.SpeedApplication;
+import com.example.speedtest.activities.AnalyticActivity;
+import com.example.speedtest.activities.SpeedApplication;
 import com.example.speedtest.adapter.WifiChannelAdapter;
 import com.example.speedtest.databinding.FragmentAnalyzerBinding;
 import com.example.speedtest.interfaces.ItemTouchHelper;
 import com.example.speedtest.model.Wifi;
 import com.example.speedtest.utils.NetworkUtils;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.formatter.IAxisValueFormatter;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
@@ -170,7 +161,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
                 }
                 adapter.setData(wifiList);
-                setDataChart(wifiList);
+//                setDataChart(wifiList);
                 binding.loadingPanel.setVisibility(View.GONE);
 
             }
@@ -196,49 +187,49 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     }
 
 
-    private void setDataChart(List<Wifi> wifiList) {
-        ArrayList<BarEntry> entries = new ArrayList<>();
-        String title = "Wifi channel";
-        ArrayList<String> xAxisValues = new ArrayList<>();
-        for (int i = 0; i <= 14; i++) {
-            xAxisValues.add(i + "");
-        }
-
-
-        binding.lcWifiChannel.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
-
-        for (Wifi wifi : wifiList) {
-            if (Integer.parseInt(wifi.getWifi_channel()) < 14) {
-                BarEntry barEntry = new BarEntry(Integer.parseInt(wifi.getWifi_channel()), Integer.parseInt(wifi.getWifi_level()));
-                entries.add(barEntry);
-            }
-        }
-
-        BarDataSet barDataSet = new BarDataSet(entries, title);
-        BarData data = new BarData(barDataSet);
-
-        binding.lcWifiChannel.getXAxis().setCenterAxisLabels(true);
-
-        binding.lcWifiChannel.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
-        binding.lcWifiChannel.getXAxis().setTextColor(getResources().getColor(R.color.white));
-        binding.lcWifiChannel.getAxisLeft().setTextColor(getResources().getColor(R.color.white));
-        binding.lcWifiChannel.getXAxis().setLabelCount(10, false);
-        binding.lcWifiChannel.getLegend().setTextColor(getResources().getColor(R.color.white));
-        binding.lcWifiChannel.getXAxis().setAxisMinimum(0f);
-        binding.lcWifiChannel.getXAxis().setAxisMaximum(13f);
-        binding.lcWifiChannel.getAxisLeft().setStartAtZero(false);
-
-        binding.lcWifiChannel.setVisibleYRange(0,90, YAxis.AxisDependency.LEFT);
-
-
-        binding.lcWifiChannel.setTouchEnabled(false);
-        binding.lcWifiChannel.setData(data);
-        binding.lcWifiChannel.notifyDataSetChanged();
-        binding.lcWifiChannel.setDrawValueAboveBar(false);
-        binding.lcWifiChannel.animateX(1000);
-        binding.lcWifiChannel.invalidate();
-
-    }
+//    private void setDataChart(List<Wifi> wifiList) {
+//        ArrayList<BarEntry> entries = new ArrayList<>();
+//        String title = "Wifi channel";
+//        ArrayList<String> xAxisValues = new ArrayList<>();
+//        for (int i = 0; i <= 14; i++) {
+//            xAxisValues.add(i + "");
+//        }
+//
+//
+//        binding.lcWifiChannel.getXAxis().setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
+//
+//        for (Wifi wifi : wifiList) {
+//            if (Integer.parseInt(wifi.getWifi_channel()) < 14) {
+//                BarEntry barEntry = new BarEntry(Integer.parseInt(wifi.getWifi_channel()), Integer.parseInt(wifi.getWifi_level()));
+//                entries.add(barEntry);
+//            }
+//        }
+//
+//        BarDataSet barDataSet = new BarDataSet(entries, title);
+//        BarData data = new BarData(barDataSet);
+//
+//        binding.lcWifiChannel.getXAxis().setCenterAxisLabels(true);
+//
+//        binding.lcWifiChannel.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
+//        binding.lcWifiChannel.getXAxis().setTextColor(getResources().getColor(R.color.white));
+//        binding.lcWifiChannel.getAxisLeft().setTextColor(getResources().getColor(R.color.white));
+//        binding.lcWifiChannel.getXAxis().setLabelCount(10, false);
+//        binding.lcWifiChannel.getLegend().setTextColor(getResources().getColor(R.color.white));
+//        binding.lcWifiChannel.getXAxis().setAxisMinimum(0f);
+//        binding.lcWifiChannel.getXAxis().setAxisMaximum(13f);
+//        binding.lcWifiChannel.getAxisLeft().setStartAtZero(false);
+//
+//        binding.lcWifiChannel.setVisibleYRange(0,90, YAxis.AxisDependency.LEFT);
+//
+//
+//        binding.lcWifiChannel.setTouchEnabled(false);
+//        binding.lcWifiChannel.setData(data);
+//        binding.lcWifiChannel.notifyDataSetChanged();
+//        binding.lcWifiChannel.setDrawValueAboveBar(false);
+//        binding.lcWifiChannel.animateX(1000);
+//        binding.lcWifiChannel.invalidate();
+//
+//    }
 
     private class MyAxisValueFormatter extends ValueFormatter {
         @Override

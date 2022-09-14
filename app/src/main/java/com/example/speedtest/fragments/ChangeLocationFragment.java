@@ -46,7 +46,7 @@ public class ChangeLocationFragment extends Fragment {
 
 
     public void initView() {
-        TextView tv=(TextView)LayoutInflater.from(requireContext()).inflate(R.layout.custom_tabbar_item,null);
+        TextView tv = (TextView) LayoutInflater.from(requireContext()).inflate(R.layout.custom_tabbar_item, null);
         Shader shader = new LinearGradient(0, 0, 0, tv.getLineHeight(),
                 getResources().getColor(R.color.gradient_text_premium_start), getResources().getColor(R.color.gradient_text_premium_end), Shader.TileMode.REPEAT);
         tv.getPaint().setShader(shader);
@@ -58,7 +58,6 @@ public class ChangeLocationFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d("TAG", "onTabSelected: " + tab.getPosition());
                 binding.viewPager.setCurrentItem(tab.getPosition());
-
             }
 
             @Override

@@ -46,7 +46,9 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ic_speedtest.xml" value="0.1965" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ic_vip.xml" value="0.1545" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/infor_container.xml" value="0.2085" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/mask.xml" value="0.211" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/progress_color.xml" value="0.2825" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/ripple_effect_fg.xml" value="0.259" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/round2.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/seekbar.xml" value="0.1" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/drawable/seekbar_style.xml" value="0.1" />
@@ -66,11 +68,12 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_check_result.xml" value="0.2" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_home.xml" value="0.13703140830800406" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_root.xml" value="0.2078125" />
-        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_speedtest.xml" value="0.46458333333333335" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_speedtest.xml" value="0.2" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/fragment_vpn.xml" value="0.2" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_result.xml" value="0.5" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_test.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/item_wifi_channel.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/layout_gauge.xml" value="0.33" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/layout/layout_speedometer_content.xml" value="0.14" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/drawer_view.xml" value="0.18958333333333333" />

@@ -1,10 +1,11 @@
-package com.example.speedtest;
+package com.example.speedtest.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.speedtest.R;
 import com.example.speedtest.databinding.ActivityAnalyticBinding;
 import com.example.speedtest.model.Wifi;
 

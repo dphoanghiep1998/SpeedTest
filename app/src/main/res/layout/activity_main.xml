@@ -25,6 +25,7 @@
 
             <ImageView
                 android:id="@+id/menu"
+                android:background="@drawable/ripple_effect_fg"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:paddingVertical="10dp"
@@ -37,6 +38,8 @@
 
             <ImageView
                 android:id="@+id/back_btn"
+                android:clickable="true"
+                android:background="@drawable/mask"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:paddingVertical="10dp"
@@ -64,6 +67,8 @@
 
             <ImageView
                 android:id="@+id/imv_vip"
+                android:background="@drawable/ripple_effect_fg"
+                android:clickable="true"
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="8dp"
@@ -82,6 +87,8 @@
                 android:paddingVertical="10dp"
                 android:paddingStart="10dp"
                 android:src="@drawable/ic_close"
+                android:clickable="true"
+                android:background="@drawable/ripple_effect_fg"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -101,6 +108,7 @@
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:foreground="@drawable/ripple_effect_fg"
             android:id="@+id/nav_bottom"
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -136,6 +144,8 @@
 
             <ImageView
                 android:id="@+id/imv_back"
+                android:clickable="true"
+                android:background="@drawable/mask"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/ic_back"

@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import com.example.speedtest.MainActivity;
+import com.example.speedtest.activities.MainActivity;
 import com.example.speedtest.R;
 import com.example.speedtest.databinding.FragmentVpnBinding;
 

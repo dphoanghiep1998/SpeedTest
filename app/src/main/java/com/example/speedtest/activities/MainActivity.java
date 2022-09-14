@@ -1,4 +1,4 @@
-package com.example.speedtest;
+package com.example.speedtest.activities;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -6,7 +6,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.net.wifi.ScanResult;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -18,17 +17,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.speedtest.R;
 import com.example.speedtest.adapter.ViewPagerAdapter;
 import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
-import com.example.speedtest.utils.NetworkUtils;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -75,8 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
     private boolean isBottomClicked = false;
     private boolean isScrolling = false;
+
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
         binding.vpContainerFrament.setAdapter(viewPager);
@@ -168,8 +168,10 @@ public class MainActivity extends AppCompatActivity {
             showMenu();
         });
     }
+
     public void setActionMenu() {
-        binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START));
+        binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START,true));
+
         binding.imvBack.setOnClickListener(view -> binding.drawerContainer.close());
     }
 
@@ -218,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void hideBottomTabWhenScan() {
-
         setViewGone(binding.navBottom);
         binding.vpContainerFrament.setUserInputEnabled(false);
     }
@@ -243,8 +244,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setViewVisible(final View view) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 
+    private void setViewVisible(final View view) {
         view.animate()
                 .alpha(1f)
                 .setDuration(500)
@@ -254,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
                         view.setVisibility(View.VISIBLE);
                     }
                 });
-
     }
 
     public void showStopBtn() {
