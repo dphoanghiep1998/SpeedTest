@@ -1,19 +1,9 @@
 package com.example.speedtest.core;
 
 
-import android.util.Log;
-
 import com.example.speedtest.core.config.SpeedtestConfig;
 import com.example.speedtest.core.serverSelector.TestPoint;
 import com.example.speedtest.core.worker.SpeedtestWorker;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 public class Speedtest {
     private TestPoint server=null;
@@ -53,14 +43,7 @@ public class Speedtest {
             if (state < 3) throw new IllegalStateException("Server hasn't been selected yet");
             if (state == 4) throw new IllegalStateException("Test already running");
             state = 4;
-            try {
-                JSONObject extra = new JSONObject();
-                if (originalExtra != null && !originalExtra.isEmpty())
-                    extra.put("extra", originalExtra);
-                extra.put("server", server.getName());
-                config.setTelemetry_extra(extra.toString());
-            } catch (Throwable t) {
-            }
+
             st = new SpeedtestWorker(server, config) {
                 @Override
                 public void onDownloadUpdate(double dl, double progress) {
@@ -98,6 +81,9 @@ public class Speedtest {
                 @Override
                 public void onAbort() {
 
+                    synchronized (mutex) {
+                        state = 5;
+                    }
                     callback.onAbort();
                 }
 
@@ -107,11 +93,7 @@ public class Speedtest {
 
 
     public void abort(){
-        synchronized (mutex) {
-            if (state == 4) st.abort();
-            state = 5;
-
-        }
+           st.abort();
     }
 
     public static abstract class SpeedtestHandler{

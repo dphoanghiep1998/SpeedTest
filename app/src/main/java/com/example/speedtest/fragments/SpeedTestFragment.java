@@ -75,7 +75,6 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     public void onPause() {
         super.onPause();
         isFragmentFreezing = true;
-        Log.d("TAG", "onPause: ");
     }
 
     @Nullable
@@ -86,7 +85,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         tempBlackList = new HashSet<>();
         initBroadCast();
         checkFirstWhenStart();
-        getActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        registBroadcast();
         return binding.getRoot();
     }
 
@@ -100,31 +99,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             Log.d("TAG", "isScanning: " + aBoolean);
             ((MainActivity) requireActivity()).first_time = false;
             if (aBoolean) {
-                if (!NetworkUtils.isWifiConnected(requireContext()) && !NetworkUtils.isMobileConnected(requireContext())) {
-                    Toast.makeText(requireContext(), "No connectivity!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-//                if (NetworkUtils.isWifiConnected(getContext())) {
-//                    SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
-//                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-//                    binding.tvWifiName.setText(content);
-//                    type = "wifi";
-//                    loadServer();
-//                } else if (NetworkUtils.isMobileConnected(getContext())) {
-//                    NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
-//                    String type = info.getTypeName() + " - " + info.getSubtypeName();
-//                    SpannableString content = new SpannableString(type);
-//                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-//                    binding.tvWifiName.setText(content);
-//                    type = "mobile";
-//                    loadServer();
-//                } else {
-//                    SpannableString content = new SpannableString("No connection");
-//                    content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-//                    binding.tvWifiName.setText(content);
-//                    binding.tvIspName.setText("No data");
-//                    type = "no-connection";
-//                }
+
                 runSpeedTest();
             } else {
                 resetView();
@@ -136,21 +111,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
         application.getShareData().isPermissionRequested.observe(getViewLifecycleOwner(), isPermissionRequested -> {
             if (!isPermissionRequested) {
-                if (NetworkUtils.isWifiConnected(requireContext())) {
-                    binding.tvWifiName.setText("Wifi");
-                    binding.tvIspName.setText("No data");
-
-                } else if (NetworkUtils.isMobileConnected(requireContext())) {
-                    binding.tvWifiName.setText("Mobile");
-                    binding.tvIspName.setText("No data");
-
-                } else {
-                    binding.tvIspName.setText("No data");
-
-                    binding.tvWifiName.setText("No connection");
-                }
+               setViewWithNoPermission();
             } else {
-                setViewWifiCheck();
+                setViewWithPermission();
             }
 
         });
@@ -159,32 +122,29 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     }
 
+    private void setViewWithNoPermission() {
+        if (NetworkUtils.isWifiConnected(requireContext())) {
+            binding.tvWifiName.setText("Wifi");
+            binding.tvIspName.setText("No data");
+        } else if (NetworkUtils.isMobileConnected(requireContext())) {
+            binding.tvWifiName.setText("Mobile");
+            binding.tvIspName.setText("No data");
+        } else {
+            binding.tvIspName.setText("No data");
+            binding.tvWifiName.setText("No connection");
+        }
+    }
+
     @Override
     public void onResume() {
         Log.d("msg", "onResume: ");
         super.onResume();
         isFragmentFreezing = false;
         if (isConnectivityChanged) {
-            if (NetworkUtils.isWifiConnected(getContext())) {
-                SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                binding.tvWifiName.setText(content);
-                type = "wifi";
-                loadServer();
-            } else if (NetworkUtils.isMobileConnected(getContext())) {
-                NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
-                String type = info.getTypeName() + " - " + info.getSubtypeName();
-                SpannableString content = new SpannableString(type);
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                binding.tvWifiName.setText(content);
-                type = "mobile";
-                loadServer();
-            } else {
-                SpannableString content = new SpannableString("No connection");
-                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                binding.tvWifiName.setText(content);
-                binding.tvIspName.setText("No data");
-                type = "no-connection";
+            if(application.getShareData().isPermissionRequested.getValue()){
+                setViewWithPermission();
+            }else{
+                setViewWithNoPermission();
             }
         }
         isConnectivityChanged = false;
@@ -199,28 +159,10 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             public void onReceive(Context context, Intent intent) {
                 isConnectivityChanged = true;
                 if (isConnectivityChanged && !isFragmentFreezing) {
-                    if (NetworkUtils.isWifiConnected(getContext())) {
-                        loadServer();
-                        SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
-                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                        binding.tvWifiName.setText(content);
-                        type = "wifi";
-
-                    } else if (NetworkUtils.isMobileConnected(getContext())) {
-                        loadServer();
-                        NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
-                        String type = info.getTypeName() + " - " + info.getSubtypeName();
-                        SpannableString content = new SpannableString(type);
-                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                        binding.tvWifiName.setText(content);
-                        type = "mobile";
-                    } else {
-                        SpannableString content = new SpannableString("No connection");
-                        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-                        binding.tvWifiName.setText(content);
-                        binding.tvIspName.setText("No data");
-
-                        type = "no-connection";
+                    if(application.getShareData().isPermissionRequested.getValue()){
+                        setViewWithPermission();
+                    }else{
+                        setViewWithNoPermission();
                     }
                     isConnectivityChanged = false;
                 }
@@ -229,6 +171,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         };
     }
 
+    private void registBroadcast(){
+        requireActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    }
 
     private void unRegisterBroadCast() {
         requireContext().unregisterReceiver(internetBroad);
@@ -264,25 +209,22 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         //select Wifi
         binding.tvWifiName.setOnClickListener(this);
 
+        //animation expandview
         ValueAnimator anim = ValueAnimator.ofInt(binding.containerExpandView.getMeasuredWidth(), 600);
         anim.addUpdateListener(valueAnimator -> binding.containerExpandView.getLayoutParams());
-        binding.containerExpandView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isExpanded) {
-                    TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
-                    view.setLayoutParams(layoutParams);
 
-                    isExpanded = true;
-                } else {
-                    TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
-                    ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-                    layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
-                    view.setLayoutParams(layoutParams);
-                    isExpanded = false;
-                }
+        //expandview
+        binding.containerExpandView.setOnClickListener(view -> {
+            TransitionManager.beginDelayedTransition((ViewGroup) view, new AutoTransition());
+            ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+            if (!isExpanded) {
+                layoutParams.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+                view.setLayoutParams(layoutParams);
+                isExpanded = true;
+            } else {
+                layoutParams.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+                view.setLayoutParams(layoutParams);
+                isExpanded = false;
             }
         });
 
@@ -291,6 +233,10 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
 
     public void onClickStartButton() {
+        if (!NetworkUtils.isWifiConnected(requireContext()) && !NetworkUtils.isMobileConnected(requireContext())) {
+            Toast.makeText(requireContext(), "No connectivity!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         ((MainActivity) requireActivity()).hideBottomTabWhenScan();
         ((MainActivity) requireActivity()).showStopBtn();
         binding.btnStart.setEnabled(false);
@@ -386,9 +332,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                             findServerIndex = index;
                         }
                     }
-//                    String testAddr = mapKey.get(findServerIndex).replace("http://", "https://");
+                    String testAddr = mapKey.get(findServerIndex).replace("http://", "https://");
                     final List<String> info = mapValue.get(findServerIndex);
-//                    final double distance = dist;
+                    final double distance = dist;
 
                     if (info == null) {
                         return;
@@ -397,6 +343,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                         Log.d("TAG", "run: " + testPoint);
                     }
                 } catch (Exception e) {
+                    setViewWithNoPermission();
                     e.printStackTrace();
                 }
             }
@@ -520,6 +467,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
             @Override
             public void onAbort() {
+                Log.d("TAG", "onAbort: ");
                 requireActivity().runOnUiThread(() -> resetView());
             }
 
@@ -591,7 +539,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void setViewWifiCheck() {
+    public void setViewWithPermission() {
         if (NetworkUtils.isWifiConnected(getContext())) {
             SpannableString content = new SpannableString(NetworkUtils.getNameWifi(getContext().getApplicationContext()));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
@@ -616,6 +564,8 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     }
 
     public void resetView() {
+        binding.speedView.speedTo(0);
+        binding.speedView.stop();
         binding.tvSpeedValue.setText("0");
         binding.tvDownloadValue.clearAnimation();
         binding.tvUploadValue.clearAnimation();
