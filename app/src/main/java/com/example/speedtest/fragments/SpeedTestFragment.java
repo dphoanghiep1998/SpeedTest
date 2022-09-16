@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.location.Location;
@@ -17,7 +19,9 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -45,8 +49,9 @@ import com.example.speedtest.databinding.FragmentSpeedtestBinding;
 import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.model.Mobile;
 import com.example.speedtest.model.Wifi;
-import com.example.speedtest.utils.GaugeView;
 import com.example.speedtest.utils.NetworkUtils;
+import com.github.anastr.speedviewlib.components.indicators.ImageIndicator;
+import com.github.anastr.speedviewlib.components.note.Note;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -62,14 +67,13 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     private BroadcastReceiver internetBroad;
     private IntentFilter internetFilter;
     private static Speedtest speedTest = null;
-    private Wifi wifi = new Wifi();
-    private Mobile mobile = new Mobile();
+    private final Wifi wifi = new Wifi();
+    private final Mobile mobile = new Mobile();
     private String type;
     private SpeedApplication application;
     private GetIP getIP;
     private HashSet<String> tempBlackList;
     private TestPoint testPoint;
-    private GaugeView gaugeView;
 
     @Override
     public void onPause() {
@@ -103,15 +107,13 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 runSpeedTest();
             } else {
                 resetView();
-                if (speedTest != null) {
-                    speedTest.abort();
-                }
+
             }
         });
 
         application.getShareData().isPermissionRequested.observe(getViewLifecycleOwner(), isPermissionRequested -> {
             if (!isPermissionRequested) {
-               setViewWithNoPermission();
+                setViewWithNoPermission();
             } else {
                 setViewWithPermission();
             }
@@ -141,9 +143,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         super.onResume();
         isFragmentFreezing = false;
         if (isConnectivityChanged) {
-            if(application.getShareData().isPermissionRequested.getValue()){
+            if (application.getShareData().isPermissionRequested.getValue() != null && application.getShareData().isPermissionRequested.getValue()) {
                 setViewWithPermission();
-            }else{
+            } else {
                 setViewWithNoPermission();
             }
         }
@@ -157,11 +159,15 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         internetBroad = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d("TAG", "onReceive WIFIIIIII: ");
+                if(NetworkUtils.isWifiEnabled(requireActivity())){
+
+                }
                 isConnectivityChanged = true;
                 if (isConnectivityChanged && !isFragmentFreezing) {
-                    if(application.getShareData().isPermissionRequested.getValue()){
+                    if (application.getShareData().isPermissionRequested.getValue()) {
                         setViewWithPermission();
-                    }else{
+                    } else {
                         setViewWithNoPermission();
                     }
                     isConnectivityChanged = false;
@@ -171,7 +177,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         };
     }
 
-    private void registBroadcast(){
+    private void registBroadcast() {
         requireActivity().registerReceiver(internetBroad, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 
@@ -188,10 +194,10 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     boolean isExpanded = false;
 
     public void setupView() {
-//        gaugeView = binding.gauge;
-//        gaugeView.setOnClickListener(this);
+        customSpeedview();
+
         // speedview
-        binding.speedView.setSpeedometerColor(getResources().getColor(R.color.gray_400));
+        binding.speedView.setCenterCircleColor(getResources().getColor(R.color.gray_400));
 
         Shader shader = new LinearGradient(0, 0, 0, binding.tvGo.getLineHeight(),
                 getResources().getColor(R.color.gradient_green_start), getResources().getColor(R.color.gradient_green_end), Shader.TileMode.REPEAT);
@@ -231,7 +237,13 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     }
 
+    private void customSpeedview() {
+        binding.speedView.removeAllNotes();
+        binding.speedView.setWithPointer(false);
 
+    }
+
+    //click button
     public void onClickStartButton() {
         if (!NetworkUtils.isWifiConnected(requireContext()) && !NetworkUtils.isMobileConnected(requireContext())) {
             Toast.makeText(requireContext(), "No connectivity!", Toast.LENGTH_SHORT).show();
@@ -248,15 +260,15 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
             binding.loading.setVisibility(View.VISIBLE);
             binding.tvConnecting.setVisibility(View.VISIBLE);
             YoYo.with(Techniques.FadeOut).duration(1500L).onEnd(animator1 -> {
+
                 binding.tvConnecting.setVisibility(View.GONE);
                 binding.loading.setVisibility(View.GONE);
-                YoYo.with(Techniques.RollIn).duration(1000L).onEnd(animator2 -> {
+                YoYo.with(Techniques.FadeIn).duration(1000L).onEnd(animator2 -> {
                     binding.tvSpeedValue.setVisibility(View.VISIBLE);
                     binding.tvMbps.setVisibility(View.VISIBLE);
                     binding.speedView.setVisibility(View.VISIBLE);
                 }).playOn(binding.speedView);
                 application.getShareData().isScanning.postValue(true);
-
             }).playOn(binding.loading);
 
         }).duration(1000L).playOn(binding.btnStart);
@@ -264,6 +276,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
 
     }
 
+    //open wifi setting
     public void onCickWifiName() {
         Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         startActivity(intent);
@@ -339,20 +352,17 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                     if (info == null) {
                         return;
                     } else {
-                        testPoint = new TestPoint(info.get(3).toString(), "http://" + info.get(6).toString(), "speedtest/", "speedtest/upload", "");
+                        testPoint = new TestPoint(info.get(3), "http://" + info.get(6), "speedtest/", "speedtest/upload", "");
                         Log.d("TAG", "run: " + testPoint);
                     }
                 } catch (Exception e) {
-                    setViewWithNoPermission();
+                    requireActivity().runOnUiThread(() -> setViewWithNoPermission());
                     e.printStackTrace();
                 }
             }
         }.start();
     }
 
-    private int mbpsToGauge(double s) {
-        return (int) (1000 * (1 - (1 / (Math.pow(1.3, Math.sqrt(s))))));
-    }
 
     public void runSpeedTest() {
         speedTest = new Speedtest();
@@ -377,12 +387,11 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 requireActivity().runOnUiThread(() -> {
                     binding.tvSpeedValue.setText(format((float) dl));
                     binding.speedView.speedTo((float) dl);
-//                    gaugeView.setValue(progress==0?0:mbpsToGauge(dl));
+
                     if (progress >= 1) {
                         binding.tvDownloadValue.clearAnimation();
                         binding.tvDownloadValue.setText(format(dl));
                         binding.speedView.speedTo(0);
-//                        gaugeView.setValue(progress==0?0:mbpsToGauge(0));
                         binding.speedView.stop();
                         binding.tvSpeedValue.setText(0.0 + "");
                     }
@@ -399,14 +408,12 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                 requireActivity().runOnUiThread(() -> {
                     binding.speedView.speedTo((float) ul);
                     binding.tvSpeedValue.setText(format((float) ul));
-//                    gaugeView.setValue(progress==0?0:mbpsToGauge(ul));
+
 
                     if (progress >= 1) {
                         binding.tvUploadValue.clearAnimation();
                         binding.tvUploadValue.setText(format(ul));
                         binding.speedView.speedTo(0);
-//                        gaugeView.setValue(0);
-
                         binding.speedView.setWithTremble(false);
                         binding.tvSpeedValue.setText(0.0 + "");
 
@@ -479,14 +486,13 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     }
 
     private String format(double d) {
-        Locale l = null;
+        Locale l;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             l = getResources().getConfiguration().getLocales().get(0);
         } else {
             l = getResources().getConfiguration().locale;
         }
-        if (d < 10) return String.format(l, "%.2f", d);
-        if (d < 100) return String.format(l, "%.1f", d);
+        if (d < 200) return String.format(l, "%.2f", d);
         return "" + Math.round(d);
     }
 
@@ -564,8 +570,11 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
     }
 
     public void resetView() {
+        if (speedTest != null) {
+            speedTest.abort();
+        }
+        binding.speedView.setSpeedometerColor(getResources().getColor(R.color.gray_400));
         binding.speedView.speedTo(0);
-        binding.speedView.stop();
         binding.tvSpeedValue.setText("0");
         binding.tvDownloadValue.clearAnimation();
         binding.tvUploadValue.clearAnimation();

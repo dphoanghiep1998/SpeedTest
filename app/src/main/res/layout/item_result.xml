@@ -43,9 +43,9 @@
                 android:singleLine="true"
                 android:text="qeqweqwewqq"
                 android:textColor="@color/white"
-                android:autoSizeMaxTextSize="16sp"
-                android:autoSizeStepGranularity="1sp"
-                android:autoSizeMinTextSize="8sp"
+                android:autoSizeMaxTextSize="16dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeMinTextSize="8dp"
                 android:maxLines="1"
                  />
 
@@ -56,9 +56,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.1"
-            android:autoSizeMaxTextSize="18sp"
-            android:autoSizeMinTextSize="10sp"
-            android:autoSizeStepGranularity="2sp"
+            android:autoSizeMaxTextSize="18dp"
+            android:autoSizeMinTextSize="10dp"
+            android:autoSizeStepGranularity="2dp"
             android:autoSizeTextType="uniform"
             android:layout_marginHorizontal="4dp"
             android:gravity="center"
@@ -80,6 +80,7 @@
                 android:id="@+id/tv_downloadRate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="16dp"
                 android:text="30.04"
                 android:textColor="@color/white" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -98,6 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:textSize="16dp"
                 android:text="32.67"
                 android:textColor="@color/white" />
 
@@ -119,6 +121,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="34"
+                android:textSize="16dp"
                 android:textColor="@color/white" />
 
 

@@ -3,17 +3,17 @@
     <item
         android:id="@+id/speedtest"
         android:icon="@drawable/ic_speed"
-        android:title="Speed Test" />
+        android:title="@string/speedtest" />
     <item
         android:id="@+id/analist"
         android:icon="@drawable/ic_wifi_analyzer"
-        android:title="Wifi Analyzer" />
+        android:title="@string/wifi_analyzer" />
     <item
         android:id="@+id/vpn"
         android:icon="@drawable/ic_vpn"
-        android:title="VPN"/>
+        android:title="@string/vpn"/>
     <item
         android:id="@+id/history"
         android:icon="@drawable/ic_result"
-        android:title="Check Results" />
+        android:title="@string/results" />
 </menu>

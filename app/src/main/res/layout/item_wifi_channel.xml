@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Neko"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20dp"
            />
 
         <TextView
@@ -51,6 +51,7 @@
             android:layout_height="wrap_content"
             android:text="WPA2"
             android:textColor="@color/white"
+            android:textSize="16dp"
              />
     </LinearLayout>
 
@@ -80,6 +81,7 @@
             android:layout_height="wrap_content"
             android:text="2458 MHz"
             android:textColor="@color/white"
+            android:textSize="16dp"
             />
 
         <TextView
@@ -90,6 +92,7 @@
             android:layout_height="wrap_content"
             android:text="Đã kết nối"
             android:textColor="@color/text_accent"
+            android:textSize="16dp"
             />
     </androidx.appcompat.widget.LinearLayoutCompat>
 

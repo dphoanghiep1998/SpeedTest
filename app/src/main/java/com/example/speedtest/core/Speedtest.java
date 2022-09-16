@@ -81,9 +81,7 @@ public class Speedtest {
                 @Override
                 public void onAbort() {
 
-                    synchronized (mutex) {
-                        state = 5;
-                    }
+
                     callback.onAbort();
                 }
 
@@ -93,6 +91,9 @@ public class Speedtest {
 
 
     public void abort(){
+        synchronized (mutex) {
+            state = 5;
+        }
            st.abort();
     }
 

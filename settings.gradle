@@ -18,3 +18,4 @@ dependencyResolutionManagement {
 rootProject.name = "SpeedTest"
 include ':app'
 include ':aChartEngine'
+include ':speedviewlib'

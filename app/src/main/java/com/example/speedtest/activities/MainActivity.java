@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        requestLocationPermission();
         viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         initView();
@@ -170,28 +170,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setActionMenu() {
-        binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START,true));
+        binding.menu.setOnClickListener(view -> binding.drawerContainer.openDrawer(GravityCompat.START, true));
 
         binding.imvBack.setOnClickListener(view -> binding.drawerContainer.close());
     }
 
-    public void requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, SettingGlobal.REQUEST_CODE_LOCATION_PERMISSION);
-        } else {
-            application.getShareData().isPermissionRequested.postValue(true);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == SettingGlobal.REQUEST_CODE_LOCATION_PERMISSION) {
-            if (grantResults.length > 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                application.getShareData().isPermissionRequested.postValue(true);
-            }
-        }
-    }
 
     public void openLink(String strUri) {
         try {
@@ -305,5 +288,7 @@ public class MainActivity extends AppCompatActivity {
             binding.menu.setVisibility(View.VISIBLE);
         }).playOn(binding.menu);
     }
+
+
 
 }

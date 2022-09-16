@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:text="RESULTS"
             android:textColor="@color/white"
-            android:textSize="@dimen/_18ssp"
+            android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
 
             app:layout_constraintBottom_toBottomOf="parent"
@@ -71,6 +71,7 @@
         android:layout_height="20dp"
         android:src="@drawable/ic_clock"/>
     <TextView
+        android:textSize="16dp"
         android:paddingStart="8dp"
         app:layout_constraintStart_toEndOf="@+id/imv_clock"
         app:layout_constraintTop_toTopOf="@+id/imv_clock"
@@ -108,7 +109,7 @@
             android:paddingTop="16dp"
             android:text="Tín hiệu mạng"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -120,7 +121,7 @@
             android:layout_marginTop="8dp"
             android:text="BÌNH THƯỜNG"
             android:textColor="@color/text_color_medium"
-            android:textSize="26sp"
+            android:textSize="26dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -146,15 +147,17 @@
             android:layout_marginTop="8dp"
             android:paddingStart="32dp"
             android:paddingBottom="16dp"
-            android:text="Yếu"
+            android:textSize="@dimen/_14sdp"
+            android:text="@string/signal_weak"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/pb_signal" />
 
         <TextView
+            android:textSize="@dimen/_14sdp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bình thường"
+            android:text="@string/signal_normal"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +167,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingEnd="32dp"
-            android:text="Mạnh"
+            android:text="@string/signal_strong"
+            android:textSize="@dimen/_14sdp"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_worseSignal" />
@@ -210,9 +214,9 @@
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/imv_downArrow"
                     android:paddingHorizontal="4dp"
-                    android:text="Tải xuống"
+                    android:text="@string/download"
                     android:textColor="#D7D7D7"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -228,7 +232,7 @@
                     android:layout_height="wrap_content"
                     android:text="112.64"
                     android:textStyle="bold"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="@dimen/_20sdp"
                     android:paddingTop="@dimen/_4sdp"
                     android:textColor="@color/button_color_start" />
                 <TextView
@@ -237,7 +241,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Mpbs"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_10sdp"
                     android:paddingTop="4dp"
                     android:textColor="@color/gray_400"
                    />
@@ -282,10 +286,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@id/imv_upArrow"
-                    android:text="Tải lên"
+                    android:text="@string/upload"
                     android:paddingHorizontal="4dp"
                     android:textColor="#D7D7D7"
-                    android:textSize="18sp"
+                    android:textSize="18dp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -299,7 +303,7 @@
                     android:layout_gravity="bottom"
                     android:text="112.64"
                     android:textStyle="bold"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="@dimen/_20sdp"
                     android:paddingTop="@dimen/_4sdp"
                     android:textColor="@color/purple_200"
                 />
@@ -310,7 +314,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:text="Mbps"
-                    android:textSize="@dimen/_10ssp"
+                    android:textSize="@dimen/_10sdp"
                     android:textColor="@color/gray_400" />
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -347,7 +351,7 @@
                 android:src="@drawable/ic_ping" />
 
             <TextView
-
+                android:textSize="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -360,6 +364,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textSize="@dimen/_10sdp"
                 android:text="0"
 
                 android:textColor="#D7D7D7" />
@@ -382,6 +387,7 @@
                 android:src="@drawable/ic_jitter" />
 
             <TextView
+                android:textSize="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -389,6 +395,7 @@
                 android:textColor="#d7d7d7" />
 
             <TextView
+                android:textSize="@dimen/_10sdp"
                 android:paddingLeft="4dp"
                 android:id="@+id/tv_jitterCount"
                 android:layout_width="wrap_content"
@@ -414,6 +421,7 @@
                 android:src="@drawable/ic_loss" />
 
             <TextView
+                android:textSize="@dimen/_10sdp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -421,6 +429,7 @@
                 android:textColor="#d7d7d7" />
 
             <TextView
+                android:textSize="@dimen/_10sdp"
                 android:paddingLeft="4dp"
                 android:id="@+id/tv_lossCount"
                 android:layout_width="wrap_content"
@@ -440,8 +449,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thử lại"
+        android:textSize="@dimen/_14sdp"
         android:textStyle="bold"
-        android:textSize="16sp"
         android:background="@drawable/button_background_start"
         android:paddingHorizontal="80dp"/>
 
@@ -453,9 +462,11 @@
         android:layout_marginTop="16dp"
         android:text="Tên kết nối"
         android:textColor="#ddd"
+        android:textSize="@dimen/_14sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_scan_again" />
     <TextView
+        android:textSize="@dimen/_14sdp"
         android:layout_marginEnd="20dp"
         android:id="@+id/tv_connectName_value"
         android:layout_width="wrap_content"
@@ -470,13 +481,15 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="20dp"
         android:id="@+id/tv_isp"
-        android:layout_width="84dp"
-        android:layout_height="17dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="ISP"
+        android:textSize="@dimen/_14sdp"
         android:textColor="#ddd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_connectName" />
     <TextView
+        android:textSize="@dimen/_14sdp"
         android:layout_marginEnd="20dp"
         android:id="@+id/tv_isp_value"
         android:layout_width="wrap_content"
@@ -491,13 +504,15 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="20dp"
         android:id="@+id/tv_internal_ip"
-        android:layout_width="84dp"
-        android:layout_height="17dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="IP Nội bộ"
+        android:textSize="@dimen/_14sdp"
         android:textColor="#ddd"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_isp" />
     <TextView
+        android:textSize="@dimen/_14sdp"
         android:layout_marginEnd="20dp"
         android:id="@+id/tv_internal_ip_value"
         android:layout_width="wrap_content"
@@ -512,15 +527,17 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="20dp"
         android:id="@+id/tv_external_ip"
-        android:layout_width="84dp"
-        android:layout_height="17dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="IP bên ngoài"
+        android:textSize="@dimen/_14sdp"
         android:textColor="#ddd"
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_internal_ip" />
     <TextView
         android:layout_marginEnd="20dp"
+        android:textSize="@dimen/_14sdp"
         android:id="@+id/tv_external_ip_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

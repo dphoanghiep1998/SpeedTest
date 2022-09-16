@@ -50,7 +50,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.d("TAG", "onCreateView: ");
         application = SpeedApplication.create(requireContext());
         binding = FragmentAnalyzerBinding.inflate(inflater, container, false);
         intentFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -87,6 +86,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
     }
 
+
     public void initView() {
         binding.btnSetting.setOnClickListener(view -> {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -97,11 +97,19 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
         application.getShareData().isPermissionRequested.observe(getViewLifecycleOwner(), isPermissionRequested -> {
             if (isPermissionRequested) {
                 Log.d("TAG", "onChanged: ");
-                binding.requestContainer.setVisibility(View.GONE);
+                binding.requestPermissionContainer.setVisibility(View.GONE);
                 mainWifi.startScan();
             } else {
-                binding.requestContainer.setVisibility(View.VISIBLE);
+                binding.requestPermissionContainer.setVisibility(View.VISIBLE);
 
+            }
+        });
+        application.getShareData().isWifiEnabled.observe(getViewLifecycleOwner(), isWifiEnabled -> {
+            if (isWifiEnabled) {
+                binding.requestWifiContainer.setVisibility(View.GONE);
+                mainWifi.startScan();
+            } else {
+                binding.requestPermissionContainer.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -124,7 +132,12 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                                 channelWidth = String.valueOf(result.channelWidth);
                             }
-                            int channel = ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency);
+                            int channel;
+                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                                channel = ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency);
+                            }else {
+                                channel = NetworkUtils.convertFreqtoChannel(result.frequency);
+                            }
                             int r_range = NetworkUtils.getRangeWifi(channel, result.channelWidth)[0];
                             int l_range = NetworkUtils.getRangeWifi(channel, result.channelWidth)[1];
 

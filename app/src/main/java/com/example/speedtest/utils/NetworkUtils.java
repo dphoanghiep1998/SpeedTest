@@ -220,6 +220,16 @@ public class NetworkUtils {
         int result[] = {r_range, l_range};
         return result;
     }
+    public static int convertFreqtoChannel(int freq)
+    {
+        if (freq == 2484)
+            return 14;
+
+        if (freq < 2484)
+            return (freq - 2407) / 5;
+
+        return freq/5 - 1000;
+    }
 
 
 }

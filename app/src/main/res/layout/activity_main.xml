@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="SPEED TEST"
                 android:textColor="@color/white"
-                android:textSize="24dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -108,6 +108,8 @@
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
+            app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+            app:itemTextAppearanceInactive="@style/BottomNavigationView"
             android:foreground="@drawable/ripple_effect_fg"
             android:id="@+id/nav_bottom"
             android:layout_width="match_parent"
@@ -158,7 +160,7 @@
                 android:layout_height="wrap_content"
                 android:text="SPEEDTEST"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="20dp"
                 android:textStyle="bold|italic"
                 app:layout_constraintBottom_toBottomOf="@id/imv_back"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +214,7 @@
                     android:layout_toRightOf="@+id/imv_star"
                     android:text="@string/rate_app"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp" />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -248,7 +250,7 @@
                     android:layout_toEndOf="@+id/imv_share"
                     android:text="@string/share_app"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp"  />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -284,7 +286,7 @@
                     android:layout_toRightOf="@+id/imv_policy"
                     android:text="@string/feedback"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp"  />
 
                 <ImageView
                     android:layout_width="30dp"
@@ -320,7 +322,7 @@
                     android:layout_toRightOf="@+id/imv_fanpage"
                     android:text="@string/policy"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="16dp"  />
 
                 <ImageView
                     android:layout_width="30dp"

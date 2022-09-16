@@ -59,7 +59,7 @@
                             android:paddingStart="8dp"
                             android:text="@string/download"
                             android:textColor="#D7D7D7"
-                            android:textSize="18sp"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -77,7 +77,7 @@
                             android:paddingTop="4dp"
                             android:text="0"
                             android:textColor="@color/gray_400"
-                            android:textSize="30sp"
+                            android:textSize="30dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -89,7 +89,7 @@
                             android:paddingBottom="4dp"
                             android:text="@string/Mbps"
                             android:textColor="#ddd"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </LinearLayout>
 
 
@@ -132,9 +132,9 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/imv_upArrow"
                             android:paddingStart="8dp"
-                            android:text="Tải lên"
+                            android:text="@string/upload"
                             android:textColor="#D7D7D7"
-                            android:textSize="18sp"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
@@ -152,7 +152,7 @@
                             android:paddingTop="4dp"
                             android:text="0"
                             android:textColor="@color/gray_400"
-                            android:textSize="30sp"
+                            android:textSize="30dp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -164,7 +164,7 @@
                             android:paddingBottom="4dp"
                             android:text="@string/Mbps"
                             android:textColor="#d7d7d7"
-                            android:textSize="12sp" />
+                            android:textSize="12dp" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
 
@@ -175,6 +175,7 @@
 
 
             <LinearLayout
+                android:textSize="16dp"
                 android:id="@+id/container_ping_loss_jitter"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -207,6 +208,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
+                        android:textSize="16dp"
                         android:text="Ping"
                         android:textColor="#d7d7d7" />
 
@@ -216,7 +218,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="0ms"
-
+                        android:textSize="16dp"
                         android:textColor="#D7D7D7" />
 
                 </LinearLayout>
@@ -237,6 +239,7 @@
                         android:src="@drawable/ic_jitter" />
 
                     <TextView
+                        android:textSize="16dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -252,6 +255,7 @@
                         android:layout_gravity="center"
                         android:paddingLeft="4dp"
                         android:text="0ms"
+                        android:textSize="16dp"
                         android:textColor="#D7D7D7" />
 
                 </LinearLayout>
@@ -271,6 +275,7 @@
                         android:src="@drawable/ic_loss" />
 
                     <TextView
+                        android:textSize="16dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -280,6 +285,7 @@
                         android:textColor="#d7d7d7" />
 
                     <TextView
+                        android:textSize="16dp"
                         android:id="@+id/tv_lossCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -293,8 +299,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/testBackground"
-                android:layout_width="@dimen/_300sdp"
-                android:layout_height="@dimen/_300sdp"
+                android:layout_width="@dimen/_200sdp"
+                android:layout_height="@dimen/_200sdp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -307,14 +313,14 @@
                     android:layout_height="@dimen/_200sdp"
                     android:background="@drawable/ripple_effect_fg"
                     android:scrollbarFadeDuration="200"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/loading" />
+                    app:lottie_rawRes="@raw/go" />
 
                 <TextView
                     android:id="@+id/tv_go"
@@ -323,8 +329,8 @@
                     android:gravity="center"
                     android:text="@string/go"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sizeText"
-                    android:visibility="visible"
+                    android:textSize="30dp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -347,7 +353,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/connecting"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_16ssp"
+                    android:textSize="@dimen/_16sdp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -355,33 +361,25 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.github.anastr.speedviewlib.PointerSpeedometer
+                    app:sv_markStyle="BUTT"
                     android:id="@+id/speedView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:sv_backgroundCircleColor="@android:color/transparent"
                     app:sv_image="@drawable/ic_speedview"
-                    app:sv_indicator="NormalSmallIndicator"
                     app:sv_indicatorColor="#ddd"
                     app:sv_indicatorWidth="10dp"
                     app:sv_speedTextColor="@android:color/transparent"
                     app:sv_speedometerColor="@color/background_ads_start"
                     app:sv_speedometerWidth="18dp"
+                    app:sv_indicator="NormalSmallIndicator"
                     app:sv_unit="" />
 
-<!--                <com.example.speedtest.utils.GaugeView-->
-<!--                    android:id="@+id/gauge"-->
-<!--                    android:layout_width="@dimen/_200sdp"-->
-<!--                    android:layout_height="@dimen/_200sdp"-->
-<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toTopOf="parent"-->
-<!--                    app:sv_backgroundCircleColor="@android:color/transparent" />-->
 
 
                 <TextView
@@ -391,9 +389,9 @@
                     android:layout_marginTop="-20dp"
                     android:text="0.0"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="20dp"
                     android:textStyle="bold"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="@id/speedView"
                     app:layout_constraintStart_toStartOf="@id/speedView"
                     app:layout_constraintTop_toBottomOf="@id/speedView" />
@@ -402,11 +400,10 @@
                     android:id="@+id/tv_mbps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:text="Mbps"
-                    android:textColor="#d7d7d7"
-                    android:textSize="20sp"
-                    android:visibility="gone"
+                    android:text="@string/Mbps"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="@id/speedView"
                     app:layout_constraintStart_toStartOf="@id/speedView"
                     app:layout_constraintTop_toBottomOf="@+id/tv_speed_value" />
@@ -414,6 +411,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_marginTop="@dimen/_20sdp"
                 android:id="@+id/container_expand_view"
                 android:layout_width="wrap_content"
                 android:layout_height="80dp"
@@ -456,7 +454,7 @@
                             android:paddingStart="8dp"
                             android:text="@string/neko"
                             android:textColor="@color/text_accent"
-                            android:textSize="18sp"
+                            android:textSize="18dp"
                             app:layout_constraintBottom_toBottomOf="@id/imv_wifi"
                             app:layout_constraintStart_toEndOf="@id/imv_wifi"
                             app:layout_constraintTop_toTopOf="@id/imv_wifi" />
@@ -477,6 +475,7 @@
                             android:paddingStart="8dp"
                             android:text="FPT TELECOM"
                             android:textColor="@color/white"
+                            android:textSize="16dp"
                             app:layout_constraintBottom_toBottomOf="@id/imv_global_isp"
                             app:layout_constraintStart_toEndOf="@id/imv_global_isp"
                             app:layout_constraintTop_toTopOf="@id/imv_global_isp" />
@@ -512,6 +511,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Mbps"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toTopOf="@id/tv_mbps_value"
                             app:layout_constraintEnd_toStartOf="@id/tv_mbps_type"
@@ -523,6 +523,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="MB/s"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintEnd_toStartOf="@id/tv_kbs_type"
                             app:layout_constraintStart_toEndOf="@+id/tv_mbps_type"
@@ -533,6 +534,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Kb/s"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/tv_mbs_type"
@@ -545,6 +547,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="100"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@id/tv_mbps_type"
@@ -558,6 +561,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="500"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@id/tv_mbs_type"
@@ -571,6 +575,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="1000"
+                            android:textSize="16dp"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@id/tv_kbs_type"
