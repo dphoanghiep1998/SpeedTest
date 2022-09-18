@@ -43,6 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_access_point" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:clickable="false"
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -60,6 +61,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:clickable="false"
         android:id="@+id/requestPermissionContainer"
         android:visibility="gone"
         android:layout_width="match_parent"
@@ -125,6 +127,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:clickable="false"
         android:visibility="gone"
         android:id="@+id/requestWifiContainer"
         android:layout_width="match_parent"

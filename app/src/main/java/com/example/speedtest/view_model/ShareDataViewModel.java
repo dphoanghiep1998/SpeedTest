@@ -1,4 +1,4 @@
-package com.example.speedtest.activities;
+package com.example.speedtest.view_model;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -16,6 +16,8 @@ public class ShareDataViewModel {
     public MutableLiveData<Speedtest> getSpeedtest() {
         return speedtest;
     }
+
+    public MutableLiveData<Boolean> isConnectivityChanged = new MutableLiveData<>();
 
     public void setSpeedtest(MutableLiveData<Speedtest> speedtest) {
         this.speedtest = speedtest;

@@ -105,11 +105,13 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
             }
         });
         application.getShareData().isWifiEnabled.observe(getViewLifecycleOwner(), isWifiEnabled -> {
+            Log.d("TAG", "initView: "+isWifiEnabled);
             if (isWifiEnabled) {
+                Log.d("TAG", "infinity: ");
                 binding.requestWifiContainer.setVisibility(View.GONE);
                 mainWifi.startScan();
             } else {
-                binding.requestPermissionContainer.setVisibility(View.VISIBLE);
+                binding.requestWifiContainer.setVisibility(View.VISIBLE);
             }
         });
     }

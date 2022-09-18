@@ -48,11 +48,9 @@ public class ConnectivityTestAdapter extends RecyclerView.Adapter<ConnectivityTe
             }else {
                 holder.connectionType.setImageResource(R.drawable.ic_mobiledata);
             }
-            holder.ssid.setText(model.getName());
             holder.date.setText(DateTimeUtils.getDateConverted(model.getDate()));
             holder.uploadRate.setText(model.getUpLoadSpeed());
             holder.downloadRate.setText(model.getDownloadSpeed());
-            holder.pingRate.setText(model.getPing());
             holder.itemView.setOnClickListener(view -> resultTouchHelper.onClickResultTest(model));
         }
     }
@@ -74,11 +72,9 @@ public class ConnectivityTestAdapter extends RecyclerView.Adapter<ConnectivityTe
     ImageView connectionType;
         public ConnectivityTestViewHolder(@NonNull View itemView) {
             super(itemView);
-            ssid = itemView.findViewById(R.id.tv_ssid);
             date = itemView.findViewById(R.id.tv_dateScan);
             downloadRate = itemView.findViewById(R.id.tv_downloadRate);
             uploadRate = itemView.findViewById(R.id.tv_uploadRate);
-            pingRate = itemView.findViewById(R.id.tv_pingRate);
             connectionType = itemView.findViewById(R.id.imv_connectionType);
         }
     }

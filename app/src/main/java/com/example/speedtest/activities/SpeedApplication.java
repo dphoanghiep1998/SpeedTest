@@ -3,6 +3,8 @@ package com.example.speedtest.activities;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.speedtest.view_model.ShareDataViewModel;
+
 public class SpeedApplication extends Application {
 
 

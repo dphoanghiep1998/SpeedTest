@@ -80,8 +80,16 @@
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/bottom_nav_menu.xml" value="0.33" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/drawer_view.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/y/AndroidStudioProjects/SpeedTest/app/src/main/res/menu/menu_toolbar.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_analytic.xml" value="0.2046875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15364583333333334" />
+        <entry key="app/src/main/res/layout/activity_permission.xml" value="0.2046875" />
+        <entry key="app/src/main/res/layout/activity_result.xml" value="0.2046875" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.2046875" />
+        <entry key="app/src/main/res/layout/activity_vip.xml" value="0.2046875" />
         <entry key="app/src/main/res/layout/fragment_analyzer.xml" value="0.15364583333333334" />
+        <entry key="app/src/main/res/layout/fragment_check_result.xml" value="0.15364583333333334" />
+        <entry key="app/src/main/res/layout/fragment_speedtest.xml" value="0.2046875" />
+        <entry key="app/src/main/res/layout/item_result.xml" value="0.15364583333333334" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.15364583333333334" />
       </map>
     </option>

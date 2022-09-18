@@ -3,9 +3,12 @@ package com.example.speedtest.activities;
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -27,6 +30,7 @@ import com.example.speedtest.R;
 import com.example.speedtest.adapter.ViewPagerAdapter;
 import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
+import com.example.speedtest.receivers.WifiListener;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public WifiTestViewModel viewModel;
     public boolean first_time = true;
     private SpeedApplication application;
+    private WifiListener wifiListener;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        initWifiListener();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
@@ -74,8 +80,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isBottomClicked = false;
-    private boolean isScrolling = false;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopWifiListener();
+    }
+
+    public void initWifiListener(){
+        wifiListener = new WifiListener(this);
+       IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+       registerReceiver(wifiListener,intentFilter);
+   }
+   public void stopWifiListener(){
+        unregisterReceiver(wifiListener);
+   }
 
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
