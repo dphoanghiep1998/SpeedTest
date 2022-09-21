@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     showVipBtn();
                     binding.imvVip.setEnabled(true);
                 } else {
+                    showStopBtn();
                     binding.imvVip.setEnabled(false);
                 }
             }
@@ -135,39 +138,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.navBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                showMenu();
+        binding.navBottom.setOnItemSelectedListener(item -> {
+            showMenu();
 
-                switch (item.getItemId()) {
-                    case R.id.speedtest:
-                        binding.tvTitle.setText("SPEEDTEST");
-                        binding.vpContainerFrament.setCurrentItem(0);
+            switch (item.getItemId()) {
+                case R.id.speedtest:
+                    binding.tvTitle.setText("SPEEDTEST");
+                    binding.vpContainerFrament.setCurrentItem(0);
 
-                        return true;
-                    case R.id.analist:
-                        binding.tvTitle.setText("WIFI ANALYZER");
+                    return true;
+                case R.id.analist:
+                    binding.tvTitle.setText("WIFI ANALYZER");
 
 
-                        binding.vpContainerFrament.setCurrentItem(1);
-                        return true;
+                    binding.vpContainerFrament.setCurrentItem(1);
+                    return true;
 
-                    case R.id.vpn:
-                        binding.tvTitle.setText("VPN");
-                        binding.vpContainerFrament.setCurrentItem(2);
+                case R.id.vpn:
+                    binding.tvTitle.setText("VPN");
+                    binding.vpContainerFrament.setCurrentItem(2);
 
-                        return true;
-                    case R.id.history:
-                        binding.tvTitle.setText("RESULTS");
-                        binding.vpContainerFrament.setCurrentItem(3);
+                    return true;
+                case R.id.history:
+                    binding.tvTitle.setText("RESULTS");
+                    binding.vpContainerFrament.setCurrentItem(3);
 
-                        return true;
-
-                }
-                return true;
+                    return true;
 
             }
+            return true;
+
         });
         binding.vpContainerFrament.setCurrentItem(0);
         binding.containerRate.setOnClickListener(view -> openLink("http://www.google.com"));
@@ -305,6 +305,23 @@ public class MainActivity extends AppCompatActivity {
         YoYo.with(Techniques.FadeIn).duration(400).onEnd(animator1 -> {
             binding.menu.setVisibility(View.VISIBLE);
         }).playOn(binding.menu);
+    }
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void registerInternetChange(){
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                super.onAvailable(network);
+                viewModel.hasInternetConnection.postValue(true);
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                super.onLost(network);
+                viewModel.hasInternetConnection.postValue(false);
+            }
+        });
     }
 
 

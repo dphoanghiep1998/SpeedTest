@@ -12,9 +12,9 @@ import com.github.anastr.speedviewlib.util.getRoundAngle
  * see it on [GitHub](https://github.com/anastr/SpeedView)
  */
 open class PointerSpeedometer @JvmOverloads constructor(
-        context: Context,
-        attrs: AttributeSet? = null,
-        defStyleAttr: Int = 0,
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
 ) : Speedometer(context, attrs, defStyleAttr) {
 
     private val speedometerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -62,7 +62,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         set(withPointer) {
             this.withPointer = withPointer
             if (isAttachedToWindow)
-                 invalidate()
+                invalidate()
         }
 
     init {
@@ -82,7 +82,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
     override fun defaultSpeedometerValues() {
         super.marksNumber = 8
-        super.marksPadding = speedometerWidth + dpTOpx(20f)
+        super.marksPadding = speedometerWidth + dpTOpx(12f)
         super.tickPadding = speedometerWidth + dpTOpx(10f)
         super.markStyle = Style.ROUND
         super.markHeight = dpTOpx(5f)
@@ -112,6 +112,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         pointerColor = a.getColor(R.styleable.PointerSpeedometer_sv_pointerColor, pointerColor)
         circlePaint.color = a.getColor(R.styleable.PointerSpeedometer_sv_centerCircleColor, circlePaint.color)
         centerCircleRadius = a.getDimension(R.styleable.SpeedView_sv_centerCircleRadius, centerCircleRadius)
+        withPointer = a.getBoolean(R.styleable.PointerSpeedometer_sv_withPointer, withPointer)
         a.recycle()
         initAttributeValue()
     }
@@ -142,7 +143,17 @@ open class PointerSpeedometer @JvmOverloads constructor(
 
         val roundAngle = getRoundAngle(speedometerWidth, speedometerRect.width())
         canvas.drawArc(speedometerRect, getStartDegree() + roundAngle
-                , (getEndDegree() - getStartDegree()) - roundAngle * 2f, false, speedometerPaint)
+            , (getEndDegree() - getStartDegree()) - roundAngle * 2f, false, speedometerPaint)
+
+        if (withPointer) {
+            canvas.save()
+            canvas.rotate(90 + degree, size * .5f, size * .5f)
+            canvas.drawCircle(size * .5f, speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(), speedometerWidth * .5f + dpTOpx(8f), pointerBackPaint)
+            canvas.drawCircle(size * .5f, speedometerWidth * .5f + dpTOpx(8f) + padding.toFloat(), speedometerWidth * .5f + dpTOpx(1f), pointerPaint)
+            canvas.restore()
+        }
+
+        drawSpeedUnitText(canvas)
         drawIndicator(canvas)
 
         val c = centerCircleColor
@@ -151,6 +162,7 @@ open class PointerSpeedometer @JvmOverloads constructor(
         circlePaint.color = c
         canvas.drawCircle(size * .5f, size * .5f, centerCircleRadius, circlePaint)
 
+        drawNotes(canvas)
     }
 
     override fun updateBackgroundBitmap() {

@@ -67,13 +67,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
     }
 
     @Override
-    public void onResume() {
-        Log.d("TAG", "onResume: ");
-        super.onResume();
-
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
     }
@@ -83,41 +76,63 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.rcvWifi.setLayoutManager(linearLayoutManager);
         binding.rcvWifi.setAdapter(adapter);
-
     }
 
-
     public void initView() {
-        binding.btnSetting.setOnClickListener(view -> {
+        binding.btnPermission.setOnClickListener(view -> {
             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
             Uri uri = Uri.fromParts("package", requireActivity().getPackageName(), null);
             intent.setData(uri);
             requireActivity().startActivity(intent);
         });
+        binding.btnSetting.setOnClickListener(view -> {
+            Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+            startActivity(intent);
+        });
         application.getShareData().isPermissionRequested.observe(getViewLifecycleOwner(), isPermissionRequested -> {
             if (isPermissionRequested) {
-                Log.d("TAG", "onChanged: ");
-                binding.requestPermissionContainer.setVisibility(View.GONE);
+                hideRequestPermisisonLayout();
                 mainWifi.startScan();
             } else {
-                binding.requestPermissionContainer.setVisibility(View.VISIBLE);
-
+                showRequestPermissionLayout();
             }
         });
         application.getShareData().isWifiEnabled.observe(getViewLifecycleOwner(), isWifiEnabled -> {
-            Log.d("TAG", "initView: "+isWifiEnabled);
             if (isWifiEnabled) {
-                Log.d("TAG", "infinity: ");
-                binding.requestWifiContainer.setVisibility(View.GONE);
+                hideRequestWifiEnable();
                 mainWifi.startScan();
             } else {
-                binding.requestWifiContainer.setVisibility(View.VISIBLE);
+                showRequestWifiEnable();
             }
         });
     }
 
-    public void initBroadcast() {
+    public void showLoadingMain() {
         binding.loadingPanel.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoadingMain() {
+        binding.loadingPanel.setVisibility(View.GONE);
+    }
+
+    public void showRequestPermissionLayout() {
+        binding.requestPermissionContainer.setVisibility(View.VISIBLE);
+    }
+
+    public void hideRequestPermisisonLayout() {
+        binding.requestPermissionContainer.setVisibility(View.GONE);
+    }
+
+    public void showRequestWifiEnable() {
+        binding.requestWifiContainer.setVisibility(View.VISIBLE);
+    }
+
+    public void hideRequestWifiEnable() {
+        binding.requestWifiContainer.setVisibility(View.GONE);
+    }
+
+    public void initBroadcast() {
+        showLoadingMain();
         wifiReciver = new BroadcastReceiver() {
             @RequiresApi(api = Build.VERSION_CODES.S)
             @Override
@@ -135,9 +150,9 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                                 channelWidth = String.valueOf(result.channelWidth);
                             }
                             int channel;
-                            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                                 channel = ScanResult.convertFrequencyMhzToChannelIfSupported(result.frequency);
-                            }else {
+                            } else {
                                 channel = NetworkUtils.convertFreqtoChannel(result.frequency);
                             }
                             int r_range = NetworkUtils.getRangeWifi(channel, result.channelWidth)[0];
@@ -155,7 +170,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                             if (result.capabilities.contains("WPS")) {
                                 secure = "WPS ";
                             }
-
                             if (activeWifiName != null && activeWifiName.equals(result.SSID)) {
                                 if (!duplicated) {
                                     Log.d("TAG", "onReceive: " + result);
@@ -165,7 +179,6 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                                             result.BSSID, channel + "", "100 m", "", true, r_range, l_range));
                                     duplicated = true;
                                 }
-
                             } else {
                                 wifiList.add(new Wifi(name, "0.0.0.0", "0.0.0.0", secure, level + "",
                                         frequency + "", result.BSSID, channel + "",
@@ -177,8 +190,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
                 }
                 adapter.setData(wifiList);
 //                setDataChart(wifiList);
-                binding.loadingPanel.setVisibility(View.GONE);
-
+                hideLoadingMain();
             }
         };
 

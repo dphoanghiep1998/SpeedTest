@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.speedtest.model.ConnectivityTestModel;
 import com.example.speedtest.repository.AppRepository;
@@ -30,4 +31,6 @@ public class WifiTestViewModel  extends AndroidViewModel {
     public LiveData<List<ConnectivityTestModel>> getListResultTest(){
         return appRepository.getTestResultList();
     }
+    public MutableLiveData<Boolean> hasInternetConnection = new MutableLiveData<>();
+
 }

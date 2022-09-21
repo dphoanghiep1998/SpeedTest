@@ -46,20 +46,6 @@ public class CheckResultFragment extends Fragment implements ResultTouchHelper, 
 
     private void initView() {
         binding.btnDelete.setOnClickListener(view -> {
-//            AlertDialog alertDialog = new AlertDialog.Builder(requireContext())
-//                    .setTitle("Do you wanna delete all results ?")
-//                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            ((MainActivity) requireActivity()).viewModel.deleteAllResultTest();
-//                        }
-//                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialogInterface, int i) {
-//                            dialogInterface.dismiss();
-//                        }
-//                    }).create();
-//            alertDialog.show();
             CustomDialog customDialog = new CustomDialog(requireActivity(),this);
             customDialog.show();
             customDialog.setTitle("DELETE ALL RESULTS ?");

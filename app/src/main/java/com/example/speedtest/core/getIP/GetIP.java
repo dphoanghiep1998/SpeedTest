@@ -70,7 +70,6 @@ public class GetIP extends Thread {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(
                                 urlConnection.getInputStream()));
-
                 String line;
                 while ((line = br.readLine()) != null) {
                     if (!line.contains("isp=")) {
@@ -82,7 +81,6 @@ public class GetIP extends Thread {
                     selfIspIp = line.split("ip=\"")[1].split(" ")[0].replace("\"", "");
                     break;
                 }
-
                 br.close();
             }
 

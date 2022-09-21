@@ -305,7 +305,7 @@
                     android:textStyle="bold"
                     android:textSize="@dimen/_20sdp"
                     android:paddingTop="@dimen/_4sdp"
-                    android:textColor="@color/purple_200"
+                    android:textColor="@color/gradient_orange_start"
                 />
                 <TextView
                     android:paddingStart="4dp"

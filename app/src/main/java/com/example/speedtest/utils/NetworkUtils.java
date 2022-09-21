@@ -220,15 +220,43 @@ public class NetworkUtils {
         int result[] = {r_range, l_range};
         return result;
     }
-    public static int convertFreqtoChannel(int freq)
-    {
+
+    public static int convertFreqtoChannel(int freq) {
         if (freq == 2484)
             return 14;
 
         if (freq < 2484)
             return (freq - 2407) / 5;
 
-        return freq/5 - 1000;
+        return freq / 5 - 1000;
+    }
+
+    public static boolean isNetworkConnected(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // For 29 api or above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.getActiveNetwork());
+            if (capabilities == null) {
+                return false;
+            }
+            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                return true;
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
+                return true;
+            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
 

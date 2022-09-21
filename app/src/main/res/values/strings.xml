@@ -31,5 +31,6 @@
     <string name="no_permission">To use this feature, please accept location permession on your device</string>
     <string name="location_permission">Location permission</string>
     <string name="Loading">Loading</string>
+    <string name="open_wifi_setting">OPEN WIFI SETTING</string>
 
 </resources>

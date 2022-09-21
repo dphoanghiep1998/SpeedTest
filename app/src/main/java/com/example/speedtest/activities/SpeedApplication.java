@@ -3,21 +3,21 @@ package com.example.speedtest.activities;
 import android.app.Application;
 import android.content.Context;
 
-import com.example.speedtest.view_model.ShareDataViewModel;
+import com.example.speedtest.view_model.ShareData;
 
 public class SpeedApplication extends Application {
 
 
-    private ShareDataViewModel instance;
+    private ShareData instance;
 
     @Override
     public void onCreate() {
         super.onCreate();
     }
 
-    public synchronized ShareDataViewModel getShareData() {
+    public synchronized ShareData getShareData() {
         if (instance == null) {
-            instance = new ShareDataViewModel();
+            instance = new ShareData();
         }
         return instance;
     }
