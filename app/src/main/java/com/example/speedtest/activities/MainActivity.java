@@ -9,10 +9,12 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.Network;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -32,6 +34,7 @@ import com.example.speedtest.R;
 import com.example.speedtest.adapter.ViewPagerAdapter;
 import com.example.speedtest.config.SettingGlobal;
 import com.example.speedtest.databinding.ActivityMainBinding;
+import com.example.speedtest.model.Wifi;
 import com.example.speedtest.receivers.WifiListener;
 import com.example.speedtest.view_model.WifiTestViewModel;
 import com.google.android.material.navigation.NavigationBarView;
@@ -44,21 +47,27 @@ public class MainActivity extends AppCompatActivity {
     private SpeedApplication application;
     private WifiListener wifiListener;
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("TAG", "onCreate: ");
         super.onCreate(savedInstanceState);
         application = SpeedApplication.create(this);
+        viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
+        registerInternetChange();
         application.getShareData().isScanning.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (!aBoolean && !first_time) {
                     showVipBtn();
                     binding.imvVip.setEnabled(true);
+                    showBottomTabAfterScan();
+
                 } else {
                     showStopBtn();
                     binding.imvVip.setEnabled(false);
+                    hideBottomTabWhenScan();
+
                 }
             }
         });
@@ -66,7 +75,6 @@ public class MainActivity extends AppCompatActivity {
         initWifiListener();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         initView();
         setActionMenu();
@@ -75,13 +83,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             application.getShareData().isPermissionRequested.postValue(true);
         } else {
             application.getShareData().isPermissionRequested.postValue(false);
-
         }
+
+
     }
+
 
     @Override
     protected void onDestroy() {
@@ -89,14 +100,15 @@ public class MainActivity extends AppCompatActivity {
         stopWifiListener();
     }
 
-    public void initWifiListener(){
+    public void initWifiListener() {
         wifiListener = new WifiListener(this);
-       IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
-       registerReceiver(wifiListener,intentFilter);
-   }
-   public void stopWifiListener(){
+        IntentFilter intentFilter = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(wifiListener, intentFilter);
+    }
+
+    public void stopWifiListener() {
         unregisterReceiver(wifiListener);
-   }
+    }
 
     public void initView() {
         viewPager = new ViewPagerAdapter(this);
@@ -172,8 +184,6 @@ public class MainActivity extends AppCompatActivity {
         binding.vpContainerFrament.setCurrentItem(0);
         binding.containerRate.setOnClickListener(view -> openLink("http://www.google.com"));
         binding.containerPolicy.setOnClickListener(view -> openLink("http://www.google.com"));
-//        binding.containerFanpage.setOnClickListener(view -> openLink("http://www.facebook.com"));
-//        binding.containerOtherApp.setOnClickListener(view -> openLink("http://www.google.com"));
         binding.containerShare.setOnClickListener(view -> shareApp());
         binding.imvStop.setOnClickListener(view1 -> {
             application.getShareData().isScanning.postValue(false);
@@ -306,8 +316,9 @@ public class MainActivity extends AppCompatActivity {
             binding.menu.setVisibility(View.VISIBLE);
         }).playOn(binding.menu);
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public void registerInternetChange(){
+    public void registerInternetChange() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         connectivityManager.registerDefaultNetworkCallback(new ConnectivityManager.NetworkCallback() {
             @Override
@@ -317,13 +328,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onLost(@NonNull Network network) {
-                super.onLost(network);
+            public void onUnavailable() {
                 viewModel.hasInternetConnection.postValue(false);
             }
         });
     }
-
 
 
 }

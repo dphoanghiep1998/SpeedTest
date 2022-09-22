@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.speedtest.core.Speedtest;
 
-public class ShareData{
+public class ShareData {
     public MutableLiveData<Boolean> isScanning = new MutableLiveData<>();
 
     public MutableLiveData<Boolean> isPermissionRequested = new MutableLiveData<>();

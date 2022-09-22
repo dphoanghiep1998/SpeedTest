@@ -64,6 +64,8 @@ public class GetIP extends Thread {
         try {
             URL url = new URL("https://www.speedtest.net/speedtest-config.php");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
             int code = urlConnection.getResponseCode();
 
             if (code == 200) {

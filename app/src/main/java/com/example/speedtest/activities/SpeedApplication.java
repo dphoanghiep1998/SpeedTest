@@ -15,6 +15,7 @@ public class SpeedApplication extends Application {
         super.onCreate();
     }
 
+
     public synchronized ShareData getShareData() {
         if (instance == null) {
             instance = new ShareData();
