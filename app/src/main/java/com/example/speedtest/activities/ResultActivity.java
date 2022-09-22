@@ -31,6 +31,7 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
     ActivityResultBinding binding;
     WifiTestViewModel viewModel;
     ConnectivityTestModel connectivityTestModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
     }
 
     private void initView() {
-        if(connectivityTestModel == null){
+        if (connectivityTestModel == null) {
             return;
         }
         String afterScan = getIntent().getStringExtra("EXTRA_MESS_1");
@@ -55,11 +56,14 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
             binding.pbSignal.setProgress(animProgress);
         });
         anim.start();
-        String status = level >= -60 ? "TỐT" : level < -60 && level >= -90 ? "BÌNH THƯỜNG" : "YẾU";
+        String status = level >= -60 ? getString(R.string.signal_strong) :
+                level < -60 && level >= -90 ? getString(R.string.signal_normal) : getString(R.string.signal_weak);
 //        binding.pbSignal.setProgress(progress);
         binding.pbSignal.setEnabled(false);
-        binding.tvSignalStrength.setTextColor(level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
-        setProgressBarColor(binding.pbSignal, level >= -60 ? getResources().getColor(R.color.signal_good) : level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
+        binding.tvSignalStrength.setTextColor(level >= -60 ? getResources().getColor(R.color.signal_good) :
+                level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
+        setProgressBarColor(binding.pbSignal, level >= -60 ? getResources().getColor(R.color.signal_good) :
+                level < -60 && level >= -90 ? getResources().getColor(R.color.signal_normal) : getResources().getColor(R.color.signal_poor));
         binding.tvTime.setText(DateTimeUtils.getDateConvertedToResult(connectivityTestModel.getDate()));
         binding.tvSignalStrength.setText(status);
         binding.tvDownloadValue.setText(connectivityTestModel.getDownloadSpeed());
@@ -83,11 +87,11 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
             finish();
         });
         binding.btnDelete.setOnClickListener(view -> {
-            if(connectivityTestModel == null){
+            if (connectivityTestModel == null) {
                 return;
             }
 
-            CustomDialog customDialog = new CustomDialog(this,this);
+            CustomDialog customDialog = new CustomDialog(this, this);
             customDialog.show();
             customDialog.setTitle("DELETE RESULT");
             customDialog.setContent("This result will be deleted from your history");
@@ -113,7 +117,7 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
         d1.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
         LayerDrawable thumb = (LayerDrawable) getResources().getDrawable(R.drawable.custom_thumb);
         Drawable bgThumb = thumb.findDrawableByLayerId(R.id.bg_thumb);
-        bgThumb.setColorFilter(newColor,PorterDuff.Mode.SRC_IN);
+        bgThumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
         progressBar.setThumb(thumb);
 //        LayerDrawable thumb = (LayerDrawable) progressBar.getThumb();
 //        thumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);

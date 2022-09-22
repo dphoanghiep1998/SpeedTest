@@ -195,7 +195,7 @@ public class AnalyzerFragment extends Fragment implements ItemTouchHelper {
 
                 }
                 adapter.setData(wifiList);
-                setDataChart(wifiList);
+//                setDataChart(wifiList);
                 hideLoadingMain();
             }
         };

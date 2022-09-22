@@ -32,5 +32,11 @@
     <string name="location_permission">Location permission</string>
     <string name="Loading">Loading</string>
     <string name="open_wifi_setting">OPEN WIFI SETTING</string>
+    <string name="scan_again">SCAN AGAIN</string>
+    <string name="connection_name">SSID</string>
+    <string name="isp">ISP</string>
+    <string name="internal_ip">Internal IP</string>
+    <string name="external_ip">External IP</string>
+    <string name="signal_status">Signal Status</string>
 
 </resources>
