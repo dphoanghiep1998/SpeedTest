@@ -33,21 +33,17 @@ public abstract class Downloader extends Thread{
             long bytesLeft=0;
             InputStream in=c.getInputStream();
             byte[] buf=new byte[BUFFER_SIZE];
-            for(;;){
-                if(stopASAP) break;
+            while(!stopASAP){
                 if(bytesLeft<=newRequestThreshold){
                     c.GET(s, true);
                     bytesLeft+=ckBytes;
                 }
-                if(stopASAP) break;
                 int l=in.read(buf);
-                if(stopASAP) break;
                 bytesLeft-=l;
                 if(resetASAP){
                     totDownloaded=0;
                     resetASAP=false;
                 }
-                if(stopASAP) break;
                 totDownloaded+=l;
                 if(System.currentTimeMillis()-lastProgressEvent>200){
                     lastProgressEvent=System.currentTimeMillis();

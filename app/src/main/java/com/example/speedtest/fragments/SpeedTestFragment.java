@@ -134,7 +134,9 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         if (NetworkUtils.isWifiConnected(requireContext())) {
             binding.tvWifiName.setText("Wifi");
         } else if (NetworkUtils.isMobileConnected(requireContext())) {
-            binding.tvWifiName.setText("Mobile");
+            NetworkInfo info = NetworkUtils.getInforMobileConnected(getContext());
+            String name = info.getTypeName() + " - " + info.getSubtypeName();
+            binding.tvWifiName.setText(name);
         } else {
             binding.tvIspName.setText("No data");
             binding.tvWifiName.setText("No connection");
@@ -336,7 +338,6 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                             binding.tvIspName.setText("No connection");
                             hideLoadingPanel();
                             isLoadedServer = false;
-
                         });
                         return;
                     } else {
@@ -398,7 +399,7 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
                         binding.loading.setVisibility(VISIBLE);
                     }).playOn(binding.loading);
                 } else if (l <= 4000) {
-
+                    binding.btnStart.setEnabled(false);
                     YoYo.with(Techniques.FadeOut).playOn(binding.btnStart);
                     YoYo.with(Techniques.SlideOutLeft).playOn(binding.tvGo);
                     YoYo.with(Techniques.SlideInRight).onStart(animator -> {
@@ -657,6 +658,5 @@ public class SpeedTestFragment extends Fragment implements View.OnClickListener 
         binding.containerSpeed.setVisibility(View.GONE);
         binding.btnStart.setEnabled(true);
         binding.tvWifiName.setEnabled(true);
-
     }
 }

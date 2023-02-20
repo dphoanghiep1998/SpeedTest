@@ -52,7 +52,6 @@ dependencies {
     //speedtest
     implementation 'fr.bmartel:jspeedtest:1.32.1'
     //mpchart
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //wifireactive
     implementation 'com.github.pwittchen:reactivewifi-rx2:0.3.0'
     //Gson
@@ -62,6 +61,7 @@ dependencies {
     //ssp, sdp
     implementation 'com.intuit.ssp:ssp-android:1.1.0'
     implementation 'com.intuit.sdp:sdp-android:1.1.0'
+
 
     //lotties
     def lottieVersion = "3.4.0"

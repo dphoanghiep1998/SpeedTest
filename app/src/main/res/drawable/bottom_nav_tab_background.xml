@@ -4,6 +4,9 @@
         <layer-list>
             <item android:gravity="top" android:height="20dp"  android:drawable="@drawable/ic_indicator">
             </item>
+
+            <item  android:drawable="@drawable/ripple_effect_fg">
+            </item>
         </layer-list>
     </item>
 </selector>

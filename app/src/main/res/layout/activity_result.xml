@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="RESULTS"
+            android:text="@string/activity_results"
             android:textColor="@color/white"
             android:textSize="@dimen/_18sdp"
             android:textStyle="bold"
@@ -76,7 +76,7 @@
         app:layout_constraintStart_toEndOf="@+id/imv_clock"
         app:layout_constraintTop_toTopOf="@+id/imv_clock"
         android:textColor="@color/white"
-        android:text="alo day la dai tieng noi viet nam"
+        android:text="@string/test"
         app:layout_constraintBottom_toBottomOf="@id/imv_clock"
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
@@ -94,6 +94,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_marginTop="8dp"
         android:layout_marginHorizontal="8dp"
+        android:paddingVertical="@dimen/_12sdp"
         android:id="@+id/container_upper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -106,7 +107,6 @@
             android:id="@+id/tv_internetSignal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="16dp"
             android:text="@string/signal_status"
             android:textColor="@color/white"
             android:textSize="18dp"
@@ -146,7 +146,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:paddingStart="32dp"
-            android:paddingBottom="16dp"
             android:textSize="@dimen/_14sdp"
             android:text="@string/signal_weak"
             android:textColor="@color/white"
@@ -180,6 +179,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
+        android:paddingVertical="@dimen/_8sdp"
         android:background="@drawable/infor_container"
 
 

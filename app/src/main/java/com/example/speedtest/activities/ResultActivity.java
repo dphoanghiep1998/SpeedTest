@@ -119,9 +119,6 @@ public class ResultActivity extends AppCompatActivity implements OnDialogClickLi
         Drawable bgThumb = thumb.findDrawableByLayerId(R.id.bg_thumb);
         bgThumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
         progressBar.setThumb(thumb);
-//        LayerDrawable thumb = (LayerDrawable) progressBar.getThumb();
-//        thumb.setColorFilter(newColor, PorterDuff.Mode.SRC_IN);
-
     }
 
 

@@ -38,5 +38,7 @@
     <string name="internal_ip">Internal IP</string>
     <string name="external_ip">External IP</string>
     <string name="signal_status">Signal Status</string>
+    <string name="activity_results">RESULTS</string>
+    <string name="test">day la dai tieng noi viet nam</string>
 
 </resources>

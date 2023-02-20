@@ -50,25 +50,19 @@ public class MainActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("TAG", "onCreate: ");
         super.onCreate(savedInstanceState);
         application = SpeedApplication.create(this);
         viewModel = new ViewModelProvider(this).get(WifiTestViewModel.class);
         registerInternetChange();
-        application.getShareData().isScanning.observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (!aBoolean && !first_time) {
-                    showVipBtn();
-                    binding.imvVip.setEnabled(true);
-                    showBottomTabAfterScan();
-
-                } else {
-                    showStopBtn();
-                    binding.imvVip.setEnabled(false);
-                    hideBottomTabWhenScan();
-
-                }
+        application.getShareData().isScanning.observe(this, aBoolean -> {
+            if (!aBoolean && !first_time) {
+                showVipBtn();
+                binding.imvVip.setEnabled(true);
+                showBottomTabAfterScan();
+            } else {
+                showStopBtn();
+                binding.imvVip.setEnabled(false);
+                hideBottomTabWhenScan();
             }
         });
 
@@ -231,13 +225,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void hideBottomTabWhenScan() {
-        setViewGone(binding.navBottom);
         binding.vpContainerFrament.setUserInputEnabled(false);
+        YoYo.with(Techniques.SlideOutDown).onEnd(animator -> {
+            setViewGone(binding.navBottom);
+        }).playOn(binding.navBottom);
     }
 
     public void showBottomTabAfterScan() {
-        setViewVisible(binding.navBottom);
+
         binding.vpContainerFrament.setUserInputEnabled(true);
+        YoYo.with(Techniques.SlideInUp).onStart(animator -> {
+            setViewVisible(binding.navBottom);
+        }).playOn(binding.navBottom);
 
     }
 
@@ -249,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        view.setVisibility(View.GONE);
+                        view.setVisibility(View.INVISIBLE);
                     }
                 });
 
